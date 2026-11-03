@@ -76,6 +76,26 @@ class CourtCoreTest {
     }
 
     @Test
+    fun staleEstimateIsKeptUntilTheNextSampleReplacesIt() {
+        val estimator = ClockOffsetEstimator(burstSize = 2)
+        estimator.add(sample(0, rtt = 10, offset = 1_000))
+        estimator.add(sample(10, rtt = 20, offset = 1_000))
+        // Open burst holding a stale, lowest-rtt sample.
+        estimator.add(sample(20, rtt = 5, offset = 1_000))
+        assertFalse(estimator.isStale())
+
+        estimator.markStale()
+        assertTrue(estimator.isStale())
+        assertEquals(1_000L, estimator.offsetMs())
+        assertFalse(estimator.add(sample(30, rtt = 40, offset = 91_000)))
+        assertFalse(estimator.isStale())
+        assertEquals(91_000L, estimator.offsetMs())
+
+        assertTrue(estimator.add(sample(40, rtt = 30, offset = 91_000)))
+        assertEquals(30L, estimator.current()!!.rttMs)
+    }
+
+    @Test
     fun backoffIsJitteredAndCappedAt30s() {
         val backoff = ReconnectBackoff(random = Random(7))
         var cap = 500L

@@ -42,7 +42,8 @@ class InMemoryActiveSessionStore(private var value: String? = null) : ActiveSess
  * Court device record lifecycle (H4/H15 + C1 resend rules).
  *
  * - Not rooted: `record.prepare`/`record.start` are refused with `not_rooted`.
- * - Recording only ever begins from `record.start`.
+ * - Recording only ever begins from `record.start`, for the session `record.prepare` armed; any other
+ *   start is refused with `not_prepared` (also after a crash: K2 re-sends prepare, then start).
  * - `record.start` for the session already recording is acked with no effect; another session is `busy`.
  * - `record.stop` is idempotent.
  */
@@ -108,16 +109,12 @@ class CourtStateMachine(
                 }
             }
             is Phase.Stopping -> busy(current.sessionId)
-            is Phase.Armed -> {
-                val profile = if (current.sessionId == command.sessionId) {
-                    current.profile
-                } else {
-                    recorder.disarm(current.sessionId)
-                    RecordProfile.DEFAULT
-                }
-                begin(command, profile)
+            is Phase.Armed -> if (current.sessionId == command.sessionId) {
+                begin(command, current.profile)
+            } else {
+                notPrepared(command.sessionId)
             }
-            Phase.Idle -> begin(command, RecordProfile.DEFAULT)
+            Phase.Idle -> notPrepared(command.sessionId)
         }
     }
 
@@ -215,6 +212,11 @@ class CourtStateMachine(
 
     private fun busy(currentSessionId: String): CommandResult =
         CommandResult.Nack(C1NackCode.BUSY, "Recording session $currentSessionId.")
+
+    private fun notPrepared(sessionId: String): CommandResult {
+        logger.warn(TAG, "record.start for $sessionId without record.prepare; refused.")
+        return CommandResult.Nack(C1NackCode.NOT_PREPARED, "Send record.prepare for $sessionId first.")
+    }
 
     private fun notRooted(): CommandResult =
         CommandResult.Nack(C1NackCode.NOT_ROOTED, "Court recording needs a rooted device.")

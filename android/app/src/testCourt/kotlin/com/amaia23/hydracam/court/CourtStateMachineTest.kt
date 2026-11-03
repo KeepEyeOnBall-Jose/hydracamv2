@@ -40,6 +40,13 @@ class CourtStateMachineTest {
     private fun prepare(sessionId: String = "s1", fps: Int = 60) =
         machine.onPrepare(RecordPrepare(sessionId, RecordProfile(fps = fps)))
 
+    /** prepare (30 fps) + start; only the start shows in [FakeRecorder.calls]. */
+    private fun record(sessionId: String = "s1"): CommandResult {
+        prepare(sessionId, fps = 30)
+        recorder.calls.removeAt(recorder.calls.lastIndex)
+        return start(sessionId)
+    }
+
     @Test
     fun notRootedRefusesPrepareAndStart() {
         rooted = false
@@ -74,16 +81,43 @@ class CourtStateMachineTest {
     }
 
     @Test
-    fun startForAnotherSessionDisarmsAndUsesDefaultProfile() {
-        prepare("s0")
-        start("s1")
+    fun startWithoutPrepareIsRefused() {
+        val result = start() as CommandResult.Nack
 
-        assertEquals(listOf("prepare:s0:60", "disarm:s0", "start:s1:30"), recorder.calls)
+        assertEquals(C1NackCode.NOT_PREPARED, result.code)
+        assertTrue(recorder.calls.isEmpty())
+        assertEquals(CourtStateMachine.Phase.Idle, machine.phase)
+        assertNull(machine.activeSessionId)
+        assertNull(sessions.load())
+    }
+
+    @Test
+    fun startForAnotherSessionIsRefusedAndKeepsThePreparedCamera() {
+        prepare("s0")
+
+        assertEquals(C1NackCode.NOT_PREPARED, (start("s1") as CommandResult.Nack).code)
+
+        assertEquals(listOf("prepare:s0:60"), recorder.calls)
+        assertEquals(CourtStateMachine.Phase.Armed("s0", RecordProfile(fps = 60)), machine.phase)
+        assertEquals(CommandResult.Ack, start("s0"))
+    }
+
+    @Test
+    fun crashLeftSessionResumesOnlyAfterPrepare() {
+        val restarted = CourtStateMachine({ true }, recorder, InMemoryActiveSessionStore("s1"))
+
+        val bare = restarted.onStart(RecordStart.fromJson(recordStartBody("s1"))) as CommandResult.Nack
+        restarted.onPrepare(RecordPrepare("s1", RecordProfile(fps = 50)))
+        val resumed = restarted.onStart(RecordStart.fromJson(recordStartBody("s1")))
+
+        assertEquals(C1NackCode.NOT_PREPARED, bare.code)
+        assertEquals(CommandResult.Ack, resumed)
+        assertEquals(listOf("prepare:s1:50", "start:s1:50"), recorder.calls)
     }
 
     @Test
     fun resentStartRefreshesInsteadOfRestarting() {
-        start()
+        record()
         assertEquals(CommandResult.Ack, start())
 
         assertEquals(listOf("start:s1:30", "refresh:s1"), recorder.calls)
@@ -91,7 +125,7 @@ class CourtStateMachineTest {
 
     @Test
     fun otherSessionIsBusyWhileRecording() {
-        start("s1")
+        record("s1")
 
         assertEquals(C1NackCode.BUSY, (start("s2") as CommandResult.Nack).code)
         assertEquals(C1NackCode.BUSY, (prepare("s2") as CommandResult.Nack).code)
@@ -101,7 +135,7 @@ class CourtStateMachineTest {
 
     @Test
     fun stopIsIdempotentAndClearsActiveSessionWhenRecorderStops() {
-        start()
+        record()
         assertEquals(CommandResult.Ack, machine.onStop(RecordStop("s1", 99)))
         assertEquals(CommandResult.Ack, machine.onStop(RecordStop("s1", 99)))
         assertTrue(machine.phase is CourtStateMachine.Phase.Stopping)
@@ -144,7 +178,7 @@ class CourtStateMachineTest {
 
     @Test
     fun recorderFailureStopsAndRecordsError() {
-        start()
+        record()
         machine.onRecorderFailed("s1", "camera_disconnected")
 
         assertEquals("camera_disconnected", machine.lastError)
@@ -163,7 +197,7 @@ class CourtStateMachineTest {
 
     @Test
     fun whileStoppingTheSameSessionIsAckedAndOthersAreBusy() {
-        start("s1")
+        record("s1")
         machine.onStop(RecordStop("s1", 0))
 
         assertEquals(CommandResult.Ack, prepare("s1"))
@@ -174,7 +208,7 @@ class CourtStateMachineTest {
 
     @Test
     fun eventsForOtherSessionsLeaveTheRecordingAlone() {
-        start("s1")
+        record("s1")
 
         machine.onStop(RecordStop("s2", 0))
         machine.onLocalStop("s2", CourtStateMachine.REASON_MAX_DURATION)
@@ -206,7 +240,7 @@ class CourtStateMachineTest {
 
     @Test
     fun recorderStoppingByItselfEndsTheRecording() {
-        start("s1")
+        record("s1")
 
         machine.onRecorderStopped("s1")
 
@@ -225,7 +259,7 @@ class CourtStateMachineTest {
 
     @Test
     fun localStopUsesGivenReason() {
-        start()
+        record()
         machine.onLocalStop("s1", CourtStateMachine.REASON_MAX_DURATION)
         machine.onLocalStop("s1", CourtStateMachine.REASON_MAX_DURATION)
 

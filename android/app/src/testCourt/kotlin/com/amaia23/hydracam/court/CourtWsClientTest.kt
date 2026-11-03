@@ -28,8 +28,12 @@ class CourtWsClientTest {
     @get:Rule
     val temp = TemporaryFolder()
 
-    /** Fake K2 end of one connection: records envelopes, answers `clock.ping` 1000 ms ahead. */
+    /** Fake K2 end of one connection: records envelopes, answers `clock.ping` [skewMs] ahead. */
     private inner class FakeK2(private val malformedPongs: Boolean = false) : WebSocketListener() {
+        @Volatile var skewMs = 1_000L
+
+        @Volatile var answerPings = true
+        val pings = AtomicInteger()
         val received = LinkedBlockingQueue<C1Envelope>()
         val opened = LinkedBlockingQueue<WebSocket>()
         val closed = LinkedBlockingQueue<Int>()
@@ -40,7 +44,8 @@ class CourtWsClientTest {
 
         override fun onMessage(webSocket: WebSocket, text: String) {
             val envelope = C1Envelope.decode(text)
-            if (envelope.type == C1.CLOCK_PING) {
+            if (envelope.type == C1.CLOCK_PING && answerPings) {
+                pings.incrementAndGet()
                 val t0 = envelope.body.getLong("t0")
                 if (malformedPongs) {
                     // No server times: read as 0 they would give a near-zero rtt and an offset of -t0.
@@ -48,8 +53,8 @@ class CourtWsClientTest {
                     val swapped = JSONObject().put("t0", t0).put("t1", t0 + 2_000).put("t2", t0 + 1_000)
                     webSocket.send(C1Envelope.create(C1.CLOCK_PONG, swapped, t0).encode())
                 }
-                val pong = JSONObject().put("t0", t0).put("t1", t0 + 1_000).put("t2", t0 + 1_000)
-                webSocket.send(C1Envelope.create(C1.CLOCK_PONG, pong, t0 + 1_000).encode())
+                val pong = JSONObject().put("t0", t0).put("t1", t0 + skewMs).put("t2", t0 + skewMs)
+                webSocket.send(C1Envelope.create(C1.CLOCK_PONG, pong, t0 + skewMs).encode())
             }
             received.put(envelope)
         }
@@ -84,6 +89,7 @@ class CourtWsClientTest {
     private val tokens = FakeTokens()
     private val estimator = ClockOffsetEstimator(burstSize = 2)
     private val commands = LinkedBlockingQueue<C1Envelope>()
+    private val offsetsAtCommand = LinkedBlockingQueue<Long>()
     private val connections = LinkedBlockingQueue<Boolean>()
     private val reasons = LinkedBlockingQueue<String>()
     private lateinit var scheduler: ScheduledExecutorService
@@ -112,12 +118,16 @@ class CourtWsClientTest {
         state = { StateBody(CourtMode.IDLE, 80, true, 85, 30.0, 0, 1_000, 0, -50, null) },
         outbox = outbox,
         clockEstimator = estimator,
-        onCommand = { commands.put(it) },
+        onCommand = {
+            offsetsAtCommand.put(estimator.offsetMs())
+            commands.put(it)
+        },
         backoff = ReconnectBackoff(baseMs = 10, maxMs = 50),
         logger = logger,
         scheduler = scheduler,
         clockBurstSize = 2,
         clockPingSpacingMs = 10,
+        clockResyncHoldMs = 300,
         onConnectionChanged = { connected, reason -> connections.put(connected).also { reasons.put(reason ?: "") } },
     )
 
@@ -212,6 +222,70 @@ class CourtWsClientTest {
         val command = commands.await()
         assertEquals(C1.RECORD_STOP, command.type)
         assertEquals("s1", command.body.getString("sessionId"))
+    }
+
+    /** Connects with a [RecordingLogger] and waits for the first burst (offset ≈ 1000 ms). */
+    private fun connectedAfterFirstBurst(k2: FakeK2, logger: RecordingLogger): WebSocket {
+        client = newClient(logger = logger)
+        upgrade(k2)
+        client.start()
+        val socket = k2.opened.await()
+        eventually("first clock burst") {
+            synchronized(logger) { logger.infos.any { it.startsWith("Clock burst done") } }
+        }
+        assertTrue("offset ${estimator.offsetMs()}", estimator.offsetMs() in 900L..1_000L)
+        return socket
+    }
+
+    private fun command(type: String, serverTs: Long) =
+        C1Envelope.create(type, JSONObject().put("sessionId", "s1"), serverTs).encode()
+
+    @Test
+    fun commandWithStaleServerTimeWaitsForAFreshClockSample() {
+        val logger = RecordingLogger()
+        val k2 = FakeK2()
+        val socket = connectedAfterFirstBurst(k2, logger)
+        val pingsBefore = k2.pings.get()
+
+        // K2's clock jumped 90 s: its commands carry the new time.
+        k2.skewMs = 91_000
+        socket.send(command(C1.RECORD_START, System.currentTimeMillis() + 91_000))
+        socket.send(command(C1.RECORD_STOP, System.currentTimeMillis() + 91_000))
+
+        assertEquals(C1.RECORD_START, commands.await().type)
+        assertEquals(C1.RECORD_STOP, commands.await().type)
+        val offsetAtStart = offsetsAtCommand.await()
+        assertTrue("offset $offsetAtStart", offsetAtStart in 90_900L..91_000L)
+        assertTrue(k2.pings.get() > pingsBefore)
+        assertTrue(synchronized(logger) { logger.warnings.any { it.contains("re-syncing") } })
+    }
+
+    @Test
+    fun commandMatchingOurClockIsHandledWithoutAResync() {
+        val logger = RecordingLogger()
+        val k2 = FakeK2()
+        val socket = connectedAfterFirstBurst(k2, logger)
+        val pingsBefore = k2.pings.get()
+
+        socket.send(command(C1.RECORD_STOP, System.currentTimeMillis() + 1_500))
+        socket.send(command(C1.RECORD_STOP, 0))
+
+        assertEquals(C1.RECORD_STOP, commands.await().type)
+        assertEquals(C1.RECORD_STOP, commands.await().type)
+        assertEquals(pingsBefore, k2.pings.get())
+    }
+
+    @Test
+    fun resyncWithNoPongHandsTheCommandOnAfterTheHold() {
+        val logger = RecordingLogger()
+        val k2 = FakeK2()
+        val socket = connectedAfterFirstBurst(k2, logger)
+
+        k2.answerPings = false
+        socket.send(command(C1.RECORD_STOP, System.currentTimeMillis() + 91_000))
+
+        assertEquals(C1.RECORD_STOP, commands.await().type)
+        assertTrue(synchronized(logger) { logger.warnings.any { it.contains("No clock.pong") } })
     }
 
     @Test

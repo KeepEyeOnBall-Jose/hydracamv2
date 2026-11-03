@@ -52,6 +52,9 @@ object C1NackCode {
     const val INTERNAL = "internal"
     const val TIMEOUT = "timeout"
 
+    /** `record.start` for a session with no matching `record.prepare`: K2 must prepare first. */
+    const val NOT_PREPARED = "not_prepared"
+
     /** 1.4: `masters.upload` for a range where the phone holds no masters. */
     const val GONE = "gone"
 }
