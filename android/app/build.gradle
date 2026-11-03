@@ -34,6 +34,20 @@ def hydracamNdkVersion =
 // here yet — that lands in the dedicated physical DAT integration step.
 def withMetaDat =
     (project.findProperty("withMetaDat") ?: "false").toString().toBoolean()
+// Opt-in court runtime (K1) flavor, `com.amaia23.hydracam.court`. Hand-held
+// builds stay flavorless so their APK paths and cross-platform `flutter run`
+// commands are unchanged (iOS/macOS have no matching schemes). The flavor exists
+// when building the court Dart entrypoint, or with `-PhydracamCourt=true` for
+// Gradle-only tasks such as `testCourtDebugUnitTest`:
+//   flutter build apk --debug --flavor court -t lib/court/main_court.dart
+def hydracamCourt =
+    (project.findProperty("hydracamCourt") ?: "false").toString().toBoolean() ||
+        (project.findProperty("target") ?: "").toString()
+            .replace("\\", "/")
+            .contains("lib/court/")
+if (hydracamCourt) {
+    apply plugin: "com.google.devtools.ksp"
+}
 def generatedPluginRegistrantFile = file(
     "src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java"
 )
@@ -64,6 +78,22 @@ android {
             main.java.srcDirs += 'src/metaDatReal/kotlin'
         } else {
             main.java.srcDirs += 'src/metaDatStub/kotlin'
+        }
+        if (hydracamCourt) {
+            court.java.srcDirs += 'src/court/kotlin'
+            testCourt.java.srcDirs += 'src/testCourt/kotlin'
+        }
+    }
+
+    if (hydracamCourt) {
+        flavorDimensions "runtime"
+        productFlavors {
+            court {
+                dimension "runtime"
+                applicationId "com.amaia23.hydracam.court"
+                manifestPlaceholders["appAuthRedirectScheme"] = "com.amaia23.hydracam.court"
+                manifestPlaceholders["mwdatRedirectScheme"] = "com.amaia23.hydracam.court.mwdat"
+            }
         }
     }
 
@@ -119,10 +149,24 @@ flutter {
 
 dependencies {
     testImplementation "junit:junit:4.13.2"
+    if (hydracamCourt) {
+        courtImplementation "androidx.core:core-ktx:1.13.1"
+        courtImplementation "androidx.room:room-runtime:2.7.2"
+        courtImplementation "com.squareup.okhttp3:okhttp:4.12.0"
+        kspCourt "androidx.room:room-compiler:2.7.2"
+        testCourtImplementation "com.squareup.okhttp3:mockwebserver:4.12.0"
+        testCourtImplementation "org.json:json:20180813"
+    }
+}
+
+if (hydracamCourt) {
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
 }
 
 tasks.withType(JavaCompile).configureEach { task ->
-    if (task.name == "compileReleaseJavaWithJavac") {
+    if (task.name in ["compileReleaseJavaWithJavac", "compileCourtReleaseJavaWithJavac"]) {
         task.doFirst {
             // Flutter 3.44 generates dev-only integration_test registration, but
             // its Gradle plugin deliberately excludes dev dependencies from release.
