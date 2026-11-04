@@ -293,8 +293,9 @@ void main() {
     });
   }
 
-  test("finish bounds pending release while retaining its original cleanup",
-      () async {
+  testWidgets(
+      "finish bounds pending release while retaining its original cleanup",
+      (tester) async {
     final released = Completer<Object?>();
     handle((call) => call.method == "release"
         ? released.future
@@ -307,7 +308,9 @@ void main() {
       finished = true;
       return metadata;
     });
-    await Future<void>.delayed(const Duration(milliseconds: 10));
+    // Fire the zero-length release deadline on the fake clock. A real delay
+    // races that timer and lost on a loaded CI host.
+    await tester.pump(Duration.zero);
     try {
       expect(finished, isTrue);
       expect(exposure.cleanupPending, isTrue);
@@ -316,7 +319,7 @@ void main() {
     } finally {
       released.complete({"status": "released"});
       await finishing;
-      await Future<void>.delayed(Duration.zero);
+      await tester.pump(Duration.zero);
     }
     expect(exposure.cleanupPending, isFalse);
     expect((await finishing).lock, containsPair("releaseStatus", "pending"),
