@@ -322,7 +322,8 @@ data class SignalEmit(val signal: String, val atServerMs: Long, val sessionId: S
  * the preview stops by itself [ttlS] seconds after the last start. [toString] hides credentials.
  */
 data class PreviewStart(val publishUrl: String, val token: String, val kbps: Int, val ttlS: Long) {
-    override fun toString(): String = "PreviewStart(publishUrl=${PreviewUrls.redact(publishUrl)}, kbps=$kbps, ttlS=$ttlS)"
+    override fun toString(): String =
+        "PreviewStart(publishUrl=${PreviewUrls.redact(publishUrl)}, kbps=$kbps, ttlS=$ttlS)"
 
     companion object {
         const val WIDTH = 640L
@@ -333,22 +334,24 @@ data class PreviewStart(val publishUrl: String, val token: String, val kbps: Int
 
         fun fromJson(body: JSONObject): PreviewStart {
             val publishUrl = body.requireText("publishUrl")
-            if (!PreviewUrls.isAllowed(publishUrl)) {
-                throw C1ProtocolException("publishUrl must be srt:// or rtmps:// (rtmp:// only to loopback).")
+            expect(PreviewUrls.isAllowed(publishUrl)) {
+                "publishUrl must be srt:// or rtmps:// (rtmp:// only to loopback)."
             }
             for ((name, expected) in listOf("width" to WIDTH, "height" to HEIGHT, "fps" to FPS)) {
-                if (body.requireLong(name) != expected) {
-                    throw C1ProtocolException("preview is ${WIDTH}x$HEIGHT at $FPS fps; $name must be $expected.")
+                expect(body.requireLong(name) == expected) {
+                    "preview is ${WIDTH}x$HEIGHT at $FPS fps; $name must be $expected."
                 }
             }
             return PreviewStart(
                 publishUrl = publishUrl,
                 token = body.requireText("token"),
                 kbps = body.intIn("kbps", KBPS_RANGE) ?: throw C1ProtocolException("Missing kbps."),
-                ttlS = body.requireLong("ttlS").also {
-                    if (it !in TTL_RANGE) throw C1ProtocolException("ttlS must be positive.")
-                },
+                ttlS = body.requireLong("ttlS").also { expect(it in TTL_RANGE) { "ttlS must be positive." } },
             )
+        }
+
+        private fun expect(ok: Boolean, message: () -> String) {
+            if (!ok) throw C1ProtocolException(message())
         }
     }
 }

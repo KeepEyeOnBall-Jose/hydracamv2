@@ -35,16 +35,6 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-/**
- * H8 seam: the SRT preview publisher (built in another session) attaches here to read the low
- * (proxy) encoder's output. Called on the proxy drain thread; implementations must not block.
- */
-interface LowEncoderListener {
-    fun onLowEncoderConfig(annexBConfig: ByteArray)
-
-    fun onLowEncoderFrame(ptsUs: Long, annexB: ByteArray, isKeyframe: Boolean)
-}
-
 /** Recorder → runtime. `recording.*` C1 events are sent from these callbacks. */
 interface CourtRecorderListener {
     fun onRecordingStarted(sessionId: String, firstFrameServerMs: Long, profile: RecordProfile)
@@ -62,7 +52,11 @@ interface CourtRecorderListener {
 /**
  * H5/H6/H15/H17: one Camera2 session feeding a master and a proxy (low) H.264 encoder, each cut into
  * 6 s MPEG-TS segments. AE/AF/AWB lock after warm-up; OIS/EIS off; torch through `FLASH_MODE_TORCH`
- * in the repeating request. Audio only when `record.start.audio`. The camera is closed when idle.
+ * in the repeating request. Audio only when `record.start.audio`. The camera is closed when idle,
+ * unless the live preview holds it ([CourtPreviewSeam]).
+ *
+ * The preview encoder's surface joins the capture session at open (or the session is retried
+ * without it); preview on/off only swaps the repeating burst, so the master never sees a rebuild.
  *
  * Port calls return at once; work runs on one control thread.
  */
@@ -75,10 +69,8 @@ class CourtCameraRecorder(
     private val listener: CourtRecorderListener,
     private val logger: CourtLogger = NoopCourtLogger,
 ) : CourtRecorderPort,
-    TorchControl {
-    @Volatile
-    var lowEncoderListener: LowEncoderListener? = null
-
+    TorchControl,
+    CourtPreviewSeam {
     private val control = Executors.newSingleThreadScheduledExecutor { runnable ->
         Thread(runnable, "CourtRecorder")
     }
@@ -89,15 +81,30 @@ class CourtCameraRecorder(
     @Volatile
     private var recording: Recording? = null
 
+    @Volatile
+    private var previewSurface: Surface? = null
+
+    @Volatile
+    private var previewFps = 0
+
+    /** Control thread only: the live preview holds the camera / K2 armed it for a session. */
+    private var held = false
+    private var armed = false
+
     /** For the status screen: `closed`, `warming`, `locked`. */
     val cameraState: String
         get() = pipeline?.let { if (it.locked) "locked" else "warming" } ?: "closed"
+
+    /** For the status screen: the preview output made it into the open capture session. */
+    val previewInSession: Boolean
+        get() = pipeline?.previewInSession == true
 
     override fun prepare(sessionId: String, profile: RecordProfile) {
         control.execute {
             if (recording != null) {
                 return@execute
             }
+            armed = true
             try {
                 ensurePipeline(profile)
             } catch (error: Exception) {
@@ -119,7 +126,8 @@ class CourtCameraRecorder(
             val active = recording
             if (active == null || active.sessionId != sessionId) {
                 // Nothing running (crash recovery or failed start): close what a kill left, report the seqs.
-                closePipeline()
+                armed = false
+                closeUnlessHeld()
                 recoverParts(sessionId)
                 listener.onRecordingStopped(
                     sessionId,
@@ -139,8 +147,9 @@ class CourtCameraRecorder(
 
     override fun disarm(sessionId: String) {
         control.execute {
+            armed = false
             if (recording == null) {
-                closePipeline()
+                closeUnlessHeld()
             }
         }
     }
@@ -150,6 +159,50 @@ class CourtCameraRecorder(
     override fun setTorch(on: Boolean) {
         pipeline?.setTorch(on)
     }
+
+    override fun previewOutputSizes(): List<Size> = try {
+        val manager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        manager.getCameraCharacteristics(backCameraId(manager))
+            .get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+            ?.getOutputSizes(MediaCodec::class.java)
+            ?.toList()
+            .orEmpty()
+    } catch (error: Exception) {
+        logger.warn(TAG, "Could not read the preview output sizes.", error)
+        emptyList()
+    }
+
+    override fun setPreviewSurface(surface: Surface?) {
+        previewSurface = surface
+    }
+
+    override fun setPreviewFps(fps: Int) {
+        previewFps = max(0, fps)
+        pipeline?.resubmit("Preview burst")
+    }
+
+    override fun holdCameraForPreview(hold: Boolean) {
+        control.execute {
+            held = hold
+            if (!hold) {
+                if (recording == null && !armed) {
+                    closePipeline()
+                }
+                return@execute
+            }
+            if (pipeline != null) {
+                return@execute
+            }
+            try {
+                ensurePipeline(RecordProfile.DEFAULT)
+            } catch (error: Exception) {
+                logger.warn(TAG, "Live preview could not open the camera.", error)
+            }
+        }
+    }
+
+    override fun captureWallMs(sensorNs: Long): Long =
+        pipeline?.ptsClock?.wallMsFor(sensorNs / NS_PER_US) ?: System.currentTimeMillis()
 
     fun shutdown() {
         control.execute {
@@ -220,6 +273,7 @@ class CourtCameraRecorder(
             return
         }
         recording = null
+        armed = false
         active.audio?.stop()
         val lastSeqs = C1.TIERS.associateWith { tier ->
             val segmenter = active.segmenters.getValue(tier)
@@ -231,7 +285,7 @@ class CourtCameraRecorder(
                 seqStore.lastSeq(active.sessionId, tier)
             }
         }
-        closePipeline()
+        closeUnlessHeld()
         logger.info(TAG, "Recording ${active.sessionId} stopped ($reason), lastSeq=$lastSeqs.")
         listener.onRecordingStopped(
             active.sessionId,
@@ -264,7 +318,18 @@ class CourtCameraRecorder(
             throw error
         }
         pipeline = pipe
+        if (pipe.previewInSession) {
+            // A setPreviewFps() during open() found no pipeline to resubmit; catch it up.
+            pipe.resubmit("Preview burst")
+        }
         return pipe
+    }
+
+    /** The live preview keeps the camera open past a recording (R2: it never records). */
+    private fun closeUnlessHeld() {
+        if (!held) {
+            closePipeline()
+        }
     }
 
     private fun closePipeline() {
@@ -293,11 +358,6 @@ class CourtCameraRecorder(
 
     /** Encoded output of one tier: routed to the session's segmenter inside the record window. */
     private fun onEncodedFrame(tier: String, ptsUs: Long, annexB: ByteArray, isKeyframe: Boolean) {
-        if (tier == C1.TIER_PROXY) {
-            lowEncoderListener?.let { low ->
-                runCatching { low.onLowEncoderFrame(ptsUs, annexB, isKeyframe) }
-            }
-        }
         val active = recording ?: return
         if (!active.inWindow(ptsUs) || !writeFrame(active, tier, ptsUs, annexB, isKeyframe)) {
             return
@@ -328,9 +388,6 @@ class CourtCameraRecorder(
     }
 
     private fun onEncoderConfig(tier: String, config: ByteArray) {
-        if (tier == C1.TIER_PROXY) {
-            lowEncoderListener?.let { low -> runCatching { low.onLowEncoderConfig(config) } }
-        }
         recording?.segmenters?.get(tier)?.onVideoConfig(config)
     }
 
@@ -364,6 +421,9 @@ class CourtCameraRecorder(
         private val cameraId: String = backCameraId(manager)
         private val characteristics = manager.getCameraCharacteristics(cameraId)
         private val encoders = mutableMapOf<String, VideoEncoder>()
+
+        /** Read once: a surface set later joins at the next open. */
+        private val preview: Surface? = previewSurface
         private val configs = mutableMapOf<String, ByteArray>()
         private var device: CameraDevice? = null
         private var session: CameraCaptureSession? = null
@@ -381,6 +441,10 @@ class CourtCameraRecorder(
 
         @Volatile
         var locked = false
+            private set
+
+        @Volatile
+        var previewInSession = false
             private set
 
         fun encoder(tier: String): VideoEncoder = encoders.getValue(tier)
@@ -436,19 +500,26 @@ class CourtCameraRecorder(
                 "Camera $cameraId did not open in $OPEN_TIMEOUT_MS ms."
             }
             openError?.let { throw it }
-            logger.info(TAG, "Camera $cameraId open: master $masterSize, proxy $proxySize @ ${profile.fps} fps.")
+            logger.info(
+                TAG,
+                "Camera $cameraId open: master $masterSize, proxy $proxySize @ ${profile.fps} fps, " +
+                    "preview output ${if (previewInSession) "on" else "off"}.",
+            )
         }
 
-        private fun configureSession(camera: CameraDevice, done: (Exception?) -> Unit) {
-            val surfaces = encoders.values.map { it.surface }
+        private fun configureSession(camera: CameraDevice, withPreview: Boolean = true, done: (Exception?) -> Unit) {
+            val recordSurfaces = encoders.values.map { it.surface }
+            val extra = preview?.takeIf { withPreview }
             camera.createCaptureSession(
-                surfaces,
+                recordSurfaces + listOfNotNull(extra),
                 object : CameraCaptureSession.StateCallback() {
                     override fun onConfigured(configured: CameraCaptureSession) {
                         try {
                             session = configured
+                            previewInSession = extra != null
+                            // The builder targets the encoders only; submit() adds the preview per burst slot.
                             val request = camera.createCaptureRequest(CameraDevice.TEMPLATE_RECORD)
-                            surfaces.forEach { request.addTarget(it) }
+                            recordSurfaces.forEach { request.addTarget(it) }
                             applyBaseControls(request)
                             builder = request
                             openedAtMs = SystemClock.elapsedRealtime()
@@ -460,7 +531,13 @@ class CourtCameraRecorder(
                     }
 
                     override fun onConfigureFailed(configured: CameraCaptureSession) {
-                        done(IllegalStateException("Capture session configuration failed."))
+                        if (extra != null) {
+                            // The recording comes first: drop the preview output rather than fail.
+                            logger.warn(TAG, "Capture session refused the preview output; recording without it.")
+                            configureSession(camera, withPreview = false, done = done)
+                        } else {
+                            done(IllegalStateException("Capture session configuration failed."))
+                        }
                     }
                 },
                 handler,
@@ -495,14 +572,49 @@ class CourtCameraRecorder(
                 ?: ranges.filter { it.upper == profile.fps }.maxByOrNull { it.lower }
         }
 
-        /** Must run on [handler]. */
+        /**
+         * Must run on [handler]. One repeating request, or a burst whose slots feed the preview
+         * output at [previewFps] (see [PreviewBurst]); every slot feeds both encoders.
+         */
         private fun submit() {
             val request = builder ?: return
+            val current = session ?: return
             request.set(
                 CaptureRequest.FLASH_MODE,
                 if (torchOn) CaptureRequest.FLASH_MODE_TORCH else CaptureRequest.FLASH_MODE_OFF,
             )
-            session?.setRepeatingRequest(request.build(), if (locked) null else warmupCallback, handler)
+            val target = preview?.takeIf { previewInSession }
+            val pattern = if (target == null) listOf(false) else PreviewBurst.pattern(profile.fps, previewFps)
+            val requests = pattern.map { show -> build(request, target?.takeIf { show }) }
+            val callback = if (locked) null else warmupCallback
+            if (requests.size == 1) {
+                current.setRepeatingRequest(requests.first(), callback, handler)
+            } else {
+                current.setRepeatingBurst(requests, callback, handler)
+            }
+        }
+
+        private fun build(request: CaptureRequest.Builder, extra: Surface?): CaptureRequest {
+            if (extra == null) {
+                return request.build()
+            }
+            request.addTarget(extra)
+            try {
+                return request.build()
+            } finally {
+                request.removeTarget(extra)
+            }
+        }
+
+        /** Re-issues the repeating burst with the current torch and preview fps. */
+        fun resubmit(what: String) {
+            handler.post {
+                try {
+                    submit()
+                } catch (error: Exception) {
+                    logger.warn(TAG, "$what update failed.", error)
+                }
+            }
         }
 
         private val warmupCallback = object : CameraCaptureSession.CaptureCallback() {
@@ -556,14 +668,8 @@ class CourtCameraRecorder(
         }
 
         fun setTorch(on: Boolean) {
-            handler.post {
-                torchOn = on
-                try {
-                    submit()
-                } catch (error: Exception) {
-                    logger.warn(TAG, "Torch update failed.", error)
-                }
-            }
+            handler.post { torchOn = on }
+            resubmit("Torch")
         }
 
         fun close() {
@@ -826,6 +932,7 @@ class CourtCameraRecorder(
         private const val STOP_GRACE_MS = 300L
         private const val DRAIN_TIMEOUT_US = 10_000L
         private const val RELEASE_JOIN_MS = 1_000L
+        private const val NS_PER_US = 1_000L
         private const val I_FRAME_INTERVAL_S = 2
         private const val AUDIO_SAMPLE_RATE = 48_000
         private const val AUDIO_BIT_RATE = 96_000

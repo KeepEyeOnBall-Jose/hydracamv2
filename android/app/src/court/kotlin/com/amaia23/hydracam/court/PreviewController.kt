@@ -154,19 +154,28 @@ class PreviewController(
             framesDropped++
             return
         }
-        val now = clock.nowMs()
-        if (!governor.admit(frame.data.size, now)) {
-            framesDropped++
-            awaitingKey = true
-            if (lastDropKeyRequestMs == Long.MIN_VALUE || now - lastDropKeyRequestMs >= tuning.keyFrameRequestIntervalMs) {
-                lastDropKeyRequestMs = now
-                enc.requestKeyFrame()
-            }
-            return
+        if (admit(frame, enc)) {
+            awaitingKey = false
+            framesSent++
+            transport.send(frame)
         }
-        awaitingKey = false
-        framesSent++
-        transport.send(frame)
+    }
+
+    /** False when the governor drops [frame]; the stream then waits for a fresh key frame. */
+    private fun admit(frame: PreviewFrame, enc: PreviewEncoderControl): Boolean {
+        val now = clock.nowMs()
+        if (governor.admit(frame.data.size, now)) {
+            return true
+        }
+        framesDropped++
+        awaitingKey = true
+        if (lastDropKeyRequestMs == Long.MIN_VALUE ||
+            now - lastDropKeyRequestMs >= tuning.keyFrameRequestIntervalMs
+        ) {
+            lastDropKeyRequestMs = now
+            enc.requestKeyFrame()
+        }
+        return false
     }
 
     /** Called about every 500 ms: TTL, backoff and the rate loop. */
