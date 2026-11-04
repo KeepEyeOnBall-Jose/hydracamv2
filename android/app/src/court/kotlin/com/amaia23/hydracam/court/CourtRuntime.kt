@@ -37,6 +37,22 @@ class CourtRuntime private constructor(context: Context) {
 
     private val scheduler = Executors.newSingleThreadScheduledExecutor { Thread(it, "CourtRuntime") }
     private val uploadExecutor = Executors.newSingleThreadScheduledExecutor { Thread(it, "CourtUploads") }
+
+    /** H8/S1 live preview: controller, transport callbacks, encoder output and ticks all run here. */
+    private val previewExecutor = Executors.newSingleThreadScheduledExecutor { Thread(it, "CourtPreview") }
+    private val previewTransport = RootEncoderPreviewTransport(previewExecutor::execute, logger)
+
+    /** Preview thread only. */
+    private var preview: PreviewController? = null
+
+    @Volatile
+    private var previewing = false
+
+    @Volatile
+    private var previewKbps = 0
+
+    @Volatile
+    private var previewStats: Map<String, Any?> = emptyMap()
     private val probe = DeviceStatusProbe(appContext)
     private val root = RootStatus(logger, RootShell::isRooted)
     private val storage = CourtStorage(File(appContext.filesDir, "court"))
@@ -100,6 +116,8 @@ class CourtRuntime private constructor(context: Context) {
             C1.SIGNAL_EMIT to CommandHandler { signals.emit(SignalEmit.fromJson(it.body)) },
             C1.UPLOAD_POLICY to CommandHandler { onUploadPolicy(UploadPolicy.fromJson(it.body)) },
             C1.MASTERS_UPLOAD to CommandHandler { onMastersUpload(it.id, MastersUpload.fromJson(it.body)) },
+            C1.PREVIEW_START to CommandHandler { onPreviewStart(PreviewStart.fromJson(it.body)) },
+            C1.PREVIEW_STOP to CommandHandler { onPreviewStop() },
         ),
         reply = { ws.reply(it) },
         logger = logger,
@@ -143,6 +161,8 @@ class CourtRuntime private constructor(context: Context) {
             enrollment = credentials.load()
             logger.info(TAG, "Starting; enrollment=${enrollment ?: "none"}.")
             checkRoot()
+            // The preview surface must be on the recorder before any command can open the camera.
+            previewExecutor.submit { setUpPreview() }.get()
             rootRecheck?.cancel(false)
             rootRecheck =
                 scheduler.scheduleWithFixedDelay({
@@ -161,6 +181,10 @@ class CourtRuntime private constructor(context: Context) {
         logger.info(TAG, "Service destroyed; closing the K2 connection.")
         ws.stop()
         scheduler.execute { rootRecheck?.cancel(false) }
+        previewExecutor.execute {
+            preview?.stop("service destroyed")
+            publishPreviewState()
+        }
         started.set(false)
     }
 
@@ -220,10 +244,12 @@ class CourtRuntime private constructor(context: Context) {
             "connectedAtMs" to ws.connectedAtMs,
             "connectError" to ws.lastConnectError,
             "phase" to phase.javaClass.simpleName,
-            "mode" to stateMachine.mode(pendingCount > 0).wire,
+            "mode" to stateMachine.mode(pendingCount > 0, previewing).wire,
             "activeSessionId" to stateMachine.activeSessionId,
             "lastError" to (stateMachine.lastError ?: uploadAlert),
             "camera" to recorder.cameraState,
+            "previewOutput" to recorder.previewInSession,
+            "preview" to previewStats,
             "clockOffsetMs" to estimate?.offsetMs,
             "clockRttMs" to estimate?.rttMs,
             "pendingUploads" to pendingCount,
@@ -302,7 +328,7 @@ class CourtRuntime private constructor(context: Context) {
         }
         val battery = probe.battery()
         return StateBody(
-            mode = stateMachine.mode(pendingCount > 0),
+            mode = stateMachine.mode(pendingCount > 0, previewing),
             batteryPct = battery.pct,
             charging = battery.charging,
             chargeCapPct = probe.chargeCapPct(),
@@ -329,7 +355,7 @@ class CourtRuntime private constructor(context: Context) {
     /** Upload thread only. */
     private fun applyPolicy(next: UploadPolicy) {
         policy = next
-        throttle.maxKbps = next.maxKbps
+        throttle.shareWithPreview(next.maxKbps, previewKbps)
         logger.info(TAG, "Upload policy: $next.")
     }
 
@@ -341,6 +367,62 @@ class CourtRuntime private constructor(context: Context) {
         }
         kickUploads()
         return CommandResult.Ack
+    }
+
+    /** Preview thread only. Idempotent; a phone without a preview encoder nacks `preview.start`. */
+    private fun setUpPreview() {
+        if (preview != null) {
+            return
+        }
+        val encoder = CourtPreviewEncoder.createOrNull(
+            onConfig = { config -> previewExecutor.execute { preview?.onCodecConfig(config) } },
+            onFrame = { frame -> previewExecutor.execute { preview?.onFrame(frame) } },
+            logger = logger,
+        )
+        recorder.setPreviewSurface(encoder?.surface)
+        preview = PreviewController(recorder, encoder, previewTransport, CourtClock.SYSTEM, logger)
+        previewExecutor.scheduleWithFixedDelay(::previewTick, PREVIEW_TICK_MS, PREVIEW_TICK_MS, TimeUnit.MILLISECONDS)
+    }
+
+    private fun onPreviewStart(command: PreviewStart): CommandResult {
+        val identity = enrollment
+            ?.let { PreviewIdentity(it.courtId, it.slot) }
+            ?.takeIf { it.courtId.isNotEmpty() && it.slot.isNotEmpty() }
+        return onPreviewThread { it.start(command, identity) }
+            ?: CommandResult.Nack(C1NackCode.UNSUPPORTED, "preview is not set up")
+    }
+
+    private fun onPreviewStop(): CommandResult {
+        onPreviewThread { it.stop("preview.stop") }
+        return CommandResult.Ack
+    }
+
+    /** Runs [block] on the preview thread and waits (well inside the 5 s ack deadline). */
+    private fun <T> onPreviewThread(block: (PreviewController) -> T): T? = previewExecutor.submit<T?> {
+        val controller = preview ?: return@submit null
+        block(controller).also { publishPreviewState() }
+    }.get(PREVIEW_CALL_MS, TimeUnit.MILLISECONDS)
+
+    /** Preview thread only (scheduled). An exception would cancel the schedule, so it is logged. */
+    private fun previewTick() {
+        try {
+            preview?.tick()
+            publishPreviewState()
+        } catch (error: Exception) {
+            logger.warn(TAG, "Preview tick failed.", error)
+        }
+    }
+
+    /** Preview thread only: shares the uplink with uploads (C4 1.7) and reports a mode change. */
+    private fun publishPreviewState() {
+        val controller = preview ?: return
+        previewStats = controller.stats()
+        previewKbps = controller.measuredKbps()
+        throttle.shareWithPreview(policy.maxKbps, previewKbps)
+        if (controller.isActive != previewing) {
+            previewing = controller.isActive
+            ws.sendStateNow()
+        }
     }
 
     private fun onUploadAlert(message: String) {
@@ -528,6 +610,8 @@ class CourtRuntime private constructor(context: Context) {
         private const val PRUNE_INTERVAL_MS = 60 * 60_000L
         private const val UPLOAD_MIN_DELAY_MS = 250L
         private const val UPLOAD_IDLE_MS = 30_000L
+        private const val PREVIEW_TICK_MS = 500L
+        private const val PREVIEW_CALL_MS = 3_000L
 
         @Volatile
         private var instance: CourtRuntime? = null

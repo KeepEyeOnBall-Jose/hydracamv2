@@ -97,7 +97,8 @@ data class C1Envelope(val id: String, val type: String, val ts: Long, val body: 
                 throw C1ProtocolException("Envelope is not a JSON object.", error)
             }
             val version = json.optInt("v", -1)
-            val id = json.optString("id")
+            // Strict: a numeric id would be coerced to a string the cloud never sent.
+            val id = json.opt("id") as? String ?: ""
             val type = json.optString("type")
             val problem = when {
                 version != C1.VERSION -> "Unsupported envelope v=$version."
@@ -316,6 +317,45 @@ data class SignalEmit(val signal: String, val atServerMs: Long, val sessionId: S
     }
 }
 
+/**
+ * C1 1.7 `preview.start`: one 640x360 stream at 20 fps; [kbps] caps the measured on-wire rate and
+ * the preview stops by itself [ttlS] seconds after the last start. [toString] hides credentials.
+ */
+data class PreviewStart(val publishUrl: String, val token: String, val kbps: Int, val ttlS: Long) {
+    override fun toString(): String =
+        "PreviewStart(publishUrl=${PreviewUrls.redact(publishUrl)}, kbps=$kbps, ttlS=$ttlS)"
+
+    companion object {
+        const val WIDTH = 640L
+        const val HEIGHT = 360L
+        const val FPS = 20L
+        private val KBPS_RANGE = 1L..1_000L
+        private val TTL_RANGE = 1L..Long.MAX_VALUE / 1_000
+
+        fun fromJson(body: JSONObject): PreviewStart {
+            val publishUrl = body.requireText("publishUrl")
+            expect(PreviewUrls.isAllowed(publishUrl)) {
+                "publishUrl must be srt:// or rtmps:// (rtmp:// only to loopback)."
+            }
+            for ((name, expected) in listOf("width" to WIDTH, "height" to HEIGHT, "fps" to FPS)) {
+                expect(body.requireLong(name) == expected) {
+                    "preview is ${WIDTH}x$HEIGHT at $FPS fps; $name must be $expected."
+                }
+            }
+            return PreviewStart(
+                publishUrl = publishUrl,
+                token = body.requireText("token"),
+                kbps = body.intIn("kbps", KBPS_RANGE) ?: throw C1ProtocolException("Missing kbps."),
+                ttlS = body.requireLong("ttlS").also { expect(it in TTL_RANGE) { "ttlS must be positive." } },
+            )
+        }
+
+        private fun expect(ok: Boolean, message: () -> String) {
+            if (!ok) throw C1ProtocolException(message())
+        }
+    }
+}
+
 /** C1 `masters.upload` (1.4); no range means the whole session. */
 data class MastersUpload(
     val sessionId: String,
@@ -454,6 +494,10 @@ internal fun JSONObject.optLongOrNull(name: String): Long? {
     }
     return value.toLong()
 }
+
+/** A required non-empty string; unlike [requireString], numbers are not coerced to text. */
+private fun JSONObject.requireText(name: String): String =
+    (opt(name) as? String)?.ifEmpty { null } ?: throw C1ProtocolException("$name must be a non-empty string.")
 
 private fun JSONObject.requireString(name: String): String =
     optStringOrNull(name) ?: throw C1ProtocolException("Missing $name.")

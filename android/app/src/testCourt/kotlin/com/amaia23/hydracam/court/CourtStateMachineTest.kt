@@ -152,6 +152,19 @@ class CourtStateMachineTest {
     }
 
     @Test
+    fun previewingRanksBelowRecordingAndArmedButAboveUploads() {
+        assertEquals(CourtMode.PREVIEWING, machine.mode(pendingUploads = true, previewing = true))
+        prepare()
+        assertEquals(CourtMode.ARMED, machine.mode(pendingUploads = false, previewing = true))
+        start()
+        assertEquals(CourtMode.RECORDING, machine.mode(pendingUploads = false, previewing = true))
+
+        rooted = false
+        val unrooted = CourtStateMachine({ rooted }, recorder, InMemoryActiveSessionStore())
+        assertEquals(CourtMode.PREVIEWING, unrooted.mode(pendingUploads = false, previewing = true))
+    }
+
+    @Test
     fun stopForUnknownSessionIsAckedWithNoEffect() {
         assertEquals(CommandResult.Ack, machine.onStop(RecordStop("nope", 0)))
         assertTrue(recorder.calls.isEmpty())
