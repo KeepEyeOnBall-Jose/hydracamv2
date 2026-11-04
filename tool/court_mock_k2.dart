@@ -14,6 +14,7 @@ import "package:crypto/crypto.dart";
 /// send record.prepare, record.start (+ rec.start signal), record for
 /// `--record-s`, send record.stop (+ rec.stop signal), then wait for every
 /// segment to verify and the manifest to complete, and write `summary.json`.
+/// `--no-signals` skips both signal.emit messages, so the phone plays no tones.
 Future<void> main(List<String> args) async {
   final options = _Options.parse(args);
   final mock = _MockK2(options);
@@ -29,6 +30,7 @@ class _Options {
     required this.audio,
     required this.tiers,
     required this.exitAfterS,
+    required this.signals,
   });
 
   final int port;
@@ -38,6 +40,7 @@ class _Options {
   final bool audio;
   final List<String> tiers;
   final int exitAfterS;
+  final bool signals;
 
   factory _Options.parse(List<String> args) {
     final values = <String, String>{};
@@ -45,7 +48,7 @@ class _Options {
       final arg = args[i];
       if (!arg.startsWith("--")) continue;
       final name = arg.substring(2);
-      if (name == "audio") {
+      if (name == "audio" || name == "no-signals") {
         values[name] = "true";
       } else if (i + 1 < args.length) {
         values[name] = args[++i];
@@ -55,7 +58,7 @@ class _Options {
     if (out == null) {
       stderr.writeln("usage: court_mock_k2.dart --out <dir> [--port 8787] "
           "[--idle-s 20] [--record-s 30] [--audio] [--tiers proxy,master] "
-          "[--exit-after-s 900]");
+          "[--exit-after-s 900] [--no-signals]");
       exit(64);
     }
     return _Options(
@@ -66,6 +69,7 @@ class _Options {
       audio: values["audio"] == "true",
       tiers: (values["tiers"] ?? "proxy,master").split(","),
       exitAfterS: int.parse(values["exit-after-s"] ?? "900"),
+      signals: values["no-signals"] != "true",
     );
   }
 }
@@ -112,6 +116,8 @@ class _MockK2 {
   bool _leaseActive = false;
   bool _manifestComplete = false;
   bool _scenarioStarted = false;
+  // A socket's onDone can fire after shutdown closed the logs.
+  bool _logsClosed = false;
   final _startedEvents = <Map<String, Object?>>[];
   final _stoppedEvents = <Map<String, Object?>>[];
 
@@ -134,6 +140,7 @@ class _MockK2 {
     await _writeSummary();
     await _socket?.close();
     await server.close(force: true);
+    _logsClosed = true;
     await _c1Log.close();
     await _c2Log.close();
   }
@@ -191,7 +198,8 @@ class _MockK2 {
       await request.response.close();
       return;
     }
-    final socket = await WebSocketTransformer.upgrade(request);
+    final socket = await WebSocketTransformer.upgrade(request,
+        compression: CompressionOptions.compressionOff);
     await _socket?.close();
     _socket = socket;
     socket.listen(
@@ -295,7 +303,7 @@ class _MockK2 {
       "ingestUrl": "http://127.0.0.1:${options.port}",
       "gestures": <String>[],
     });
-    if (!resend) {
+    if (!resend && options.signals) {
       _send("signal.emit", {
         "signal": "rec.start",
         "atServerMs": _startAtServerMs,
@@ -308,8 +316,13 @@ class _MockK2 {
     final stopAt = _now + 1000;
     _leaseActive = false;
     _recordStopSentMs = _now;
-    _send("signal.emit",
-        {"signal": "rec.stop", "atServerMs": stopAt, "sessionId": _sessionId});
+    if (options.signals) {
+      _send("signal.emit", {
+        "signal": "rec.stop",
+        "atServerMs": stopAt,
+        "sessionId": _sessionId,
+      });
+    }
     _send("record.stop", {"sessionId": _sessionId, "stopAtServerMs": stopAt});
   }
 
@@ -472,6 +485,7 @@ class _MockK2 {
   }
 
   void _logC1(String direction, String type, Map<String, Object?> envelope) {
+    if (_logsClosed) return;
     _c1Log.writeln(jsonEncode({
       "serverMs": _now,
       "dir": direction,
@@ -481,6 +495,7 @@ class _MockK2 {
   }
 
   void _logC2(String event, Map<String, Object?> fields) {
+    if (_logsClosed) return;
     _c2Log.writeln(jsonEncode({"serverMs": _now, "event": event, ...fields}));
   }
 
