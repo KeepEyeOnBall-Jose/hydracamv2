@@ -168,6 +168,8 @@ class CourtContractsConformanceTest {
             C1.SIGNAL_EMIT to parses(SignalEmit::fromJson),
             C1.UPLOAD_POLICY to parses(UploadPolicy::fromJson),
             C1.MASTERS_UPLOAD to parses(MastersUpload::fromJson),
+            C1.PREVIEW_START to parses(PreviewStart::fromJson),
+            C1.PREVIEW_STOP to parses {},
         )
 
         fun parses(parse: (JSONObject) -> Any): CommandHandler = CommandHandler { envelope ->

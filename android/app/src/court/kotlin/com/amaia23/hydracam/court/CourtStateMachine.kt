@@ -179,10 +179,11 @@ class CourtStateMachine(
     }
 
     @Synchronized
-    fun mode(pendingUploads: Boolean): CourtMode = when (phase) {
+    fun mode(pendingUploads: Boolean, previewing: Boolean = false): CourtMode = when (phase) {
         is Phase.Recording, is Phase.Stopping -> CourtMode.RECORDING
         is Phase.Armed -> CourtMode.ARMED
         Phase.Idle -> when {
+            previewing -> CourtMode.PREVIEWING
             pendingUploads -> CourtMode.UPLOADING
             !rooted() -> CourtMode.DEGRADED
             else -> CourtMode.IDLE
