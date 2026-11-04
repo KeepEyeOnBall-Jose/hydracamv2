@@ -20,7 +20,10 @@ jobs:
     name: ${{ inputs.runner_label && format('flutter-quality (host qualification {0}, advisory)', inputs.runner_label) || 'flutter-quality' }}
     continue-on-error: ${{ inputs.runner_label && true || false }}
     runs-on: ${{ github.repository == 'KeepEyeOnBall-Jose/hydracamv2' && github.actor == github.repository_owner && github.triggering_actor == github.repository_owner && !github.event.repository.fork && (github.event_name != 'pull_request' || (github.event.pull_request.user.login == github.repository_owner && github.event.pull_request.head.repo.full_name == github.repository && !github.event.pull_request.head.repo.fork)) && (inputs.runner_label || fromJSON(vars.CI_LINUX_RUNNER_LABELS || '["keob-linux-ci","repo-hydracamv2"]')) || 'ubuntu-latest' }}
-    timeout-minutes: 20
+    # Hetzner guests (hz-nodes, hz-workspace) share one host's disks: idle, the job takes ~3-5 min;
+    # when other guests are busy, flutter test runs ~30 tests/min and 20 min cut it off at ~590 of
+    # ~816 tests (runs 41178709652, 41357525554), i.e. ~29 min for the whole job. 45 = that + ~50%.
+    timeout-minutes: 45
 
     steps:
       - name: Checkout code
