@@ -106,8 +106,10 @@ class CourtCameraRecorder(
             }
             armed = true
             try {
-                ensurePipeline(profile)
+                ensurePipeline(profile, sessionId)
             } catch (error: Exception) {
+                // Not armed: holdCameraForPreview(false) and disarm() must be free to close the camera.
+                armed = false
                 fail(sessionId, "camera_open: ${error.message}", error)
             }
         }
@@ -200,6 +202,8 @@ class CourtCameraRecorder(
             }
         }
     }
+
+    override fun cameraOpen(): Boolean = pipeline != null
 
     override fun captureWallMs(sensorNs: Long): Long =
         pipeline?.ptsClock?.wallMsFor(sensorNs / NS_PER_US) ?: System.currentTimeMillis()
@@ -300,13 +304,24 @@ class CourtCameraRecorder(
         listener.onRecorderFailed(sessionId, message)
     }
 
-    private fun ensurePipeline(profile: RecordProfile): CameraPipeline {
-        pipeline?.let { current ->
-            if (current.profile == profile) {
-                return current
+    /**
+     * The open pipeline for [profile], opened if needed. [sessionId] is set by `record.prepare` only:
+     * a pipeline the live preview or an earlier session warmed up warms up again (see [pipelineAction]).
+     */
+    private fun ensurePipeline(profile: RecordProfile, sessionId: String? = null): CameraPipeline {
+        val current = pipeline
+        return when (pipelineAction(current?.profile, current?.warmedFor, profile, sessionId)) {
+            PipelineAction.REUSE -> checkNotNull(current)
+            PipelineAction.REWARM -> checkNotNull(current).also { it.rewarm(checkNotNull(sessionId)) }
+            PipelineAction.REOPEN -> {
+                closePipeline()
+                openPipeline(profile, sessionId)
             }
-            closePipeline()
+            PipelineAction.OPEN -> openPipeline(profile, sessionId)
         }
+    }
+
+    private fun openPipeline(profile: RecordProfile, sessionId: String?): CameraPipeline {
         if (!hasPermission(Manifest.permission.CAMERA)) {
             throw SecurityException("CAMERA permission not granted.")
         }
@@ -317,6 +332,7 @@ class CourtCameraRecorder(
             pipe.close()
             throw error
         }
+        pipe.warmedFor = sessionId
         pipeline = pipe
         if (pipe.previewInSession) {
             // A setPreviewFps() during open() found no pipeline to resubmit; catch it up.
@@ -430,7 +446,11 @@ class CourtCameraRecorder(
         private var builder: CaptureRequest.Builder? = null
         private var openedAtMs = 0L
         private var lastFocusDistance: Float? = null
+        private var afTriggered = false
         private var torchOn = false
+
+        /** Control thread only: the session whose `record.prepare` warmed 3A up (null: the preview). */
+        var warmedFor: String? = null
 
         val ptsClock = PtsClock(
             characteristics.get(CameraCharacteristics.SENSOR_INFO_TIMESTAMP_SOURCE) ==
@@ -661,10 +681,45 @@ class CourtCameraRecorder(
                 request.set(CaptureRequest.CONTROL_AF_TRIGGER, CaptureRequest.CONTROL_AF_TRIGGER_START)
                 session?.capture(request.build(), null, handler)
                 request.set(CaptureRequest.CONTROL_AF_TRIGGER, CaptureRequest.CONTROL_AF_TRIGGER_IDLE)
+                afTriggered = true
                 focusMode = "af_trigger"
             }
             submit()
             logger.info(TAG, "3A locked after $elapsedMs ms (converged=$converged, focus=$focusMode).")
+        }
+
+        /**
+         * Control thread: a `record.prepare` for [sessionId] reuses this pipeline, so 3A warms up and
+         * locks again for it instead of keeping what the preview (or the last session) locked.
+         */
+        fun rewarm(sessionId: String) {
+            warmedFor = sessionId
+            handler.post {
+                try {
+                    unlock(sessionId)
+                } catch (error: Exception) {
+                    logger.warn(TAG, "3A warm-up for $sessionId failed; keeping the old lock.", error)
+                }
+            }
+        }
+
+        /** Runs on [handler]: back to open-time 3A; [warmupCallback] then locks again. */
+        private fun unlock(sessionId: String) {
+            val request = builder ?: return
+            request.set(CaptureRequest.CONTROL_AE_LOCK, false)
+            request.set(CaptureRequest.CONTROL_AWB_LOCK, false)
+            request.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_VIDEO)
+            if (afTriggered) {
+                request.set(CaptureRequest.CONTROL_AF_TRIGGER, CaptureRequest.CONTROL_AF_TRIGGER_CANCEL)
+                session?.capture(request.build(), null, handler)
+                request.set(CaptureRequest.CONTROL_AF_TRIGGER, CaptureRequest.CONTROL_AF_TRIGGER_IDLE)
+                afTriggered = false
+            }
+            lastFocusDistance = null
+            openedAtMs = SystemClock.elapsedRealtime()
+            locked = false
+            submit()
+            logger.info(TAG, "3A unlocked to warm up again for $sessionId.")
         }
 
         fun setTorch(on: Boolean) {

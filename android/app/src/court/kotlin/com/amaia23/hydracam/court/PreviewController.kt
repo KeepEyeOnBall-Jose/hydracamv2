@@ -41,6 +41,8 @@ data class PreviewTuning(
     val maxBackoffMs: Long = 8_000,
     val failuresBeforeFallback: Int = 2,
     val keyFrameRequestIntervalMs: Long = 500,
+    /** How long the camera may take to open before the preview asks for it again (then as often). */
+    val cameraRetryMs: Long = 5_000,
 )
 
 /**
@@ -83,9 +85,18 @@ class PreviewController(
     private var framesSent = 0
     private var framesDropped = 0
     private var reconnects = 0
+    private var cameraFailed = false
+    private var cameraRetries = 0
+    private var cameraCheckAtMs = 0L
     private val governor = PreviewRateGovernor(capKbps = MAX_KBPS)
 
     val isActive: Boolean get() = state != State.Off
+
+    /** Active with the camera open (or still opening): what the `previewing` mode reports. */
+    val isPreviewing: Boolean get() = isActive && !cameraFailed
+
+    /** Why an active preview shows nothing, for `state.lastError`; null when it is fine. */
+    val problem: String? get() = if (isActive && cameraFailed) CAMERA_PROBLEM else null
 
     val stateName: String get() = state.name
 
@@ -98,7 +109,7 @@ class PreviewController(
         }
         val next = PreviewUrls.target(command.publishUrl, command.token, identity)
         val now = clock.nowMs()
-        expiresAtMs = now + command.ttlS * MS_PER_S
+        expiresAtMs = expiry(now, command.ttlS)
         governor.capKbps = command.kbps
         val previous = target
         target = next
@@ -106,11 +117,13 @@ class PreviewController(
             !isActive -> begin(now, encoder)
             previous?.key == next.key -> {
                 // A re-arm: the fresh token is for the next reconnect; the stream keeps going.
+                reopenCameraIfClosed()
                 applyLevels(encoder)
                 encoder.requestKeyFrame()
             }
             else -> {
                 logger.info(TAG, "Preview target changed to ${next.key}.")
+                reopenCameraIfClosed()
                 applyLevels(encoder)
                 transport.disconnect()
                 urlIndex = 0
@@ -178,15 +191,21 @@ class PreviewController(
         return false
     }
 
-    /** Called about every 500 ms: TTL, backoff and the rate loop. */
+    /** Called about every 500 ms: TTL, the camera, backoff and the rate loop. */
     fun tick() {
         val now = clock.nowMs()
         val current = state
         when {
             current == State.Off -> return
             now >= expiresAtMs -> stop("ttl")
-            current is State.Backoff && now >= current.untilMs -> connect()
-            governor.adjust(now) -> encoder?.let(::applyLevels)
+            else -> {
+                watchCamera(now)
+                if (current is State.Backoff && now >= current.untilMs) {
+                    connect()
+                } else if (governor.adjust(now)) {
+                    encoder?.let(::applyLevels)
+                }
+            }
         }
     }
 
@@ -203,10 +222,15 @@ class PreviewController(
         "framesSent" to framesSent,
         "framesDropped" to framesDropped,
         "reconnects" to reconnects,
+        "camera" to cameraStatus(),
+        "cameraRetries" to cameraRetries,
     )
 
     private fun begin(now: Long, enc: PreviewEncoderControl) {
         camera.holdCameraForPreview(true)
+        cameraFailed = false
+        cameraRetries = 0
+        cameraCheckAtMs = now + tuning.cameraRetryMs
         governor.reset(now)
         applyLevels(enc)
         urlIndex = 0
@@ -263,6 +287,48 @@ class PreviewController(
         logger.warn(TAG, "Preview publish failed ($reason); retry in $delay ms on url ${urlIndex + 1}.")
     }
 
+    /**
+     * The camera open is async and its failure only logged: while the camera stays closed, ask for it
+     * again every [PreviewTuning.cameraRetryMs] and report the preview as failed, not previewing.
+     */
+    private fun watchCamera(now: Long) {
+        if (camera.cameraOpen()) {
+            if (cameraFailed) {
+                logger.info(TAG, "Preview camera open after $cameraRetries retries.")
+                cameraFailed = false
+                encoder?.requestKeyFrame()
+            }
+            cameraRetries = 0
+            cameraCheckAtMs = now + tuning.cameraRetryMs
+        } else if (now >= cameraCheckAtMs) {
+            if (!cameraFailed) {
+                logger.warn(TAG, "Preview camera did not open; retrying every ${tuning.cameraRetryMs} ms.")
+            }
+            cameraFailed = true
+            cameraRetries++
+            cameraCheckAtMs = now + tuning.cameraRetryMs
+            camera.holdCameraForPreview(true)
+        }
+    }
+
+    /** A re-arm also retries a camera that failed to open (or that a recording closed). */
+    private fun reopenCameraIfClosed() {
+        if (!camera.cameraOpen()) {
+            camera.holdCameraForPreview(true)
+        }
+    }
+
+    private fun cameraStatus(): String = when {
+        !isActive -> "off"
+        cameraFailed -> "failed"
+        camera.cameraOpen() -> "open"
+        else -> "opening"
+    }
+
+    /** [now] + [ttlS] seconds, saturating: C1 allows a TTL up to `Long.MAX_VALUE / 1000` s. */
+    private fun expiry(now: Long, ttlS: Long): Long =
+        if (ttlS >= (Long.MAX_VALUE - now) / MS_PER_S) Long.MAX_VALUE else now + ttlS * MS_PER_S
+
     private fun backoffMs(attempt: Int): Long {
         var delay = tuning.baseBackoffMs
         repeat(attempt - 1) {
@@ -287,5 +353,6 @@ class PreviewController(
         const val TAG = "CourtPreview"
         const val MAX_KBPS = 1_000
         const val MS_PER_S = 1_000L
+        const val CAMERA_PROBLEM = "preview_camera_closed"
     }
 }

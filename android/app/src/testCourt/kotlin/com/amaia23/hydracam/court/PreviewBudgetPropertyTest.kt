@@ -16,12 +16,28 @@ class PreviewBudgetPropertyTest {
             val budget = UploadThrottle.budgetKbps(policy, preview)
             val context = "policy=$policy preview=$preview budget=$budget"
 
-            assertTrue(context, budget >= UploadThrottle.MIN_SHARED_KBPS)
+            assertTrue(context, budget >= minOf(policy, UploadThrottle.MIN_SHARED_KBPS))
             if (policy - preview >= UploadThrottle.MIN_SHARED_KBPS) {
                 assertTrue(context, budget + preview.coerceAtLeast(0) <= policy)
             }
-            assertTrue(context, budget <= maxOf(policy, UploadThrottle.MIN_SHARED_KBPS))
+            assertTrue(context, budget <= policy)
         }
+    }
+
+    @Test
+    fun aPolicyBelowTheFloorIsNeverRaised() {
+        assertEquals(32, UploadThrottle.budgetKbps(policyKbps = 32, measuredPreviewKbps = 0))
+        assertEquals(32, UploadThrottle.budgetKbps(policyKbps = 32, measuredPreviewKbps = 100))
+        assertEquals(1, UploadThrottle.budgetKbps(policyKbps = 1, measuredPreviewKbps = 0))
+        assertEquals(
+            UploadThrottle.MIN_SHARED_KBPS,
+            UploadThrottle.budgetKbps(policyKbps = 1_000, measuredPreviewKbps = 2_000),
+        )
+        assertEquals(0, UploadThrottle.budgetKbps(policyKbps = 0, measuredPreviewKbps = 500))
+
+        val throttle = UploadThrottle(maxKbps = 32)
+        throttle.shareWithPreview(policyKbps = 32, measuredPreviewKbps = 0)
+        assertEquals(32, throttle.maxKbps)
     }
 
     @Test

@@ -20,7 +20,7 @@ class PreviewRateGovernorTest {
     }
 
     @Test
-    fun admittedWireBytesNeverExceedTheCapPlusOneSecondOfBurst() {
+    fun admittedWireBytesNeverExceedTheCapPlusOneBurst() {
         val random = Random(11)
         repeat(200) {
             val cap = random.nextInt(50, 1_001)
@@ -34,14 +34,49 @@ class PreviewRateGovernorTest {
                     admitted += now to governor.wireBytes(payload)
                 }
             }
+            // The burst is one second at the cap, or one oversized frame the bucket went into debt for.
+            val burst = maxOf(cap.toLong() * PreviewRateGovernor.BURST_MS / 8, admitted.maxOf { it.second }.toLong())
             for ((start, _) in admitted) {
-                for (spanMs in longArrayOf(500, 1_000, 3_000)) {
+                for (spanMs in longArrayOf(500, 1_000, 3_000, 10_000)) {
                     val bytes = admitted.filter { it.first in start until start + spanMs }.sumOf { it.second }
-                    val allowed = cap.toLong() * (spanMs + PreviewRateGovernor.BURST_MS) / 8
+                    val allowed = cap.toLong() * spanMs / 8 + burst
                     assertTrue("cap=$cap span=$spanMs bytes=$bytes allowed=$allowed", bytes <= allowed)
                 }
             }
         }
+    }
+
+    @Test
+    fun aKeyFrameBiggerThanTheBucketGoesOnceItIsFullAndItsDebtIsRepaid() {
+        // At 200 kbps the bucket is 25 KB; a 40 KB key frame (43.2 KB on the wire) must still go.
+        val governor = PreviewRateGovernor(capKbps = 200)
+        assertTrue(governor.admit(40_000, 0))
+
+        // 18.2 KB of debt at 25 KB/s: the next 1 KB frame waits ~770 ms.
+        assertFalse(governor.admit(1_000, 500))
+        assertTrue(governor.admit(1_000, 800))
+
+        // Not full again yet, so a second oversized frame waits for the bucket to refill.
+        assertFalse(governor.admit(40_000, 1_500))
+        assertTrue(governor.admit(40_000, 3_000))
+    }
+
+    @Test
+    fun aFrameBiggerThanTheWindowGoesIntoAnEmptyWindowAndHoldsTheLongRunRate() {
+        // At 50 kbps the 2 s window is 12.5 KB; a 20 KB key frame is bigger than bucket and window.
+        val governor = PreviewRateGovernor(capKbps = 50)
+        val admitted = mutableListOf<Long>()
+        var now = 0L
+        repeat(600) {
+            now += 100
+            if (governor.admit(20_000, now)) admitted += now
+        }
+
+        assertTrue("admitted ${admitted.size}", admitted.size >= 10)
+        // From the first frame on (the bucket starts full), the debt holds the rate at the cap.
+        val wireBits = (admitted.size - 1) * governor.wireBytes(20_000) * 8L
+        val kbps = wireBits / (admitted.last() - admitted.first())
+        assertTrue("long-run $kbps kbps", kbps <= 50)
     }
 
     @Test

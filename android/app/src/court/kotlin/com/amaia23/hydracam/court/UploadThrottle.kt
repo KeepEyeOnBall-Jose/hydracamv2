@@ -1,6 +1,7 @@
 package com.amaia23.hydracam.court
 
 import java.io.InterruptedIOException
+import kotlin.math.min
 
 /**
  * R10: paces segment bytes to `upload.policy.maxKbps` so the live preview keeps uplink headroom.
@@ -49,7 +50,8 @@ class UploadThrottle(
 
     /**
      * C4 v1.7: while the preview flows, uploads get [policyKbps] minus the preview rate measured on
-     * the wire, never less than [MIN_SHARED_KBPS] (0 would mean unlimited). 0 policy stays unlimited.
+     * the wire, never less than [MIN_SHARED_KBPS] (0 would mean unlimited) and never more than
+     * [policyKbps]: a policy below the floor is kept as is. 0 policy stays unlimited.
      */
     fun shareWithPreview(policyKbps: Int, measuredPreviewKbps: Int) {
         maxKbps = budgetKbps(policyKbps, measuredPreviewKbps)
@@ -60,7 +62,8 @@ class UploadThrottle(
 
         fun budgetKbps(policyKbps: Int, measuredPreviewKbps: Int): Int = when {
             policyKbps <= 0 -> 0
-            else -> (policyKbps - measuredPreviewKbps.coerceAtLeast(0)).coerceAtLeast(MIN_SHARED_KBPS)
+            else -> (policyKbps - measuredPreviewKbps.coerceAtLeast(0))
+                .coerceAtLeast(min(MIN_SHARED_KBPS, policyKbps))
         }
 
         /** One byte (8 bits) at 1 kbps (1000 bit/s) takes 8 ms. */
