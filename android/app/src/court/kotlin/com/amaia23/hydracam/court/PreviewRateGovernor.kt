@@ -9,6 +9,8 @@ import kotlin.math.min
  *
  * - [admit] is the hard limit. A one-second token bucket bounds any span, and a [windowMs] sliding
  *   window keeps [measuredKbps] at or below the cap. Refused frames are dropped by the caller.
+ *   A frame bigger than the bucket or the window (a key frame at a low cap) still goes once the
+ *   bucket is full and the window empty; the bucket then runs a debt that later frames repay.
  * - [adjust] is the soft loop: it lowers the encoder bitrate toward [floorKbps], then the camera
  *   fps, so drops stay rare; with headroom it restores fps first, then bitrate.
  *
@@ -55,7 +57,11 @@ class PreviewRateGovernor(
         expire(nowMs)
         val wire = wireBytes(payloadBytes)
         val windowLimit = capKbps.toLong() * windowMs / BITS_PER_BYTE
-        if (wire > tokens || windowBytes + wire > windowLimit) {
+        // A full bucket and an empty window let one oversized frame through: refusing it forever
+        // would drop every key frame bigger than the bucket and the preview would never start.
+        val bucketOk = wire <= tokens || tokens >= capacity()
+        val windowOk = windowBytes + wire <= windowLimit || windowBytes == 0L
+        if (!bucketOk || !windowOk) {
             return false
         }
         tokens -= wire
@@ -149,7 +155,10 @@ class PreviewRateGovernor(
         max(1, (cap.toLong() * PERCENT * AIM_PCT / (PERCENT + overheadPct) / PERCENT).toInt())
 
     companion object {
-        /** The bucket holds one second at the cap: any span carries at most cap × (span + 1 s). */
+        /**
+         * The bucket holds one second at the cap: any span carries at most cap × span plus the larger
+         * of one second at the cap and the biggest frame admitted.
+         */
         const val BURST_MS = 1_000L
         const val MAX_FPS = 20
         const val MIN_FPS = 10

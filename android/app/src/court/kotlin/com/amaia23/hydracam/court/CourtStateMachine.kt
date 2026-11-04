@@ -174,7 +174,10 @@ class CourtStateMachine(
             phase = Phase.Stopping(sessionId)
             recorder.stop(sessionId, 0, REASON_ERROR)
         } else if (current is Phase.Armed && current.sessionId == sessionId) {
+            // A failed prepare: disarm so the port does not keep a half-open camera for a session
+            // that will never start (the live preview would otherwise see it as armed and keep it).
             phase = Phase.Idle
+            recorder.disarm(sessionId)
         }
     }
 

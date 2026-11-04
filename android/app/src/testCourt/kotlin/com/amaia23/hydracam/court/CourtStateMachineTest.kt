@@ -248,7 +248,8 @@ class CourtStateMachineTest {
 
         assertEquals(CourtStateMachine.Phase.Idle, machine.phase)
         assertEquals("camera_open_failed", machine.lastError)
-        assertEquals(listOf("prepare:s1:60"), recorder.calls)
+        // The failed prepare is disarmed so the port can close what it opened.
+        assertEquals(listOf("prepare:s1:60", "disarm:s1"), recorder.calls)
     }
 
     @Test

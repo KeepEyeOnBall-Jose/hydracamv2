@@ -48,6 +48,10 @@ class CourtRuntime private constructor(context: Context) {
     @Volatile
     private var previewing = false
 
+    /** Why the active preview shows nothing (its camera did not open), reported as `state.lastError`. */
+    @Volatile
+    private var previewAlert: String? = null
+
     @Volatile
     private var previewKbps = 0
 
@@ -246,7 +250,7 @@ class CourtRuntime private constructor(context: Context) {
             "phase" to phase.javaClass.simpleName,
             "mode" to stateMachine.mode(pendingCount > 0, previewing).wire,
             "activeSessionId" to stateMachine.activeSessionId,
-            "lastError" to (stateMachine.lastError ?: uploadAlert),
+            "lastError" to (stateMachine.lastError ?: uploadAlert ?: previewAlert),
             "camera" to recorder.cameraState,
             "previewOutput" to recorder.previewInSession,
             "preview" to previewStats,
@@ -337,7 +341,7 @@ class CourtRuntime private constructor(context: Context) {
             freeBytes = probe.freeBytes(),
             pendingUploadBytes = pendingBytes,
             wifiRssi = probe.wifiRssi(),
-            lastError = stateMachine.lastError ?: uploadAlert,
+            lastError = stateMachine.lastError ?: uploadAlert ?: previewAlert,
         )
     }
 
@@ -419,8 +423,9 @@ class CourtRuntime private constructor(context: Context) {
         previewStats = controller.stats()
         previewKbps = controller.measuredKbps()
         throttle.shareWithPreview(policy.maxKbps, previewKbps)
-        if (controller.isActive != previewing) {
-            previewing = controller.isActive
+        if (controller.isPreviewing != previewing || controller.problem != previewAlert) {
+            previewing = controller.isPreviewing
+            previewAlert = controller.problem
             ws.sendStateNow()
         }
     }

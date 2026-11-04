@@ -20,22 +20,26 @@ class PreviewControllerTest {
     private val config = PreviewCodecConfig(byteArrayOf(0, 0, 0, 1, 0x67), byteArrayOf(0, 0, 0, 1, 0x68))
     private val controller = PreviewController(camera, encoder, transport, clock, logger)
 
-    private fun command(token: String = "jwt-1", kbps: Int = 1_000, ttlS: Int = 300, url: String = "srt://relay:8890") =
-        PreviewStart.fromJson(
-            JSONObject()
-                .put("publishUrl", url)
-                .put("token", token)
-                .put("width", 640)
-                .put("height", 360)
-                .put("fps", 20)
-                .put("kbps", kbps)
-                .put("ttlS", ttlS),
-        )
+    private fun command(
+        token: String = "jwt-1",
+        kbps: Int = 1_000,
+        ttlS: Long = 300,
+        url: String = "srt://relay:8890",
+    ) = PreviewStart.fromJson(
+        JSONObject()
+            .put("publishUrl", url)
+            .put("token", token)
+            .put("width", 640)
+            .put("height", 360)
+            .put("fps", 20)
+            .put("kbps", kbps)
+            .put("ttlS", ttlS),
+    )
 
     private fun frame(key: Boolean = false, size: Int = 1_000) = PreviewFrame(ByteArray(size), clock.now * 1_000, key)
 
-    private fun publishing(): PreviewController {
-        assertEquals(CommandResult.Ack, controller.start(command(), identity))
+    private fun publishing(start: PreviewStart = command()): PreviewController {
+        assertEquals(CommandResult.Ack, controller.start(start, identity))
         controller.onCodecConfig(config)
         transport.listener!!.onConnected()
         return controller
@@ -293,6 +297,105 @@ class PreviewControllerTest {
     }
 
     @Test
+    fun aKeyFrameBiggerThanTheBucketIsStillSentAtALowCap() {
+        controller.start(command(kbps = 200), identity)
+        controller.onCodecConfig(config)
+        transport.listener!!.onConnected()
+
+        // 200 kbps is a 25 kB bucket; the stream must still start with a 40 kB key frame.
+        controller.onFrame(frame(key = true, size = 40_000))
+        clock.now += 50
+        controller.onFrame(frame(size = 1_000))
+        clock.now += 2_000
+        controller.onFrame(frame(key = true, size = 40_000))
+
+        assertEquals(listOf(40_000, 40_000), transport.sent.map { it.data.size })
+        assertEquals(listOf(true, true), transport.sent.map { it.keyFrame })
+    }
+
+    @Test
+    fun theLargestTtlNeverExpiresEarly() {
+        clock.now = 1_700_000_000_000L
+        publishing(command(ttlS = Long.MAX_VALUE / 1_000))
+
+        clock.now += 1_000
+        controller.tick()
+
+        assertTrue(controller.isActive)
+        assertEquals("publishing", controller.stateName)
+    }
+
+    @Test
+    fun aCameraThatFailsToOpenIsRetriedAndReportedUntilItOpens() {
+        camera.opens = false
+        publishing()
+        assertTrue(controller.isPreviewing)
+        assertNull(controller.problem)
+
+        // Still within the grace period: the open is async.
+        clock.now = 4_999
+        controller.tick()
+        assertEquals(1, camera.holds)
+        assertEquals("opening", controller.stats()["camera"])
+
+        clock.now = 5_000
+        controller.tick()
+        assertEquals(2, camera.holds)
+        assertFalse(controller.isPreviewing)
+        assertEquals("preview_camera_closed", controller.problem)
+        assertEquals("failed", controller.stats()["camera"])
+        assertEquals(1, logger.warnings.count { it.contains("did not open") })
+
+        clock.now = 10_000
+        controller.tick()
+        assertEquals(3, camera.holds)
+        assertEquals(2, controller.stats()["cameraRetries"])
+        assertEquals(1, logger.warnings.count { it.contains("did not open") })
+
+        camera.opens = true
+        val keyFrames = encoder.keyFrameRequests
+        clock.now = 10_500
+        controller.tick()
+        assertTrue(controller.isPreviewing)
+        assertNull(controller.problem)
+        assertEquals("open", controller.stats()["camera"])
+        assertEquals(keyFrames + 1, encoder.keyFrameRequests)
+        assertEquals(0, controller.stats()["cameraRetries"])
+
+        controller.stop("preview.stop")
+        assertFalse(controller.isPreviewing)
+        assertNull(controller.problem)
+        assertEquals("off", controller.stats()["camera"])
+    }
+
+    @Test
+    fun aCameraThatStaysOpenIsNeverAskedForAgain() {
+        publishing()
+        repeat(40) {
+            clock.now += 500
+            controller.tick()
+        }
+
+        assertEquals(1, camera.holds)
+        assertTrue(controller.isPreviewing)
+    }
+
+    @Test
+    fun aReArmReopensAClosedCamera() {
+        publishing()
+        camera.opens = false
+
+        controller.start(command(token = "jwt-2"), identity)
+        assertEquals(2, camera.holds)
+        controller.start(command(url = "srt://other-relay:8890"), identity)
+        assertEquals(3, camera.holds)
+
+        camera.opens = true
+        controller.start(command(token = "jwt-3", url = "srt://other-relay:8890"), identity)
+        assertEquals(3, camera.holds)
+    }
+
+    @Test
     fun statsNeverHoldCredentials() {
         publishing()
         val stats = controller.stats().toString()
@@ -306,6 +409,10 @@ class PreviewControllerTest {
         var fps = 0
         var fpsCalls = 0
         var held = false
+        var holds = 0
+
+        /** Whether a hold opens the camera (false: the open fails, as on a busy camera). */
+        var opens = true
 
         override fun previewOutputSizes(): List<Size> = emptyList()
 
@@ -318,7 +425,10 @@ class PreviewControllerTest {
 
         override fun holdCameraForPreview(hold: Boolean) {
             held = hold
+            if (hold) holds++
         }
+
+        override fun cameraOpen(): Boolean = held && opens
 
         override fun captureWallMs(sensorNs: Long): Long = sensorNs / 1_000_000
     }

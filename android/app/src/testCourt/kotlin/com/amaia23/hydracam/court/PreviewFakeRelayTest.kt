@@ -75,7 +75,7 @@ class PreviewFakeRelayTest {
         } == name
     }
 
-    private fun frame(i: Int, key: Boolean): PreviewFrame {
+    private fun frame(i: Int, key: Boolean, baseUs: Long = 0): PreviewFrame {
         val nal = if (key) {
             byteArrayOf(
                 0x65,
@@ -86,7 +86,7 @@ class PreviewFakeRelayTest {
         } else {
             byteArrayOf(0x41, 0x9A.toByte(), i.toByte())
         }
-        return PreviewFrame(START + nal + ByteArray(200) { i.toByte() }, i * FRAME_US, key)
+        return PreviewFrame(START + nal + ByteArray(200) { i.toByte() }, baseUs + i * FRAME_US, key)
     }
 
     @Test
@@ -132,6 +132,20 @@ class PreviewFakeRelayTest {
         assertFalse(camera.held)
         assertEquals(0, camera.fps)
         assertFalse("no token in logs", (logger.infos + logger.warnings).any { it.contains(TOKEN) })
+    }
+
+    @Test
+    fun sensorBootTimestampsAreRebasedToZeroOnTheWire() {
+        val relay = FakeRtmpRelay().also { relay = it }
+
+        start("rtmp://127.0.0.1:${relay.port}")
+        onPreview { controller.onCodecConfig(config) }
+        assertTrue("publishing", awaitState("publishing"))
+        // Encoder pts are sensor boot time: 30 days of uptime overflows RTMP's signed 32-bit ms.
+        onPreview { for (i in 0..4) controller.onFrame(frame(i, key = i == 0, baseUs = THIRTY_DAYS_US)) }
+        assertTrue("video arrived", relay.awaitVideo(6))
+
+        assertEquals(listOf(0L, 50L, 100L, 150L, 200L), relay.videoTimestamps.drop(1))
     }
 
     @Test
@@ -189,6 +203,8 @@ class PreviewFakeRelayTest {
             held = hold
         }
 
+        override fun cameraOpen(): Boolean = held
+
         override fun captureWallMs(sensorNs: Long): Long = sensorNs / 1_000_000
     }
 
@@ -205,6 +221,7 @@ class PreviewFakeRelayTest {
     private companion object {
         const val TOKEN = "jwt-fake-relay"
         const val FRAME_US = 50_000L
+        const val THIRTY_DAYS_US = 30L * 24 * 3_600 * 1_000_000
         val START = byteArrayOf(0, 0, 0, 1)
     }
 }

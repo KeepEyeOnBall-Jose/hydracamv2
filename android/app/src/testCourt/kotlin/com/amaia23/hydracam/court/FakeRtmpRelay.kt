@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit
 /**
  * A loopback RTMP publish endpoint, just enough of MediaMTX for one publisher: the plain
  * handshake, chunk parsing (fmt 0–3, set chunk size, extended timestamps) and AMF0 replies to
- * `connect`, `createStream` and `publish`. It records what a relay would see.
+ * `connect`, `createStream` and `publish`. It records what a relay would see, message timestamps included.
  */
 class FakeRtmpRelay(private val publishCode: String = "NetStream.Publish.Start") : Closeable {
     private val server = ServerSocket(0, 1, InetAddress.getLoopbackAddress())
@@ -40,6 +40,9 @@ class FakeRtmpRelay(private val publishCode: String = "NetStream.Publish.Start")
 
     /** FLV video tag bodies, in arrival order. */
     val video = CopyOnWriteArrayList<ByteArray>()
+
+    /** The RTMP message timestamp (ms, unsigned 32-bit) of each [video] tag, in arrival order. */
+    val videoTimestamps = CopyOnWriteArrayList<Long>()
 
     init {
         thread.start()
@@ -77,7 +80,10 @@ class FakeRtmpRelay(private val publishCode: String = "NetStream.Publish.Start")
         while (true) {
             val message = reader.next() ?: return
             when (message.type) {
-                TYPE_VIDEO -> video += message.payload
+                TYPE_VIDEO -> {
+                    videoTimestamps += message.timestamp
+                    video += message.payload
+                }
                 TYPE_COMMAND -> command(Amf0.decodeAll(message.payload), writer)
                 else -> Unit
             }
@@ -135,7 +141,7 @@ class FakeRtmpRelay(private val publishCode: String = "NetStream.Publish.Start")
         input.readFully(ByteArray(HANDSHAKE_SIZE))
     }
 
-    class Message(val type: Int, val streamId: Int, val payload: ByteArray)
+    class Message(val type: Int, val streamId: Int, val payload: ByteArray, val timestamp: Long = 0)
 
     private class ChunkReader(private val input: DataInputStream) {
         private class Stream {
@@ -143,7 +149,24 @@ class FakeRtmpRelay(private val publishCode: String = "NetStream.Publish.Start")
             var type = 0
             var streamId = 0
             var extended = false
+            var timestamp = 0L
+            var delta = 0L
             val buffer = ByteArrayOutputStream()
+
+            /** RTMP 5.3.1.2: fmt 0 sets the timestamp, fmt 1–2 add a delta, fmt 3 repeats it on a new message. */
+            fun advance(fmt: Int, field: Long) {
+                when {
+                    fmt == FMT_FULL -> {
+                        timestamp = field
+                        delta = 0
+                    }
+                    fmt <= FMT_TIMESTAMP_ONLY -> {
+                        delta = field
+                        timestamp = (timestamp + field) and UINT32
+                    }
+                    buffer.size() == 0 -> timestamp = (timestamp + delta) and UINT32
+                }
+            }
         }
 
         private val streams = HashMap<Int, Stream>()
@@ -173,14 +196,12 @@ class FakeRtmpRelay(private val publishCode: String = "NetStream.Publish.Start")
                 if (fmt <= FMT_TIMESTAMP_ONLY) {
                     stream.extended = timestamp == EXTENDED_TIMESTAMP
                 }
-                if (stream.extended) {
-                    input.readInt()
-                }
+                stream.advance(fmt, if (stream.extended) input.readInt().toLong() and UINT32 else timestamp.toLong())
                 val remaining = stream.length - stream.buffer.size()
                 val bytes = ByteArray(minOf(chunkSize, remaining)).also(input::readFully)
                 stream.buffer.write(bytes)
                 if (stream.buffer.size() >= stream.length) {
-                    val message = Message(stream.type, stream.streamId, stream.buffer.toByteArray())
+                    val message = Message(stream.type, stream.streamId, stream.buffer.toByteArray(), stream.timestamp)
                     stream.buffer.reset()
                     if (message.type == TYPE_SET_CHUNK_SIZE) {
                         chunkSize = ByteBuffer.wrap(message.payload).int and Int.MAX_VALUE
@@ -346,6 +367,7 @@ class FakeRtmpRelay(private val publishCode: String = "NetStream.Publish.Start")
         private const val FMT_TIMESTAMP_ONLY = 2
         private const val FMT_CONTINUATION = 3
         private const val EXTENDED_TIMESTAMP = 0xFFFFFF
+        private const val UINT32 = 0xFFFFFFFFL
 
         private fun uint24(input: DataInputStream): Int =
             (input.readUnsignedByte() shl 16) or (input.readUnsignedByte() shl 8) or input.readUnsignedByte()

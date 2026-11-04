@@ -11,6 +11,10 @@ import java.nio.ByteBuffer
  * [PreviewTransport] over RootEncoder's SRT and RTMP(S) clients (H8). One fresh client per
  * connect, with RootEncoder's own retries off: [PreviewController] owns backoff and the RTMPS
  * fallback. Every callback is handed to [post] (the preview executor). Only redacted URLs are logged.
+ *
+ * Encoder pts are sensor time since boot; each connection rebases them so its stream starts at 0.
+ * RootEncoder writes RTMP timestamps as a signed 32-bit ms value (negative after ~24.9 days of
+ * uptime, then cut to 24 bits on the wire) and SRT/MPEG-TS wraps 33-bit 90 kHz pts after ~26.5 h.
  */
 class RootEncoderPreviewTransport(
     private val post: (Runnable) -> Unit,
@@ -20,6 +24,7 @@ class RootEncoderPreviewTransport(
     private val fps: Int = PreviewRateGovernor.MAX_FPS,
 ) : PreviewTransport {
     private var client: Client? = null
+    private var basePtsUs = NO_BASE
 
     override fun connect(url: String, config: PreviewCodecConfig, listener: PreviewTransport.Listener) {
         disconnect()
@@ -27,6 +32,7 @@ class RootEncoderPreviewTransport(
         val checker = Checker(listener)
         val next = if (url.startsWith("$SRT_SCHEME:", ignoreCase = true)) srt(checker) else rtmp(checker)
         client = next
+        basePtsUs = NO_BASE
         next.setVideoInfo(ByteBuffer.wrap(config.sps), ByteBuffer.wrap(config.pps))
         next.connect(url)
     }
@@ -36,7 +42,10 @@ class RootEncoderPreviewTransport(
         // Field writes, not BufferInfo.set(): RootEncoder only reads the fields.
         info.offset = 0
         info.size = frame.data.size
-        info.presentationTimeUs = frame.ptsUs
+        if (basePtsUs == NO_BASE) {
+            basePtsUs = frame.ptsUs
+        }
+        info.presentationTimeUs = (frame.ptsUs - basePtsUs).coerceAtLeast(0)
         info.flags = if (frame.keyFrame) MediaCodec.BUFFER_FLAG_KEY_FRAME else 0
         client?.sendVideo(ByteBuffer.wrap(frame.data), info)
     }
@@ -108,5 +117,6 @@ class RootEncoderPreviewTransport(
         const val SRT_LATENCY_MS = 120
         const val WIDTH = 640
         const val HEIGHT = 360
+        const val NO_BASE = Long.MIN_VALUE
     }
 }
