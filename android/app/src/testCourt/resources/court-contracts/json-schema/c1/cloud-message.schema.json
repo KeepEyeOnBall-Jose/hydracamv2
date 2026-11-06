@@ -167,7 +167,7 @@
             },
             "token": {
               "type": "string",
-              "minLength": 1
+              "pattern": "^[A-Za-z0-9_-]{22,128}$"
             },
             "width": {
               "type": "number",
@@ -312,6 +312,11 @@
                 "proxyKbps",
                 "segmentS"
               ]
+            },
+            "maxDurationS": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
             }
           },
           "required": [
@@ -593,7 +598,8 @@
               "enum": [
                 "never",
                 "on-request",
-                "window"
+                "window",
+                "stream"
               ]
             },
             "windows": {
@@ -608,6 +614,11 @@
               "maximum": 9007199254740991
             },
             "keepDays": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "masterMaxKbps": {
               "type": "integer",
               "minimum": 0,
               "maximum": 9007199254740991

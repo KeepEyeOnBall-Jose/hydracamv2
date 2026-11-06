@@ -47,6 +47,26 @@ class PreviewStartTest {
     }
 
     @Test
+    fun tokenIsAnOpaqueUrlSafeString() {
+        // C1 1.10.1: the token is opaque, 22..128 chars of [A-Za-z0-9_-]; no JWT dots, no spaces.
+        val shortest = "a".repeat(22)
+        val longest = "Z9_-".repeat(32)
+        assertEquals(shortest, PreviewStart.fromJson(body("token" to shortest)).token)
+        assertEquals(longest, PreviewStart.fromJson(body("token" to longest)).token)
+
+        val bads = listOf(
+            "a".repeat(21),
+            "a".repeat(129),
+            "Not Valid!",
+            "header.payload.signature-xx",
+            "tok/en".repeat(5),
+        )
+        for (bad in bads) {
+            assertEquals(bad, C1NackCode.BAD_REQUEST, refused("token" to bad).code)
+        }
+    }
+
+    @Test
     fun refusesAnythingButThe360p20Stream() {
         refused("width" to 1280)
         refused("height" to 720)
@@ -85,8 +105,8 @@ class PreviewStartTest {
     fun toStringHidesTheTokenAndStreamId() {
         val start = PreviewStart.fromJson(
             body(
-                "publishUrl" to "srt://relay:8890?streamid=publish:court/c/s:device:secret-jwt",
-                "token" to "secret-jwt",
+                "publishUrl" to "srt://relay:8890?streamid=publish:court/c/s:device:secret-jwt-token-padding",
+                "token" to "secret-jwt-token-padding",
             ),
         )
 

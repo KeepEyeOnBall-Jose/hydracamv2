@@ -24,12 +24,16 @@ import kotlin.math.min
  * - Proxy before master; a tier no grant lists is [UploadState.HELD] and stays on disk.
  * - Masters on request (1.4): [requestMasters] stores a `masters.upload`; its master-tier manifest
  *   is sent first, then the listed masters upload with that command's grant.
+ * - Masters stream (1.11): with the record.start grant listing masters, they upload during and
+ *   after recording, but only while no proxy is due (checked again before every master part). A
+ *   `masters.upload` is then a queue jump: its masters go to the front of the master queue.
  * - Resumable: uploadId, presigned parts and per-part ETags are persisted after every step.
- * - Part bytes go through [throttle] (`upload.policy.maxKbps`).
- * - Masters move only while [mastersAllowed]; [preemptMasters] cancels a master part in flight.
- * - The local file is deleted only when K3 reports `verified`.
- * - After `recording.stopped`, once every granted item of the session is settled, the manifest is
- *   sent and any `missing` segment still on disk is re-queued.
+ * - Part bytes go through [throttle] (`upload.policy.maxKbps`; masters also `masterMaxKbps`).
+ * - Masters move only while [mastersAllowed]; [preemptMasters] cancels a master part in flight
+ *   once the gate closes.
+ * - The local file is deleted only when K3 reports `verified`; nothing else deletes a segment.
+ * - After `recording.stopped`, once every granted proxy of the session is settled, the manifest is
+ *   sent and any `missing` segment still on disk is re-queued (a master still uploading counts).
  */
 class C2Uploader(
     private val http: OkHttpClient,
@@ -50,28 +54,43 @@ class C2Uploader(
     private var masterCall: Call? = null
 
     /**
-     * Advances one step: a due master manifest, else one item, else a session manifest. Returns
-     * true when it did any work (call again). [includeMasters] false keeps master bytes off the
-     * uplink (while recording, so proxies stay prompt).
+     * Advances one step: a due master manifest, else one proxy, else a session manifest, else one
+     * master. Returns true when it did any work (call again). [includeMasters] false keeps master
+     * bytes off the uplink (masters held, or recording without `stream`).
      */
     fun runOnce(includeMasters: Boolean = mastersAllowed()): Boolean {
         val now = clock.nowMs()
         val request = store.dueMasterRequest(now)
-        val item = if (request == null) store.nextDue(now, includeMasters) else null
-        when {
-            request != null -> sendMasterManifest(request, now)
-            item != null -> step(item, now)
-            else -> return sendDueManifest(now)
+        val proxy = if (request == null) store.nextDue(now, includeMasters = false) else null
+        return when {
+            request != null -> {
+                sendMasterManifest(request, now)
+                true
+            }
+            proxy != null -> {
+                step(proxy, now)
+                true
+            }
+            sendDueManifest(now) -> true
+            else -> includeMasters && stepMaster(now)
         }
+    }
+
+    private fun stepMaster(now: Long): Boolean {
+        val master = store.nextDue(now, includeMasters = true) ?: return false
+        step(master, now)
         return true
     }
 
     /**
-     * Cancels the master part in flight, if any, so a new recording's proxies do not wait behind
-     * up to [partSizeBytes] on a slow uplink. Resumable: the ETags of finished parts are kept.
+     * Cancels the master part in flight, if any, once the gate closes, so a new recording's proxies
+     * do not wait behind up to [partSizeBytes] on a slow uplink. A streaming master (gate still open)
+     * keeps its part on the wire. Resumable: the ETags of finished parts are kept.
      */
     fun preemptMasters() {
-        synchronized(callLock) { masterCall }?.cancel()
+        if (!mastersAllowed()) {
+            synchronized(callLock) { masterCall }?.cancel()
+        }
     }
 
     /**
@@ -127,25 +146,6 @@ class C2Uploader(
         else -> null
     }
 
-    /** keepDays: deletes HELD or FAILED masters older than [keepDays]. Returns how many were deleted. */
-    fun pruneMasters(keepDays: Int): Int {
-        val cutoff = clock.nowMs() - keepDays * DAY_MS
-        var pruned = 0
-        for (item in store.idleMastersBefore(cutoff)) {
-            val file = File(item.filePath)
-            if (file.isFile && file.delete()) {
-                finish(item, UploadState.FAILED, KEEP_DAYS_EXPIRED)
-                pruned += 1
-            } else if (file.isFile) {
-                logger.warn(TAG, "Could not delete expired master ${item.key}.")
-            }
-        }
-        if (pruned > 0) {
-            logger.info(TAG, "Deleted $pruned master(s) older than $keepDays day(s).")
-        }
-        return pruned
-    }
-
     /** Called by the runtime after `recording.stopped`. */
     fun onSessionStopped(sessionId: String, lastSeqProxy: Long, lastSeqMaster: Long) {
         val session = store.session(sessionId) ?: return
@@ -179,7 +179,7 @@ class C2Uploader(
         } catch (error: IOException) {
             if (item.tier == C1.TIER_MASTER && !mastersAllowed()) {
                 // Preempted, not failed: the stored item keeps its parts and its attempt count.
-                logger.info(TAG, "${item.key} paused for recording.")
+                logger.info(TAG, "${item.key} paused: masters held or recording.")
             } else {
                 retryLater(stored(item), error.message ?: error.javaClass.simpleName)
             }
@@ -286,17 +286,27 @@ class C2Uploader(
 
     /** PUTs part [number]; returns the item with its ETag recorded, or null once the item is settled for now. */
     private fun uploadPart(item: UploadItem, file: File, number: Int, url: String, etags: JSONObject): UploadItem? {
-        if (item.tier == C1.TIER_MASTER && !mastersAllowed()) {
-            logger.info(TAG, "${item.key} paused for recording after part ${number - 1}.")
-            return null
-        }
+        val master = item.tier == C1.TIER_MASTER
+        val pause = if (master) masterPause() else null
         val offset = (number - 1) * partSizeBytes
         val length = min(partSizeBytes, file.length() - offset)
-        if (length <= 0) {
-            retryLater(item, "part_${number}_out_of_range")
-            return null
+        when {
+            pause != null -> logger.info(TAG, "${item.key} paused after part ${number - 1}: $pause.")
+            length <= 0 -> retryLater(item, "part_${number}_out_of_range")
+            else -> return putPart(item, partCall(file, url, offset, length, master), number, etags)
         }
-        return executePart(item, partCall(file, url, offset, length)).use { response ->
+        return null
+    }
+
+    /** Why a master may not PUT its next part now, or null. 1.11: it also waits while any proxy is due. */
+    private fun masterPause(): String? = when {
+        !mastersAllowed() -> "masters held or recording"
+        store.nextDue(clock.nowMs(), includeMasters = false) != null -> "a proxy is due"
+        else -> null
+    }
+
+    private fun putPart(item: UploadItem, call: Call, number: Int, etags: JSONObject): UploadItem? =
+        executePart(item, call).use { response ->
             val etag = response.header("ETag")
             when {
                 response.isSuccessful && etag != null -> {
@@ -318,16 +328,16 @@ class C2Uploader(
                 }
             }
         }
-    }
 
-    private fun partCall(file: File, url: String, offset: Long, length: Long): Call {
+    private fun partCall(file: File, url: String, offset: Long, length: Long, master: Boolean): Call {
         val request = Request.Builder()
             .url(url)
-            .put(FileRangeBody(file, offset, length, CONTENT_TYPE_TS.toMediaType(), throttle))
+            .put(FileRangeBody(file, offset, length, CONTENT_TYPE_TS.toMediaType(), throttle, master))
             .build()
         return http.newCall(request).apply {
             // A low maxKbps stretches a part beyond the client's call timeout.
-            timeout().timeout(PART_TIMEOUT_BASE_NS + 2 * throttle.expectedNanos(length), TimeUnit.NANOSECONDS)
+            val expectedNs = throttle.expectedNanos(length, master)
+            timeout().timeout(PART_TIMEOUT_BASE_NS + 2 * expectedNs, TimeUnit.NANOSECONDS)
         }
     }
 
@@ -407,8 +417,11 @@ class C2Uploader(
         val (session, items) = store.sessions().asSequence()
             .filter { manifestDue(it, now) }
             .map { it to store.items(it.sessionId) }
-            // Requested masters upload under their own manifest; they never delay this one.
-            .firstOrNull { (session, items) -> items.none { it.uploadState.active && it.tier in session.tiers } }
+            // Only granted proxies hold it back: 1.11 streamed masters may still be uploading, and
+            // requested masters upload under their own manifest.
+            .firstOrNull { (session, items) ->
+                items.none { it.uploadState.active && it.tier == C1.TIER_PROXY && it.tier in session.tiers }
+            }
             ?: return false
         sendManifest(session, items)
         return true
@@ -534,16 +547,13 @@ class C2Uploader(
         }
         var queued = 0
         for (item in held) {
+            // 1.11 queue jump: the latest request goes to the front of the master queue.
+            val jumped = item.copy(priority = now, updatedAtMs = now)
             if (item.uploadState == UploadState.HELD || item.uploadState == UploadState.FAILED) {
-                store.update(
-                    item.restarted().copy(
-                        attempts = 0,
-                        nextAttemptAtMs = 0,
-                        lastError = null,
-                        updatedAtMs = now,
-                    ),
-                )
+                store.update(jumped.restarted().copy(attempts = 0, nextAttemptAtMs = 0, lastError = null))
                 queued += 1
+            } else {
+                store.update(jumped)
             }
         }
         store.upsertMasterRequest(
@@ -573,8 +583,11 @@ class C2Uploader(
             val key = UploadItem.keyOf(session.sessionId, entry.getString("tier"), entry.getLong("seq"))
             val item = store.item(key) ?: continue
             // A CONFLICT would only fail again, so it stays put. A capped verify failure that K3 still
-            // wants gets a fresh restart budget; manifest backoff and the grant bound the loop.
-            if (item.canRefill()) {
+            // wants gets a fresh restart budget; manifest backoff and the grant bound the loop. An
+            // active item (a streamed master still uploading) is already on its way: no restart.
+            if (item.uploadState.active) {
+                count += 1
+            } else if (item.canRefill()) {
                 store.update(item.restarted().copy(nextAttemptAtMs = 0, verifyRestarts = 0))
                 count += 1
             } else {
@@ -694,6 +707,7 @@ class C2Uploader(
         private val length: Long,
         private val mediaType: MediaType,
         private val throttle: UploadThrottle,
+        private val master: Boolean,
     ) : RequestBody() {
         override fun contentType(): MediaType = mediaType
 
@@ -709,7 +723,7 @@ class C2Uploader(
                     if (read < 0) {
                         throw IOException("${file.name} shrank during upload.")
                     }
-                    throttle.acquire(read)
+                    throttle.acquire(read, master)
                     sink.write(buffer, 0, read)
                     remaining -= read
                 }
@@ -722,8 +736,6 @@ class C2Uploader(
         const val DEFAULT_PART_SIZE_BYTES = 16L * 1024 * 1024
         const val CONTENT_TYPE_TS = "video/mp2t"
         const val REASON_NOT_REQUESTED = "not-requested"
-        const val KEEP_DAYS_EXPIRED = "keep_days_expired"
-        private const val DAY_MS = 24 * 60 * 60 * 1000L
         private const val PART_TIMEOUT_BASE_NS = 120_000_000_000L
         private const val COPY_BUFFER_BYTES = 64 * 1024
         private const val MAX_BACKOFF_SHIFT = 16

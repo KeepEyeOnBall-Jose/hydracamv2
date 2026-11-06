@@ -198,6 +198,10 @@
                   "type": "null"
                 }
               ]
+            },
+            "contractVersion": {
+              "type": "string",
+              "pattern": "^\\d+(?:\\.\\d+)+$"
             }
           },
           "required": [
@@ -294,6 +298,10 @@
             },
             "lastError": {
               "type": "string"
+            },
+            "blocked": {
+              "type": "string",
+              "const": "storage_full"
             }
           },
           "required": [

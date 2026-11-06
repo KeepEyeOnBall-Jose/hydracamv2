@@ -219,7 +219,7 @@ class PreviewFakeRelayTest {
     }
 
     private companion object {
-        const val TOKEN = "jwt-fake-relay"
+        const val TOKEN = "jwt-fake-relay-token-pad"
         const val FRAME_US = 50_000L
         const val THIRTY_DAYS_US = 30L * 24 * 3_600 * 1_000_000
         val START = byteArrayOf(0, 0, 0, 1)

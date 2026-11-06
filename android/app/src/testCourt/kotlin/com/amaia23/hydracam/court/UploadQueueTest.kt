@@ -108,15 +108,22 @@ class UploadQueueTest {
     }
 
     @Test
-    fun idleMastersAreHeldOrFailedMastersOlderThanTheCutoff() {
-        store.enqueue(item(C1.TIER_MASTER, 0, UploadState.HELD, createdAtMs = 10))
-        store.enqueue(item(C1.TIER_MASTER, 1, UploadState.FAILED, createdAtMs = 10))
-        store.enqueue(item(C1.TIER_MASTER, 2, UploadState.PENDING, createdAtMs = 10))
-        store.enqueue(item(C1.TIER_MASTER, 3, UploadState.HELD, createdAtMs = 100))
-        store.enqueue(item(C1.TIER_PROXY, 0, UploadState.FAILED, createdAtMs = 10))
+    fun requestedMastersJumpTheMasterQueueButNeverAProxy() {
+        // C1 1.11: proxy first; among masters the latest `masters.upload` (highest priority), then oldest.
+        store.enqueue(item(C1.TIER_MASTER, 0, UploadState.PENDING, createdAtMs = 10))
+        store.enqueue(item(C1.TIER_MASTER, 1, UploadState.PENDING, createdAtMs = 20).copy(priority = 500))
+        store.enqueue(item(C1.TIER_MASTER, 2, UploadState.PENDING, createdAtMs = 30).copy(priority = 900))
+        store.enqueue(item(C1.TIER_PROXY, 0, UploadState.PENDING, createdAtMs = 40))
 
-        assertEquals(listOf(0L, 1L), store.idleMastersBefore(cutoffMs = 50).map { it.seq })
+        assertEquals(UploadItem.keyOf("s1", C1.TIER_PROXY, 0), store.nextDue(nowMs = 0)!!.key)
+        store.update(store.item(UploadItem.keyOf("s1", C1.TIER_PROXY, 0))!!.copy(state = UploadState.VERIFIED.name))
+        assertEquals(listOf(2L, 1L, 0L), drainMasters())
+        assertNull(store.nextDue(nowMs = 0, includeMasters = false))
     }
+
+    private fun drainMasters(): List<Long> = generateSequence { store.nextDue(nowMs = 0) }
+        .map { next -> next.also { store.update(it.copy(state = UploadState.VERIFIED.name)) }.seq }
+        .toList()
 
     @Test
     fun activeTotalsCountOnlyActiveItems() {

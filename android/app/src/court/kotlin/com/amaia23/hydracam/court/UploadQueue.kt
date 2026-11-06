@@ -49,6 +49,8 @@ data class UploadItem(
     val etagsJson: String? = null,
     /** Restarts after K3 failed verification; capped so bad bytes stop re-uploading. */
     @ColumnInfo(defaultValue = "0") val verifyRestarts: Int = 0,
+    /** C1 1.11 queue jump: when `masters.upload` last asked for it; higher goes first within a tier. */
+    @ColumnInfo(defaultValue = "0") val priority: Long = 0,
     val attempts: Int = 0,
     val nextAttemptAtMs: Long = 0,
     val lastError: String? = null,
@@ -193,7 +195,7 @@ interface UploadQueueStore : SegmentSeqStore {
 
     fun items(sessionId: String): List<UploadItem>
 
-    /** Next active item due at [nowMs]: proxy before master, then oldest first. */
+    /** Next active item due at [nowMs]: proxy before master, then the latest queue jump, then oldest. */
     fun nextDue(nowMs: Long, includeMasters: Boolean = true): UploadItem?
 
     /** Earliest `nextAttemptAtMs` among active items and pending master requests, or null when none. */
@@ -205,9 +207,6 @@ interface UploadQueueStore : SegmentSeqStore {
 
     /** Oldest pending master request due at [nowMs]. */
     fun dueMasterRequest(nowMs: Long): MasterRequest?
-
-    /** HELD or FAILED masters created before [cutoffMs] (keepDays pruning). */
-    fun idleMastersBefore(cutoffMs: Long): List<UploadItem>
 
     fun activeBytes(): Long
 
@@ -254,7 +253,9 @@ class InMemoryUploadQueueStore : UploadQueueStore {
             it.uploadState.active && it.nextAttemptAtMs <= nowMs &&
                 (includeMasters || it.tier == C1.TIER_PROXY)
         }
-        .sortedWith(compareBy({ if (it.tier == C1.TIER_PROXY) 0 else 1 }, { it.createdAtMs }, { it.seq }))
+        .sortedWith(
+            compareBy({ if (it.tier == C1.TIER_PROXY) 0 else 1 }, { -it.priority }, { it.createdAtMs }, { it.seq }),
+        )
         .firstOrNull()
 
     @Synchronized
@@ -280,12 +281,6 @@ class InMemoryUploadQueueStore : UploadQueueStore {
     override fun dueMasterRequest(nowMs: Long): MasterRequest? = masterRequests.values
         .filter { it.state == MasterRequest.STATE_PENDING && it.nextAttemptAtMs <= nowMs }
         .minByOrNull { it.createdAtMs }
-
-    @Synchronized
-    override fun idleMastersBefore(cutoffMs: Long): List<UploadItem> = items.values.filter {
-        it.tier == C1.TIER_MASTER && it.createdAtMs < cutoffMs &&
-            (it.uploadState == UploadState.HELD || it.uploadState == UploadState.FAILED)
-    }
 
     @Synchronized
     override fun activeBytes(): Long = items.values.filter { it.uploadState.active }.sumOf { it.bytes }

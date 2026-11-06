@@ -58,6 +58,20 @@ class CourtContractsConformanceTest {
     }
 
     @Test
+    fun k1HelloDeclaresTheVendoredContractVersion() {
+        // 1.11: K2 sends stream, masterMaxKbps and maxDurationS only to a hello that declares 1.11+.
+        val caps = CourtCaps("1080p", listOf(30), hevc = true, encoders = 2, torch = true, speaker = true)
+        val body = HelloBody("dev-1", "2.5.0", 250, "Pixel", 34, true, "court-1", "center", 3, caps, null).toJson()
+        val hello = JSONObject(C1Envelope.create(C1.HELLO, body, nowMs = 1).encode())
+
+        assertEquals(CONTRACT_VERSION, C1.CONTRACT_VERSION)
+        assertEquals(CONTRACT_VERSION, body.getString("contractVersion"))
+        val errors = schemas.getSchema(File(root, "json-schema/c1/hello$SCHEMA_SUFFIX").readText())
+            .validate(mapper.readTree(hello.toString()))
+        assertTrue("$errors", errors.isEmpty())
+    }
+
+    @Test
     fun everyGoodFixtureMatchesItsSchema() {
         val good = fixtures("good")
         assertTrue(good.size >= MIN_GOOD)
@@ -138,7 +152,7 @@ class CourtContractsConformanceTest {
         const val ROOT = "court-contracts"
         const val MANIFEST = "MANIFEST.sha256"
         const val SCHEMA_SUFFIX = ".schema.json"
-        const val CONTRACT_VERSION = "1.9"
+        const val CONTRACT_VERSION = "1.11"
         const val MIN_GOOD = 40
         const val MIN_BAD = 130
         val RANGE_RULES = setOf("end-before-start", "empty-range")

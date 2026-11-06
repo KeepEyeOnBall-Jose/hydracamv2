@@ -11,6 +11,12 @@ import java.util.UUID
 object C1 {
     const val VERSION = 1
 
+    /**
+     * The court-contracts version K1 implements, sent as `hello.contractVersion`. K2 sends 1.11 values
+     * (`stream`, `masterMaxKbps`, `record.prepare.maxDurationS`) only to a device that declares 1.11+.
+     */
+    const val CONTRACT_VERSION = "1.11"
+
     const val ACK = "ack"
     const val NACK = "nack"
 
@@ -61,6 +67,9 @@ object C1NackCode {
 
     /** 1.9: `masters.upload` whose `toServerMs` is not after `fromServerMs`. */
     const val BAD_RANGE = "bad_range"
+
+    /** 1.11: `record.prepare`/`record.start` whose duration does not fit above the storage reserve. */
+    const val STORAGE_FULL = "storage_full"
 }
 
 /** A command body K1 refuses; [code] is the `nack.code` it is answered with. */
@@ -158,6 +167,7 @@ data class HelloBody(
     val mountRev: Int,
     val caps: CourtCaps,
     val activeSessionId: String?,
+    val contractVersion: String = C1.CONTRACT_VERSION,
 ) {
     fun toJson(): JSONObject = JSONObject()
         .put("deviceId", deviceId)
@@ -171,6 +181,7 @@ data class HelloBody(
         .put("mountRev", mountRev)
         .put("caps", caps.toJson())
         .put("activeSessionId", activeSessionId ?: JSONObject.NULL)
+        .put("contractVersion", contractVersion)
 }
 
 data class StateBody(
@@ -184,6 +195,8 @@ data class StateBody(
     val pendingUploadBytes: Long,
     val wifiRssi: Int,
     val lastError: String?,
+    /** 1.11: [BLOCKED_STORAGE_FULL] while less than ten minutes fit above the reserve; else omitted. */
+    val blocked: String? = null,
 ) {
     fun toJson(): JSONObject {
         val json = JSONObject()
@@ -199,7 +212,14 @@ data class StateBody(
         if (lastError != null) {
             json.put("lastError", lastError)
         }
+        if (blocked != null) {
+            json.put("blocked", blocked)
+        }
         return json
+    }
+
+    companion object {
+        const val BLOCKED_STORAGE_FULL = "storage_full"
     }
 }
 
@@ -256,12 +276,17 @@ data class RecordProfile(
     }
 }
 
-data class RecordPrepare(val sessionId: String, val profile: RecordProfile) {
+/** C1 `record.prepare`; 1.11 [maxDurationS] lets the phone refuse a session it cannot store. */
+data class RecordPrepare(val sessionId: String, val profile: RecordProfile, val maxDurationS: Int? = null) {
     companion object {
         fun fromJson(body: JSONObject): RecordPrepare = RecordPrepare(
             sessionId = body.requireSessionId(),
             profile = RecordProfile.fromJson(body.optJSONObject("profile")),
+            maxDurationS = body.intIn("maxDurationS", MAX_DURATION_RANGE),
         )
+
+        /** At least a second, at most a day. */
+        private val MAX_DURATION_RANGE = 1L..86_400L
     }
 }
 
@@ -332,6 +357,9 @@ data class PreviewStart(val publishUrl: String, val token: String, val kbps: Int
         private val KBPS_RANGE = 1L..1_000L
         private val TTL_RANGE = 1L..Long.MAX_VALUE / 1_000
 
+        /** C1 1.10.1: an opaque, URL-safe token. */
+        private val TOKEN = Regex("[A-Za-z0-9_-]{22,128}")
+
         fun fromJson(body: JSONObject): PreviewStart {
             val publishUrl = body.requireText("publishUrl")
             expect(PreviewUrls.isAllowed(publishUrl)) {
@@ -342,9 +370,11 @@ data class PreviewStart(val publishUrl: String, val token: String, val kbps: Int
                     "preview is ${WIDTH}x$HEIGHT at $FPS fps; $name must be $expected."
                 }
             }
+            val token = body.requireText("token")
+            expect(TOKEN.matches(token)) { "token must be 22..128 chars of [A-Za-z0-9_-]." }
             return PreviewStart(
                 publishUrl = publishUrl,
-                token = body.requireText("token"),
+                token = token,
                 kbps = body.intIn("kbps", KBPS_RANGE) ?: throw C1ProtocolException("Missing kbps."),
                 ttlS = body.requireLong("ttlS").also { expect(it in TTL_RANGE) { "ttlS must be positive." } },
             )
@@ -391,24 +421,44 @@ data class MastersUpload(
     }
 }
 
-/** C1 `upload.policy` (R10). `maxKbps` 0 means unlimited. */
+/**
+ * C1 `upload.policy` (R10). `maxKbps` 0 means unlimited. 1.11 [MODE_STREAM] moves masters during
+ * and after recording, capped by [masterMaxKbps] when set (absent: no master-only cap). A
+ * [masterMaxKbps] of 0 holds masters in every mode (1.11 center first: K2 holds the side slots
+ * until the center slot's masters are complete, then re-sends the policy with a cap).
+ * [keepDays] is kept for the wire only: the phone never deletes a segment K3 has not verified.
+ */
 data class UploadPolicy(
     val masterMode: String = MODE_ON_REQUEST,
     val windows: List<String> = emptyList(),
     val maxKbps: Int = 2_500,
     val keepDays: Int = 7,
+    val masterMaxKbps: Int? = null,
 ) {
-    fun toJson(): JSONObject = JSONObject()
-        .put("masterMode", masterMode)
-        .put("windows", JSONArray(windows))
-        .put("maxKbps", maxKbps)
-        .put("keepDays", keepDays)
+    fun toJson(): JSONObject {
+        val json = JSONObject()
+            .put("masterMode", masterMode)
+            .put("windows", JSONArray(windows))
+            .put("maxKbps", maxKbps)
+            .put("keepDays", keepDays)
+        if (masterMaxKbps != null) {
+            json.put("masterMaxKbps", masterMaxKbps)
+        }
+        return json
+    }
+
+    /**
+     * Masters move while idle in every mode; only [MODE_STREAM] moves them while recording. A
+     * [masterMaxKbps] of 0 holds them either way.
+     */
+    fun mastersMayMove(idle: Boolean): Boolean = masterMaxKbps != 0 && (masterMode == MODE_STREAM || idle)
 
     companion object {
         const val MODE_NEVER = "never"
         const val MODE_ON_REQUEST = "on-request"
         const val MODE_WINDOW = "window"
-        private val MODES = setOf(MODE_NEVER, MODE_ON_REQUEST, MODE_WINDOW)
+        const val MODE_STREAM = "stream"
+        private val MODES = setOf(MODE_NEVER, MODE_ON_REQUEST, MODE_WINDOW, MODE_STREAM)
 
         val DEFAULT = UploadPolicy()
 
@@ -420,17 +470,19 @@ data class UploadPolicy(
             }
             val maxKbps = body.requireLong("maxKbps")
             val keepDays = body.requireLong("keepDays")
+            val masterMaxKbps = body.optLongOrNull("masterMaxKbps")
             val problem = when {
                 masterMode !in MODES -> "Unknown masterMode $masterMode."
                 windows.size != windowsJson.length() -> "windows must be non-empty strings."
                 maxKbps !in 0..Int.MAX_VALUE.toLong() -> "maxKbps must be >= 0."
                 keepDays !in 1..MAX_KEEP_DAYS -> "keepDays must be 1..$MAX_KEEP_DAYS."
+                masterMaxKbps != null && masterMaxKbps !in 0..Int.MAX_VALUE.toLong() -> "masterMaxKbps must be >= 0."
                 else -> null
             }
             if (problem != null) {
                 throw C1ProtocolException(problem)
             }
-            return UploadPolicy(masterMode, windows, maxKbps.toInt(), keepDays.toInt())
+            return UploadPolicy(masterMode, windows, maxKbps.toInt(), keepDays.toInt(), masterMaxKbps?.toInt())
         }
 
         private const val MAX_KEEP_DAYS = 365L
