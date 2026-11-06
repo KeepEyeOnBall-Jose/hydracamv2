@@ -46,17 +46,21 @@ class InMemoryActiveSessionStore(private var value: String? = null) : ActiveSess
  *   start is refused with `not_prepared` (also after a crash: K2 re-sends prepare, then start).
  * - `record.start` for the session already recording is acked with no effect; another session is `busy`.
  * - `record.stop` is idempotent.
+ * - C1 1.11 storage: a prepare with `maxDurationS` and every new start are refused with `storage_full`
+ *   when the duration does not fit above the reserve; a recording that runs out stops with
+ *   `storage_full`. Segments are never deleted to make room.
  */
 class CourtStateMachine(
     private val rooted: () -> Boolean,
     private val recorder: CourtRecorderPort,
     private val activeSessions: ActiveSessionStore,
     private val logger: CourtLogger = NoopCourtLogger,
+    private val storage: StorageGuard = StorageGuard({ Long.MAX_VALUE }),
 ) {
     sealed class Phase {
         object Idle : Phase()
 
-        data class Armed(val sessionId: String, val profile: RecordProfile) : Phase()
+        data class Armed(val sessionId: String, val profile: RecordProfile, val maxDurationS: Int? = null) : Phase()
 
         data class Recording(val sessionId: String) : Phase()
 
@@ -75,6 +79,9 @@ class CourtStateMachine(
     var activeSessionId: String? = activeSessions.load()
         private set
 
+    /** The profile `state.blocked` is measured at: the armed one, else the last one used. */
+    private var lastProfile = RecordProfile.DEFAULT
+
     @Synchronized
     fun onPrepare(command: RecordPrepare): CommandResult {
         if (!rooted()) {
@@ -84,12 +91,16 @@ class CourtStateMachine(
             is Phase.Recording -> sameOrBusy(current.sessionId, command.sessionId)
             is Phase.Stopping -> sameOrBusy(current.sessionId, command.sessionId)
             is Phase.Armed -> {
+                val refused = refusedPrepare(command)
+                if (refused != null) {
+                    return refused
+                }
                 if (current.sessionId != command.sessionId) {
                     recorder.disarm(current.sessionId)
                 }
                 arm(command)
             }
-            Phase.Idle -> arm(command)
+            Phase.Idle -> refusedPrepare(command) ?: arm(command)
         }
     }
 
@@ -110,7 +121,7 @@ class CourtStateMachine(
             }
             is Phase.Stopping -> busy(current.sessionId)
             is Phase.Armed -> if (current.sessionId == command.sessionId) {
-                begin(command, current.profile)
+                begin(command, current)
             } else {
                 notPrepared(command.sessionId)
             }
@@ -148,6 +159,26 @@ class CourtStateMachine(
             phase = Phase.Stopping(sessionId)
             recorder.stop(sessionId, 0, reason)
         }
+    }
+
+    /**
+     * C1 1.11: called after each committed segment. Stops the recording with [REASON_STORAGE_FULL]
+     * once the next segment would eat into the reserve; every segment already written is kept.
+     */
+    @Synchronized
+    fun checkStorage() {
+        val current = phase
+        if (current is Phase.Recording && storage.exhausted(lastProfile)) {
+            logger.warn(TAG, "Storage below the reserve while recording ${current.sessionId}; stopping.")
+            onLocalStop(current.sessionId, REASON_STORAGE_FULL)
+        }
+    }
+
+    /** `state.blocked`: [StateBody.BLOCKED_STORAGE_FULL] while less than ten minutes fit; else null. */
+    @Synchronized
+    fun storageBlocked(): String? {
+        val profile = (phase as? Phase.Armed)?.profile ?: lastProfile
+        return if (storage.blocked(profile)) StateBody.BLOCKED_STORAGE_FULL else null
     }
 
     @Synchronized
@@ -194,16 +225,37 @@ class CourtStateMachine(
     }
 
     private fun arm(command: RecordPrepare): CommandResult {
-        phase = Phase.Armed(command.sessionId, command.profile)
+        phase = Phase.Armed(command.sessionId, command.profile, command.maxDurationS)
+        lastProfile = command.profile
         recorder.prepare(command.sessionId, command.profile)
         return CommandResult.Ack
     }
 
-    private fun begin(command: RecordStart, profile: RecordProfile): CommandResult {
+    /** A prepare that names a duration is refused when it cannot be stored; without one it is not checked. */
+    private fun refusedPrepare(command: RecordPrepare): CommandResult? {
+        val seconds = command.maxDurationS ?: return null
+        return if (storage.refuses(seconds.toLong(), command.profile)) storageFull(command.sessionId, seconds) else null
+    }
+
+    private fun begin(command: RecordStart, armed: Phase.Armed): CommandResult {
+        // The start's own limit wins; else the prepare's; else the ten minutes `state.blocked` guards.
+        val seconds = command.maxDurationS.takeIf { it > 0 }
+            ?: armed.maxDurationS
+            ?: StorageGuard.BLOCKED_BELOW_S.toInt()
+        if (storage.refuses(seconds.toLong(), armed.profile)) {
+            phase = Phase.Idle
+            recorder.disarm(command.sessionId)
+            return storageFull(command.sessionId, seconds)
+        }
         phase = Phase.Recording(command.sessionId)
         setActive(command.sessionId)
-        recorder.start(command, profile)
+        recorder.start(command, armed.profile)
         return CommandResult.Ack
+    }
+
+    private fun storageFull(sessionId: String, seconds: Int): CommandResult {
+        logger.warn(TAG, "$sessionId: ${seconds}s do not fit above the storage reserve; refused.")
+        return CommandResult.Nack(C1NackCode.STORAGE_FULL, "Not enough free storage for ${seconds}s of recording.")
     }
 
     private fun setActive(sessionId: String?) {
@@ -230,6 +282,9 @@ class CourtStateMachine(
         const val REASON_MAX_DURATION = "max_duration"
         const val REASON_ERROR = "error"
         const val REASON_RECOVERED = "recovered"
+
+        /** C1 1.11 `recording.stopped.reason`: free space ran down to the reserve mid-recording. */
+        const val REASON_STORAGE_FULL = "storage_full"
         private const val TAG = "CourtState"
     }
 }

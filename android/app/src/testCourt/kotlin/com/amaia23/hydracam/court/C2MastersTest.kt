@@ -13,7 +13,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.Test
 
-/** 1.4 `masters.upload`, 1.6 `not-requested`, R10 throttle and keepDays against a fake C2 store. */
+/** 1.4 `masters.upload`, 1.6 `not-requested`, R10 throttle and 1.11 stream masters against a fake C2 store. */
 class C2MastersTest : C2StoreTestBase() {
     private val masterGrant = testGrant("s1", listOf(C1.TIER_MASTER), 4_000_000_000L)
 
@@ -286,24 +286,210 @@ class C2MastersTest : C2StoreTestBase() {
     }
 
     @Test
-    fun pruneDeletesOnlyIdleMastersOlderThanKeepDays() {
+    fun noSegmentThatIsNotVerifiedIsEverDeleted() {
+        // C1 1.11 storage guard: keepDays, age and failures never delete a segment K3 has not verified.
         startSession(tiers = listOf(C1.TIER_PROXY))
         val upload = uploader()
-        val old = segment(C1.TIER_MASTER, 0).also(upload::enqueue)
-        val proxy = segment(C1.TIER_PROXY, 0).also(upload::enqueue)
-        clock.now += 6 * DAY_MS
-        val young = segment(C1.TIER_MASTER, 1).also(upload::enqueue)
-        clock.now += 2 * DAY_MS
+        val held = segment(C1.TIER_MASTER, 0).also(upload::enqueue)
+        val failed = segment(C1.TIER_PROXY, 0).also(upload::enqueue)
+        server.enqueue(json(403, JSONObject()))
+        assertTrue(upload.runOnce())
+        assertEquals(UploadState.FAILED, item(C1.TIER_PROXY, 0).uploadState)
 
-        assertEquals(1, upload.pruneMasters(keepDays = 7))
+        clock.now += 400 * DAY_MS
+        assertFalse(upload.runOnce())
 
-        assertFalse(old.file.exists())
-        val pruned = item(C1.TIER_MASTER, 0)
-        assertEquals(UploadState.FAILED, pruned.uploadState)
-        assertEquals(C2Uploader.KEEP_DAYS_EXPIRED, pruned.lastError)
-        assertTrue(young.file.isFile)
-        assertTrue(proxy.file.isFile)
-        assertEquals(0, upload.pruneMasters(keepDays = 7))
+        assertTrue(held.file.isFile)
+        assertTrue(failed.file.isFile)
+        assertEquals(UploadState.HELD, item(C1.TIER_MASTER, 0).uploadState)
+        assertTrue(C2Uploader::class.java.declaredMethods.none { it.name.contains("prune", ignoreCase = true) })
+    }
+
+    @Test
+    fun aDueProxyAlwaysGoesBeforeADueMaster() {
+        // C1 1.11: priority is preview, then proxy, then master.
+        startSession(tiers = listOf(C1.TIER_PROXY, C1.TIER_MASTER))
+        val upload = uploader()
+        upload.enqueue(segment(C1.TIER_MASTER, 0))
+        upload.enqueue(segment(C1.TIER_PROXY, 0))
+        server.enqueue(json(200, JSONObject().put("state", "verified")))
+        server.enqueue(json(200, JSONObject().put("state", "verified")))
+
+        assertTrue(upload.runOnce())
+        assertEquals("proxy", JSONObject(take().body.readUtf8()).getString("tier"))
+        assertTrue(upload.runOnce())
+        assertEquals("master", JSONObject(take().body.readUtf8()).getString("tier"))
+        assertEquals(UploadState.VERIFIED, item(C1.TIER_MASTER, 0).uploadState)
+    }
+
+    @Test
+    fun aZeroMasterCapHoldsTheMasterLaneUntilThePolicyRaisesIt() {
+        // 1.11 center first: K2 holds a side slot's masters at masterMaxKbps 0, then raises the cap.
+        startSession(tiers = listOf(C1.TIER_PROXY, C1.TIER_MASTER))
+        var policy = UploadPolicy.DEFAULT.copy(masterMode = UploadPolicy.MODE_STREAM, masterMaxKbps = 0)
+        val upload = uploader(mastersAllowed = { policy.mastersMayMove(idle = false) })
+        upload.enqueue(segment(C1.TIER_MASTER, 0))
+        upload.enqueue(segment(C1.TIER_PROXY, 0))
+        server.enqueue(json(200, JSONObject().put("state", "verified")))
+
+        assertTrue(upload.runOnce())
+        assertEquals("proxy", JSONObject(take().body.readUtf8()).getString("tier"))
+        // Held: nothing to do, so the drain loop ends instead of spinning.
+        assertFalse(upload.runOnce())
+        assertFalse(upload.runOnce())
+        assertEquals(1, server.requestCount)
+        assertEquals(UploadState.PENDING, item(C1.TIER_MASTER, 0).uploadState)
+
+        policy = policy.copy(masterMaxKbps = 4_000)
+        server.enqueue(json(200, JSONObject().put("state", "verified")))
+        assertTrue(upload.runOnce())
+        assertEquals("master", JSONObject(take().body.readUtf8()).getString("tier"))
+        assertEquals(UploadState.VERIFIED, item(C1.TIER_MASTER, 0).uploadState)
+    }
+
+    @Test
+    fun aMasterWaitsBetweenPartsWhileAProxyIsDue() {
+        startSession(tiers = listOf(C1.TIER_PROXY, C1.TIER_MASTER))
+        val upload = uploader(partSizeBytes = 10)
+        upload.enqueue(segment(C1.TIER_MASTER, 0, size = 25))
+        var masterInits = 0
+        server.dispatcher = object : Dispatcher() {
+            override fun dispatch(request: RecordedRequest): MockResponse {
+                val path = request.path.orEmpty()
+                return when {
+                    path == "/v2/uploads" && JSONObject(request.body.readUtf8()).getString("tier") == "proxy" ->
+                        json(200, JSONObject().put("state", "verified"))
+                    path == "/v2/uploads" -> json(201, parts(3)).also { masterInits += 1 }
+                    path.startsWith("/part/") -> {
+                        // A proxy segment is committed while master part 1 is on the wire.
+                        if (path == "/part/1") {
+                            upload.enqueue(segment(C1.TIER_PROXY, 0))
+                        }
+                        MockResponse().setResponseCode(200).setHeader("ETag", "e" + path.removePrefix("/part/"))
+                    }
+                    else -> json(200, JSONObject())
+                }
+            }
+        }
+
+        assertTrue(upload.runOnce())
+        val paused = item(C1.TIER_MASTER, 0)
+        assertEquals(UploadState.UPLOADING, paused.uploadState)
+        assertEquals("e1", JSONObject(paused.etagsJson!!).getString("1"))
+        assertEquals(0, paused.attempts)
+
+        assertTrue(upload.runOnce())
+        assertEquals(UploadState.VERIFIED, item(C1.TIER_PROXY, 0).uploadState)
+
+        assertTrue(upload.runOnce())
+        assertEquals(UploadState.VERIFYING, item(C1.TIER_MASTER, 0).uploadState)
+        assertEquals(1, masterInits)
+    }
+
+    @Test
+    fun preemptLeavesAStreamingMasterOnTheWire() {
+        startSession(tiers = listOf(C1.TIER_PROXY, C1.TIER_MASTER))
+        lateinit var upload: C2Uploader
+        var nowNs = 0L
+        val throttle = UploadThrottle(maxKbps = 1_000, nanoClock = { nowNs }) {
+            nowNs += it
+            upload.preemptMasters()
+        }
+        upload = uploader(throttle)
+        upload.enqueue(segment(C1.TIER_MASTER, 0, size = 4 * 64 * 1024))
+        server.enqueue(json(201, parts(1)))
+        server.enqueue(partOk("e1"))
+        server.enqueue(json(200, JSONObject()))
+
+        assertTrue(upload.runOnce())
+
+        assertEquals(UploadState.VERIFYING, item(C1.TIER_MASTER, 0).uploadState)
+        assertEquals(0, item(C1.TIER_MASTER, 0).attempts)
+    }
+
+    @Test
+    fun masterPartBytesUseTheMasterCap() {
+        startSession(tiers = listOf(C1.TIER_PROXY, C1.TIER_MASTER))
+        var nowNs = 0L
+        var sleptNs = 0L
+        val throttle = UploadThrottle(maxKbps = 0, nanoClock = { nowNs }, sleeper = {
+            nowNs += it
+            sleptNs += it
+        })
+        throttle.masterMaxKbps = 1_000
+        val upload = uploader(throttle)
+        upload.enqueue(segment(C1.TIER_MASTER, 0, size = 4 * 64 * 1024))
+        server.enqueue(json(201, parts(1)))
+        server.enqueue(partOk("e1"))
+        server.enqueue(json(200, JSONObject()))
+
+        assertTrue(upload.runOnce())
+
+        assertEquals(throttle.expectedNanos(3 * 64 * 1024L, master = true), sleptNs)
+        assertEquals(UploadState.VERIFYING, item(C1.TIER_MASTER, 0).uploadState)
+    }
+
+    @Test
+    fun mastersUploadJumpsTheMasterQueueButNotTheProxies() {
+        startSession(tiers = listOf(C1.TIER_PROXY, C1.TIER_MASTER))
+        val upload = uploader()
+        enqueueMasters(upload, 3)
+
+        // seq 2 is [BASE + 12 s, BASE + 18 s).
+        assertEquals(1, upload.requestMasters("cmd-1", request(BASE_MS + 12_000, BASE_MS + 18_000)))
+        server.enqueue(json(200, JSONObject()))
+        assertTrue(upload.runOnce())
+        assertEquals("/m/v2/sessions/s1/manifest", take().path)
+        upload.enqueue(segment(C1.TIER_PROXY, 0))
+
+        val order = mutableListOf<String>()
+        repeat(4) {
+            server.enqueue(json(200, JSONObject().put("state", "verified")))
+            assertTrue(upload.runOnce())
+            val body = JSONObject(take().body.readUtf8())
+            order += "${body.getString("tier")}-${body.getLong("seq")}"
+        }
+
+        assertEquals(listOf("proxy-0", "master-2", "master-0", "master-1"), order)
+        // 1.4 gone: the device holds none of that range any more.
+        assertEquals(0, upload.requestMasters("cmd-2", request(BASE_MS + 12_000, BASE_MS + 18_000)))
+    }
+
+    @Test
+    fun sessionManifestGoesOutWhileStreamedMastersAreStillUploading() {
+        startSession(tiers = listOf(C1.TIER_PROXY, C1.TIER_MASTER))
+        val upload = uploader()
+        upload.enqueue(segment(C1.TIER_PROXY, 0))
+        upload.enqueue(segment(C1.TIER_MASTER, 0))
+        server.enqueue(json(200, JSONObject().put("state", "verified")))
+        assertTrue(upload.runOnce())
+        take()
+        // The master is mid-upload (backing off after a dropped part).
+        store.update(
+            item(C1.TIER_MASTER, 0).copy(
+                state = UploadState.UPLOADING.name,
+                uploadId = "u1",
+                partsJson = parts(1).getJSONArray("parts").toString(),
+                etagsJson = "{}",
+                nextAttemptAtMs = clock.now + 60_000,
+            ),
+        )
+        upload.onSessionStopped("s1", lastSeqProxy = 0, lastSeqMaster = 0)
+        val missing = JSONArray().put(JSONObject().put("tier", "master").put("seq", 0))
+        server.enqueue(json(200, JSONObject().put("state", "partial").put("missing", missing)))
+
+        assertTrue(upload.runOnce())
+
+        val manifest = take()
+        assertEquals("/v2/sessions/s1/manifest", manifest.path)
+        assertEquals(2, JSONObject(manifest.body.readUtf8()).getJSONArray("segments").length())
+        // Still coming: not restarted, and the manifest is re-sent later.
+        val master = item(C1.TIER_MASTER, 0)
+        assertEquals(UploadState.UPLOADING, master.uploadState)
+        assertEquals("u1", master.uploadId)
+        val session = store.session("s1")!!
+        assertEquals(UploadSession.MANIFEST_PARTIAL, session.manifestState)
+        assertEquals(clock.now + 2_000, session.nextManifestAtMs)
     }
 
     @Test

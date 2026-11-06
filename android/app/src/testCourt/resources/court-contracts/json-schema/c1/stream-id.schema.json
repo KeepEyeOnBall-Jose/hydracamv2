@@ -1,5 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "string",
-  "pattern": "^publish:court\\/([^/:]+)\\/([^/:]+):device:([\\w-]+\\.[\\w-]+\\.[\\w-]+)$"
+  "maxLength": 512,
+  "pattern": "^publish:court\\/([A-Za-z0-9_-]{1,64})\\/([A-Za-z0-9_-]{1,64}):device:([A-Za-z0-9_-]{22,128})$"
 }

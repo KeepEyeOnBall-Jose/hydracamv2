@@ -72,7 +72,7 @@ class CourtRuntime private constructor(context: Context) {
         logger = logger,
         throttle = throttle,
         onAlert = ::onUploadAlert,
-        mastersAllowed = { stateMachine.phase is CourtStateMachine.Phase.Idle },
+        mastersAllowed = { mastersMayMove() },
     )
 
     @Volatile
@@ -100,6 +100,7 @@ class CourtRuntime private constructor(context: Context) {
         recorder = RecorderPort(),
         activeSessions = PrefsActiveSessionStore(appContext),
         logger = logger,
+        storage = StorageGuard(probe::freeBytes),
     )
 
     private val signals = CourtSignalPlayer(
@@ -143,7 +144,6 @@ class CourtRuntime private constructor(context: Context) {
     private val uploadKickPending = AtomicBoolean(false)
     private val countRefreshPending = AtomicBoolean(false)
     private var uploadWake: ScheduledFuture<*>? = null
-    private var lastPruneAtMs = 0L
     private var maxDurationStop: ScheduledFuture<*>? = null
     private var caps: CourtCaps? = null
 
@@ -342,26 +342,32 @@ class CourtRuntime private constructor(context: Context) {
             pendingUploadBytes = pendingBytes,
             wifiRssi = probe.wifiRssi(),
             lastError = stateMachine.lastError ?: uploadAlert ?: previewAlert,
+            blocked = stateMachine.storageBlocked(),
         )
     }
 
-    /** R10: persisted first, so an ack means the policy survives a restart. */
+    /**
+     * R10: persisted first, so an ack means the policy survives a restart. Applied at once, so a
+     * 1.11 `masterMaxKbps` 0 also cuts a master part in flight; the kick resumes a raised cap.
+     */
     private fun onUploadPolicy(next: UploadPolicy): CommandResult {
         policies.save(next)
-        uploadExecutor.execute {
-            applyPolicy(next)
-            lastPruneAtMs = 0
-        }
+        applyPolicy(next)
+        uploader.preemptMasters()
         kickUploads()
         return CommandResult.Ack
     }
 
-    /** Upload thread only. */
+    /** Any thread: [policy] and the throttle limits are volatile. */
     private fun applyPolicy(next: UploadPolicy) {
         policy = next
-        throttle.shareWithPreview(next.maxKbps, previewKbps)
+        throttle.share(next, previewKbps)
         logger.info(TAG, "Upload policy: $next.")
     }
+
+    /** 1.11: masters move while idle, or while recording under `stream`; `masterMaxKbps` 0 holds them. */
+    private fun mastersMayMove(): Boolean =
+        policy.mastersMayMove(idle = stateMachine.phase is CourtStateMachine.Phase.Idle)
 
     /** 1.4: runs on the command worker; the queue store is thread-safe. */
     private fun onMastersUpload(commandId: String, request: MastersUpload): CommandResult {
@@ -422,7 +428,7 @@ class CourtRuntime private constructor(context: Context) {
         val controller = preview ?: return
         previewStats = controller.stats()
         previewKbps = controller.measuredKbps()
-        throttle.shareWithPreview(policy.maxKbps, previewKbps)
+        throttle.share(policy, previewKbps)
         if (controller.isPreviewing != previewing || controller.problem != previewAlert) {
             previewing = controller.isPreviewing
             previewAlert = controller.problem
@@ -443,15 +449,15 @@ class CourtRuntime private constructor(context: Context) {
 
     /**
      * Upload thread only. One step per task, so enqueues and grants queued behind it run between
-     * steps. Masters wait while a session is armed or recording: proxies must stay prompt (K4), and
-     * the uplink never blocks the recorder, which only appends to the queue.
+     * steps. Masters wait while a session is armed or recording unless the policy says `stream`
+     * (then they go only while no proxy is due), and `masterMaxKbps` 0 holds them; the uplink never
+     * blocks the recorder, which only appends to the queue. Nothing here deletes a segment.
      */
     private fun drainUploads() {
         uploadKickPending.set(false)
         var delayMs = UPLOAD_IDLE_MS
-        val includeMasters = stateMachine.phase is CourtStateMachine.Phase.Idle
+        val includeMasters = mastersMayMove()
         try {
-            pruneMastersHourly()
             if (uploader.runOnce(includeMasters)) {
                 kickUploads()
                 return
@@ -468,16 +474,6 @@ class CourtRuntime private constructor(context: Context) {
             delayMs.coerceIn(UPLOAD_MIN_DELAY_MS, UPLOAD_IDLE_MS),
             TimeUnit.MILLISECONDS,
         )
-    }
-
-    /** Upload thread only. */
-    private fun pruneMastersHourly() {
-        val now = System.currentTimeMillis()
-        if (now - lastPruneAtMs < PRUNE_INTERVAL_MS) {
-            return
-        }
-        lastPruneAtMs = now
-        uploader.pruneMasters(policy.keepDays)
     }
 
     /** Upload thread only. */
@@ -585,6 +581,8 @@ class CourtRuntime private constructor(context: Context) {
                 refreshPendingCounts()
             }
             kickUploads()
+            // 1.11: stop with storage_full before the next segment would eat into the reserve.
+            scheduler.execute { stateMachine.checkStorage() }
         }
 
         override fun onSegmentLost(gap: SegmentGap) {
@@ -612,7 +610,6 @@ class CourtRuntime private constructor(context: Context) {
     companion object {
         private const val TAG = "CourtRuntime"
         private const val ROOT_RECHECK_MS = 60_000L
-        private const val PRUNE_INTERVAL_MS = 60 * 60_000L
         private const val UPLOAD_MIN_DELAY_MS = 250L
         private const val UPLOAD_IDLE_MS = 30_000L
         private const val PREVIEW_TICK_MS = 500L

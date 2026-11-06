@@ -37,7 +37,7 @@ interface CourtUploadDao {
     @Query(
         "SELECT * FROM upload_items WHERE state IN ('PENDING', 'UPLOADING', 'VERIFYING') " +
             "AND nextAttemptAtMs <= :nowMs AND (:includeMasters OR tier = 'proxy') " +
-            "ORDER BY CASE tier WHEN 'proxy' THEN 0 ELSE 1 END, createdAtMs, seq LIMIT 1",
+            "ORDER BY CASE tier WHEN 'proxy' THEN 0 ELSE 1 END, priority DESC, createdAtMs, seq LIMIT 1",
     )
     fun nextDue(nowMs: Long, includeMasters: Boolean): UploadItem?
 
@@ -62,12 +62,6 @@ interface CourtUploadDao {
     )
     fun dueMasterRequest(nowMs: Long): MasterRequest?
 
-    @Query(
-        "SELECT * FROM upload_items WHERE tier = 'master' AND state IN ('HELD', 'FAILED') " +
-            "AND createdAtMs < :cutoffMs",
-    )
-    fun idleMastersBefore(cutoffMs: Long): List<UploadItem>
-
     @Query("SELECT COALESCE(SUM(bytes), 0) FROM upload_items WHERE state IN ('PENDING', 'UPLOADING', 'VERIFYING')")
     fun activeBytes(): Long
 
@@ -83,9 +77,13 @@ interface CourtUploadDao {
 
 @Database(
     entities = [UploadItem::class, UploadSession::class, SeqCounter::class, MasterRequest::class],
-    version = 3,
+    version = 4,
     exportSchema = true,
-    autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3)],
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2),
+        AutoMigration(from = 2, to = 3),
+        AutoMigration(from = 3, to = 4),
+    ],
 )
 abstract class CourtDatabase : RoomDatabase() {
     abstract fun uploads(): CourtUploadDao
@@ -124,8 +122,6 @@ class RoomUploadQueueStore(database: CourtDatabase) : UploadQueueStore {
     override fun masterRequest(id: String): MasterRequest? = dao.masterRequest(id)
 
     override fun dueMasterRequest(nowMs: Long): MasterRequest? = dao.dueMasterRequest(nowMs)
-
-    override fun idleMastersBefore(cutoffMs: Long): List<UploadItem> = dao.idleMastersBefore(cutoffMs)
 
     override fun activeBytes(): Long = dao.activeBytes()
 

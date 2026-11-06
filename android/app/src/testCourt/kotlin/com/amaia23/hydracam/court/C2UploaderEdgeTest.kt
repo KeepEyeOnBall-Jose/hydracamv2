@@ -517,24 +517,6 @@ class C2UploaderEdgeTest : C2StoreTestBase() {
     }
 
     @Test
-    fun pruneKeepsUndeletableMastersAndSkipsGoneOnes() {
-        startSession(tiers = listOf(C1.TIER_PROXY))
-        val upload = uploader()
-        val dir = temp.newFolder("ro")
-        upload.enqueue(segment(C1.TIER_MASTER, 0, dir = dir))
-        val gone = segment(C1.TIER_MASTER, 1).also(upload::enqueue)
-        assertTrue(gone.file.delete())
-        clock.now += 3 * 24 * 3_600_000L
-
-        val pruned = readOnly(dir) { upload.pruneMasters(keepDays = 1) }
-
-        assertEquals(0, pruned)
-        assertEquals(listOf("Could not delete expired master s1/master/0."), logger.warnings)
-        assertEquals(UploadState.HELD, item(C1.TIER_MASTER, 0).uploadState)
-        assertEquals(UploadState.HELD, item(C1.TIER_MASTER, 1).uploadState)
-    }
-
-    @Test
     fun completeConflictRestartsWithTheReason() {
         startSession()
         val upload = uploader()

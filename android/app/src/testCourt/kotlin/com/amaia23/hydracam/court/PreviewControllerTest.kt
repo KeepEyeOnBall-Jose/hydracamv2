@@ -20,21 +20,17 @@ class PreviewControllerTest {
     private val config = PreviewCodecConfig(byteArrayOf(0, 0, 0, 1, 0x67), byteArrayOf(0, 0, 0, 1, 0x68))
     private val controller = PreviewController(camera, encoder, transport, clock, logger)
 
-    private fun command(
-        token: String = "jwt-1",
-        kbps: Int = 1_000,
-        ttlS: Long = 300,
-        url: String = "srt://relay:8890",
-    ) = PreviewStart.fromJson(
-        JSONObject()
-            .put("publishUrl", url)
-            .put("token", token)
-            .put("width", 640)
-            .put("height", 360)
-            .put("fps", 20)
-            .put("kbps", kbps)
-            .put("ttlS", ttlS),
-    )
+    private fun command(token: String = JWT_1, kbps: Int = 1_000, ttlS: Long = 300, url: String = "srt://relay:8890") =
+        PreviewStart.fromJson(
+            JSONObject()
+                .put("publishUrl", url)
+                .put("token", token)
+                .put("width", 640)
+                .put("height", 360)
+                .put("fps", 20)
+                .put("kbps", kbps)
+                .put("ttlS", ttlS),
+        )
 
     private fun frame(key: Boolean = false, size: Int = 1_000) = PreviewFrame(ByteArray(size), clock.now * 1_000, key)
 
@@ -57,7 +53,7 @@ class PreviewControllerTest {
         assertEquals("waiting", controller.stateName)
 
         controller.onCodecConfig(config)
-        assertEquals(listOf("srt://relay:8890?streamid=publish:court/club-7/left:device:jwt-1"), transport.connects)
+        assertEquals(listOf("srt://relay:8890?streamid=publish:court/club-7/left:device:$JWT_1"), transport.connects)
         assertEquals(config, transport.config)
         assertEquals("connecting", controller.stateName)
     }
@@ -114,7 +110,7 @@ class PreviewControllerTest {
         controller.onFrame(frame(key = true))
         clock.now = 250_000
 
-        assertEquals(CommandResult.Ack, controller.start(command(token = "jwt-2", kbps = 600), identity))
+        assertEquals(CommandResult.Ack, controller.start(command(token = JWT_2, kbps = 600), identity))
         assertEquals(1, transport.connects.size)
         assertEquals(0, transport.disconnects)
         assertEquals(2, encoder.keyFrameRequests)
@@ -128,7 +124,7 @@ class PreviewControllerTest {
         transport.listener!!.onFailed("relay closed")
         clock.now += 1_000
         controller.tick()
-        assertEquals("srt://relay:8890?streamid=publish:court/club-7/left:device:jwt-2", transport.connects.last())
+        assertEquals("srt://relay:8890?streamid=publish:court/club-7/left:device:$JWT_2", transport.connects.last())
     }
 
     @Test
@@ -191,7 +187,7 @@ class PreviewControllerTest {
         transport.listener!!.onFailed("timeout")
         clock.now += 2_000
         controller.tick()
-        assertEquals("rtmps://relay:1936/court/club-7/left?token=jwt-1", transport.connects.last())
+        assertEquals("rtmps://relay:1936/court/club-7/left?token=$JWT_1", transport.connects.last())
 
         transport.listener!!.onConnected()
         assertEquals("publishing", controller.stateName)
@@ -385,13 +381,13 @@ class PreviewControllerTest {
         publishing()
         camera.opens = false
 
-        controller.start(command(token = "jwt-2"), identity)
+        controller.start(command(token = JWT_2), identity)
         assertEquals(2, camera.holds)
         controller.start(command(url = "srt://other-relay:8890"), identity)
         assertEquals(3, camera.holds)
 
         camera.opens = true
-        controller.start(command(token = "jwt-3", url = "srt://other-relay:8890"), identity)
+        controller.start(command(token = JWT_3, url = "srt://other-relay:8890"), identity)
         assertEquals(3, camera.holds)
     }
 
@@ -400,7 +396,7 @@ class PreviewControllerTest {
         publishing()
         val stats = controller.stats().toString()
 
-        assertFalse(stats, stats.contains("jwt-1"))
+        assertFalse(stats, stats.contains(JWT_1))
         assertTrue(stats, stats.contains("relay"))
         assertNull(PreviewController(camera, encoder, transport, clock).stats()["target"])
     }
@@ -466,5 +462,12 @@ class PreviewControllerTest {
         override fun disconnect() {
             disconnects++
         }
+    }
+
+    private companion object {
+        // C1 1.10.1 tokens are opaque [A-Za-z0-9_-]{22,128}.
+        const val JWT_1 = "jwt-1-fixture-token-pad"
+        const val JWT_2 = "jwt-2-fixture-token-pad"
+        const val JWT_3 = "jwt-3-fixture-token-pad"
     }
 }

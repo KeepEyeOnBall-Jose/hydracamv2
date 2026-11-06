@@ -156,6 +156,15 @@ class C1ProtocolTest {
     }
 
     @Test
+    fun helloDeclaresContractVersionSoK2SendsTheNewValues() {
+        val caps = CourtCaps("1080p", listOf(30), hevc = false, encoders = 1, torch = false, speaker = false)
+        val hello = HelloBody("d", "v", 1, "m", 34, true, "c", "center", 0, caps, null).toJson()
+
+        assertEquals("1.11", C1.CONTRACT_VERSION)
+        assertEquals(C1.CONTRACT_VERSION, hello.getString("contractVersion"))
+    }
+
+    @Test
     fun stateCarriesChargeCap() {
         val state = StateBody(CourtMode.UPLOADING, 80, true, 85, 31.5, 1, 10, 20, -55, null).toJson()
         assertEquals("uploading", state.getString("mode"))
@@ -220,6 +229,78 @@ class C1ProtocolTest {
         rejects { UploadPolicy.fromJson(policyBody().put("keepDays", 366)) }
         rejects { UploadPolicy.fromJson(policyBody().put("windows", JSONArray(listOf(5)))) }
         rejects { UploadPolicy.fromJson(policyBody().put("windows", JSONArray(listOf(" ")))) }
+    }
+
+    @Test
+    fun uploadPolicyStreamModeCarriesAMasterCap() {
+        val stream = UploadPolicy.fromJson(policyBody().put("masterMode", "stream").put("masterMaxKbps", 8_000))
+
+        assertEquals(UploadPolicy.MODE_STREAM, stream.masterMode)
+        assertEquals(8_000, stream.masterMaxKbps)
+        assertEquals(stream, UploadPolicy.fromJson(stream.toJson()))
+        assertEquals(8_000, stream.toJson().getInt("masterMaxKbps"))
+        assertEquals(0, UploadPolicy.fromJson(policyBody().put("masterMaxKbps", 0)).masterMaxKbps)
+
+        val uncapped = UploadPolicy.fromJson(policyBody().put("masterMode", "stream"))
+        assertNull(uncapped.masterMaxKbps)
+        assertFalse(uncapped.toJson().has("masterMaxKbps"))
+        assertNull(UploadPolicy.fromJson(policyBody().put("masterMaxKbps", JSONObject.NULL)).masterMaxKbps)
+        assertNull(UploadPolicy.DEFAULT.masterMaxKbps)
+
+        rejects { UploadPolicy.fromJson(policyBody().put("masterMaxKbps", -1)) }
+        rejects { UploadPolicy.fromJson(policyBody().put("masterMaxKbps", 1.5)) }
+        rejects { UploadPolicy.fromJson(policyBody().put("masterMaxKbps", "fast")) }
+        rejects { UploadPolicy.fromJson(policyBody().put("masterMaxKbps", 3_000_000_000L)) }
+    }
+
+    @Test
+    fun onlyStreamMovesMastersWhileRecording() {
+        val stream = UploadPolicy.DEFAULT.copy(masterMode = UploadPolicy.MODE_STREAM)
+        assertTrue(stream.mastersMayMove(idle = false))
+        assertTrue(stream.mastersMayMove(idle = true))
+        for (mode in listOf(UploadPolicy.MODE_ON_REQUEST, UploadPolicy.MODE_WINDOW, UploadPolicy.MODE_NEVER)) {
+            val policy = UploadPolicy.DEFAULT.copy(masterMode = mode)
+            assertFalse(mode, policy.mastersMayMove(idle = false))
+            assertTrue(mode, policy.mastersMayMove(idle = true))
+        }
+    }
+
+    @Test
+    fun masterCapZeroHoldsMastersInEveryMode() {
+        // 1.11 center first: K2 holds a side slot's masters with masterMaxKbps 0, then raises the cap.
+        for (mode in listOf(UploadPolicy.MODE_STREAM, UploadPolicy.MODE_ON_REQUEST, UploadPolicy.MODE_NEVER)) {
+            val held = UploadPolicy.DEFAULT.copy(masterMode = mode, masterMaxKbps = 0)
+            assertFalse(mode, held.mastersMayMove(idle = true))
+            assertFalse(mode, held.mastersMayMove(idle = false))
+            assertTrue(mode, held.copy(masterMaxKbps = 2_000).mastersMayMove(idle = true))
+        }
+    }
+
+    @Test
+    fun prepareCarriesAnOptionalMaxDuration() {
+        val prepare = { extra: Any? -> JSONObject().put("sessionId", "s1").put("maxDurationS", extra) }
+        assertNull(RecordPrepare.fromJson(JSONObject().put("sessionId", "s1")).maxDurationS)
+        assertEquals(3_600, RecordPrepare.fromJson(prepare(3_600)).maxDurationS)
+        assertNull(RecordPrepare.fromJson(prepare(JSONObject.NULL)).maxDurationS)
+
+        rejects { RecordPrepare.fromJson(prepare(0)) }
+        rejects { RecordPrepare.fromJson(prepare(-5)) }
+        rejects { RecordPrepare.fromJson(prepare(1.5)) }
+        rejects { RecordPrepare.fromJson(prepare(86_401)) }
+    }
+
+    @Test
+    fun stateCarriesStorageFullOnlyWhenBlocked() {
+        val free = StateBody(CourtMode.IDLE, 80, true, 85, 31.5, 1, 10, 20, -55, null).toJson()
+        assertFalse(free.has("blocked"))
+
+        val blocked = StateBody(
+            CourtMode.IDLE, 80, true, 85, 31.5, 1, 10, 20, -55, null,
+            blocked = StateBody.BLOCKED_STORAGE_FULL,
+        ).toJson()
+        assertEquals("storage_full", blocked.getString("blocked"))
+        assertEquals("storage_full", C1NackCode.STORAGE_FULL)
+        assertEquals("storage_full", CourtStateMachine.REASON_STORAGE_FULL)
     }
 
     private fun mastersBody(): JSONObject = JSONObject()

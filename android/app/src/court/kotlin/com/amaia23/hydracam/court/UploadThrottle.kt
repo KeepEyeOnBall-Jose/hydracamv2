@@ -8,6 +8,7 @@ import kotlin.math.min
  *
  * Each [acquire] books its bytes on one shared timeline and sleeps until its slot starts, so the
  * long-run rate never exceeds [maxKbps]. Idle time earns no burst credit. 0 means unlimited.
+ * C1 1.11: master bytes book at [masterKbps], which also honours `masterMaxKbps`.
  */
 class UploadThrottle(
     maxKbps: Int = UploadPolicy.DEFAULT.maxKbps,
@@ -20,12 +21,28 @@ class UploadThrottle(
             field = value.coerceAtLeast(0)
         }
 
+    /**
+     * C1 1.11 `upload.policy.masterMaxKbps`; null means no master-only cap. 0 holds the master lane,
+     * which [UploadPolicy.mastersMayMove] enforces before any master byte reaches the throttle.
+     */
+    @Volatile
+    var masterMaxKbps: Int? = null
+        set(value) {
+            field = value?.coerceAtLeast(0)
+        }
+
     private val lock = Any()
     private var nextFreeNs = nanoClock()
 
+    /** The master rate: the shared budget, lowered to a positive [masterMaxKbps]; 0 means unlimited. */
+    fun masterKbps(): Int {
+        val limits = listOfNotNull(maxKbps, masterMaxKbps).filter { it > 0 }
+        return limits.minOrNull() ?: 0
+    }
+
     /** Blocks until [bytes] may be sent. Throws [InterruptedIOException] when interrupted. */
-    fun acquire(bytes: Int) {
-        val kbps = maxKbps
+    fun acquire(bytes: Int, master: Boolean = false) {
+        val kbps = rate(master)
         if (kbps == 0 || bytes <= 0) {
             return
         }
@@ -43,8 +60,8 @@ class UploadThrottle(
     }
 
     /** Time [bytes] take at the current rate; 0 when unlimited. */
-    fun expectedNanos(bytes: Long): Long {
-        val kbps = maxKbps
+    fun expectedNanos(bytes: Long, master: Boolean = false): Long {
+        val kbps = rate(master)
         return if (kbps == 0) 0 else nanosFor(bytes, kbps)
     }
 
@@ -56,6 +73,14 @@ class UploadThrottle(
     fun shareWithPreview(policyKbps: Int, measuredPreviewKbps: Int) {
         maxKbps = budgetKbps(policyKbps, measuredPreviewKbps)
     }
+
+    /** [shareWithPreview] for [policy]'s `maxKbps`, plus its 1.11 `masterMaxKbps` cap. */
+    fun share(policy: UploadPolicy, measuredPreviewKbps: Int) {
+        shareWithPreview(policy.maxKbps, measuredPreviewKbps)
+        masterMaxKbps = policy.masterMaxKbps
+    }
+
+    private fun rate(master: Boolean): Int = if (master) masterKbps() else maxKbps
 
     companion object {
         const val MIN_SHARED_KBPS = 64
