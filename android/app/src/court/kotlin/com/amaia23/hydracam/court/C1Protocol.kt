@@ -13,9 +13,10 @@ object C1 {
 
     /**
      * The court-contracts version K1 implements, sent as `hello.contractVersion`. K2 sends 1.11 values
-     * (`stream`, `masterMaxKbps`, `record.prepare.maxDurationS`) only to a device that declares 1.11+.
+     * (`stream`, `masterMaxKbps`, `record.prepare.maxDurationS`) only to a device that declares 1.11+,
+     * and 1.16 `record.prepare.capture` only to 1.16+; K1 answers it with `recording.started.applied`.
      */
-    const val CONTRACT_VERSION = "1.11"
+    const val CONTRACT_VERSION = "1.24"
 
     const val ACK = "ack"
     const val NACK = "nack"
@@ -276,13 +277,22 @@ data class RecordProfile(
     }
 }
 
-/** C1 `record.prepare`; 1.11 [maxDurationS] lets the phone refuse a session it cannot store. */
-data class RecordPrepare(val sessionId: String, val profile: RecordProfile, val maxDurationS: Int? = null) {
+/**
+ * C1 `record.prepare`; 1.11 [maxDurationS] lets the phone refuse a session it cannot store, and 1.16
+ * [capture] names the lens, zoom, stabilization, codec and rotation (null: K2 sent none).
+ */
+data class RecordPrepare(
+    val sessionId: String,
+    val profile: RecordProfile,
+    val maxDurationS: Int? = null,
+    val capture: CaptureTarget? = null,
+) {
     companion object {
         fun fromJson(body: JSONObject): RecordPrepare = RecordPrepare(
             sessionId = body.requireSessionId(),
             profile = RecordProfile.fromJson(body.optJSONObject("profile")),
             maxDurationS = body.intIn("maxDurationS", MAX_DURATION_RANGE),
+            capture = CaptureTarget.optional(body),
         )
 
         /** At least a second, at most a day. */
@@ -490,16 +500,24 @@ data class UploadPolicy(
 }
 
 object C1Events {
+    /** 1.16 [applied] is what the camera and encoder accepted; omitted when it could not be read back. */
     fun recordingStarted(
         sessionId: String,
         firstFrameServerMs: Long,
         offsetMs: Long,
         profile: RecordProfile,
-    ): JSONObject = JSONObject()
-        .put("sessionId", sessionId)
-        .put("firstFrameServerMs", firstFrameServerMs)
-        .put("offsetMs", offsetMs)
-        .put("profile", profile.toJson())
+        applied: AppliedCapture? = null,
+    ): JSONObject {
+        val json = JSONObject()
+            .put("sessionId", sessionId)
+            .put("firstFrameServerMs", firstFrameServerMs)
+            .put("offsetMs", offsetMs)
+            .put("profile", profile.toJson())
+        if (applied != null) {
+            json.put("applied", applied.toJson())
+        }
+        return json
+    }
 
     fun recordingSegment(segment: SegmentRecord): JSONObject = JSONObject()
         .put("sessionId", segment.sessionId)

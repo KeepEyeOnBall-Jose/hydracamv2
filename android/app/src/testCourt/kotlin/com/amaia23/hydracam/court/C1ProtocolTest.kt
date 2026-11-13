@@ -160,7 +160,7 @@ class C1ProtocolTest {
         val caps = CourtCaps("1080p", listOf(30), hevc = false, encoders = 1, torch = false, speaker = false)
         val hello = HelloBody("d", "v", 1, "m", 34, true, "c", "center", 0, caps, null).toJson()
 
-        assertEquals("1.11", C1.CONTRACT_VERSION)
+        assertEquals("1.24", C1.CONTRACT_VERSION)
         assertEquals(C1.CONTRACT_VERSION, hello.getString("contractVersion"))
     }
 

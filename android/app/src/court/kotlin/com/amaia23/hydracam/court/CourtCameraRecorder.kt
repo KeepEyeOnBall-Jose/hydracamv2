@@ -31,13 +31,18 @@ import java.nio.ByteBuffer
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
-import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
 /** Recorder → runtime. `recording.*` C1 events are sent from these callbacks. */
 interface CourtRecorderListener {
-    fun onRecordingStarted(sessionId: String, firstFrameServerMs: Long, profile: RecordProfile)
+    /** [applied]: C1 1.16 what the camera and encoder accepted; null when it could not be read back. */
+    fun onRecordingStarted(
+        sessionId: String,
+        firstFrameServerMs: Long,
+        profile: RecordProfile,
+        applied: AppliedCapture?,
+    )
 
     fun onSegment(segment: SegmentRecord)
 
@@ -49,11 +54,16 @@ interface CourtRecorderListener {
     fun onRecorderFailed(sessionId: String, error: String)
 }
 
+/** An open pipeline serves one profile and one C1 1.16 capture; a new pair reopens the camera. */
+private data class PipelineKey(val profile: RecordProfile, val capture: CaptureTarget)
+
 /**
  * H5/H6/H15/H17: one Camera2 session feeding a master and a proxy (low) H.264 encoder, each cut into
- * 6 s MPEG-TS segments. AE/AF/AWB lock after warm-up; OIS/EIS off; torch through `FLASH_MODE_TORCH`
- * in the repeating request. Audio only when `record.start.audio`. The camera is closed when idle,
- * unless the live preview holds it ([CourtPreviewSeam]).
+ * 6 s MPEG-TS segments. C1 1.16: the lens, zoom and stabilization come from `record.prepare.capture`
+ * through [CapturePlanner]; after warm-up AF/AWB lock and exposure is fixed at a 1/500 s shutter
+ * (AE lock where the lens has no manual sensor). Torch through `FLASH_MODE_TORCH` in the repeating
+ * request. Audio only when `record.start.audio`. The camera is closed when idle, unless the live
+ * preview holds it ([CourtPreviewSeam]).
  *
  * The preview encoder's surface joins the capture session at open (or the session is retried
  * without it); preview on/off only swaps the repeating burst, so the master never sees a rebuild.
@@ -99,14 +109,26 @@ class CourtCameraRecorder(
     val previewInSession: Boolean
         get() = pipeline?.previewInSession == true
 
-    override fun prepare(sessionId: String, profile: RecordProfile) {
+    /** Back cameras as Camera2 shows them; read once, they never change. */
+    @Volatile
+    private var lenses: List<LensInfo>? = null
+
+    override fun unsupported(profile: RecordProfile, capture: CaptureTarget): CaptureUnsupported? = try {
+        plan(profile, capture) as? CaptureUnsupported
+    } catch (error: Exception) {
+        // The camera service failed us: let prepare try, and fail there with the real error.
+        logger.warn(TAG, "Could not read the cameras to check the capture.", error)
+        null
+    }
+
+    override fun prepare(sessionId: String, profile: RecordProfile, capture: CaptureTarget) {
         control.execute {
             if (recording != null) {
                 return@execute
             }
             armed = true
             try {
-                ensurePipeline(profile, sessionId)
+                ensurePipeline(PipelineKey(profile, capture), sessionId)
             } catch (error: Exception) {
                 // Not armed: holdCameraForPreview(false) and disarm() must be free to close the camera.
                 armed = false
@@ -115,8 +137,8 @@ class CourtCameraRecorder(
         }
     }
 
-    override fun start(command: RecordStart, profile: RecordProfile) {
-        control.execute { startNow(command, profile) }
+    override fun start(command: RecordStart, profile: RecordProfile, capture: CaptureTarget) {
+        control.execute { startNow(command, PipelineKey(profile, capture)) }
     }
 
     override fun refresh(command: RecordStart) {
@@ -196,7 +218,7 @@ class CourtCameraRecorder(
                 return@execute
             }
             try {
-                ensurePipeline(RecordProfile.DEFAULT)
+                ensurePipeline(PipelineKey(RecordProfile.DEFAULT, CaptureTarget.DEFAULT))
             } catch (error: Exception) {
                 logger.warn(TAG, "Live preview could not open the camera.", error)
             }
@@ -216,13 +238,14 @@ class CourtCameraRecorder(
         control.shutdown()
     }
 
-    private fun startNow(command: RecordStart, profile: RecordProfile) {
+    private fun startNow(command: RecordStart, key: PipelineKey) {
         val sessionId = command.sessionId
         if (recording?.sessionId == sessionId) {
             return
         }
+        val profile = key.profile
         try {
-            val pipe = ensurePipeline(profile)
+            val pipe = ensurePipeline(key)
             val timebase = SessionTimebase { ptsUs -> clockEstimator.toServerMs(pipe.ptsClock.wallMsFor(ptsUs)) }
             val sidecar = JsonlAppender(storage.sidecar(sessionId))
             val withAudio = command.audio && hasPermission(Manifest.permission.RECORD_AUDIO)
@@ -249,7 +272,7 @@ class CourtCameraRecorder(
                     logger = logger,
                 ).also { segmenter -> pipe.config(tier)?.let { segmenter.onVideoConfig(it) } }
             }
-            val active = Recording(sessionId, profile, command.startAtServerMs, timebase, segmenters)
+            val active = Recording(sessionId, profile, command.startAtServerMs, timebase, segmenters, pipe::applied)
             recording = active
             if (withAudio) {
                 active.audio = AudioPipeline(pipe.ptsClock) { ptsUs, aac ->
@@ -305,27 +328,39 @@ class CourtCameraRecorder(
     }
 
     /**
-     * The open pipeline for [profile], opened if needed. [sessionId] is set by `record.prepare` only:
+     * The open pipeline for [key], opened if needed. [sessionId] is set by `record.prepare` only:
      * a pipeline the live preview or an earlier session warmed up warms up again (see [pipelineAction]).
      */
-    private fun ensurePipeline(profile: RecordProfile, sessionId: String? = null): CameraPipeline {
+    private fun ensurePipeline(key: PipelineKey, sessionId: String? = null): CameraPipeline {
         val current = pipeline
-        return when (pipelineAction(current?.profile, current?.warmedFor, profile, sessionId)) {
+        return when (pipelineAction(current?.key, current?.warmedFor, key, sessionId)) {
             PipelineAction.REUSE -> checkNotNull(current)
             PipelineAction.REWARM -> checkNotNull(current).also { it.rewarm(checkNotNull(sessionId)) }
             PipelineAction.REOPEN -> {
                 closePipeline()
-                openPipeline(profile, sessionId)
+                openPipeline(key, sessionId)
             }
-            PipelineAction.OPEN -> openPipeline(profile, sessionId)
+            PipelineAction.OPEN -> openPipeline(key, sessionId)
         }
     }
 
-    private fun openPipeline(profile: RecordProfile, sessionId: String?): CameraPipeline {
+    private fun plan(profile: RecordProfile, capture: CaptureTarget): CapturePlanResult {
+        val manager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        val known = lenses ?: backLenses(manager).also { lenses = it }
+        return CapturePlanner.plan(profile, capture, known, backCameraId(manager))
+    }
+
+    /** The prepare already nacked an unsupported capture; one here means the phone changed under us. */
+    private fun requirePlan(key: PipelineKey): CapturePlan = when (val result = plan(key.profile, key.capture)) {
+        is CapturePlan -> result
+        is CaptureUnsupported -> error("unsupported ${result.reason}")
+    }
+
+    private fun openPipeline(key: PipelineKey, sessionId: String?): CameraPipeline {
         if (!hasPermission(Manifest.permission.CAMERA)) {
             throw SecurityException("CAMERA permission not granted.")
         }
-        val pipe = CameraPipeline(profile)
+        val pipe = CameraPipeline(key, requirePlan(key))
         try {
             pipe.open()
         } catch (error: Exception) {
@@ -381,7 +416,7 @@ class CourtCameraRecorder(
         if (!active.announced && active.timebase.baseUs >= 0) {
             active.announced = true
             val firstFrameServerMs = active.timebase.serverMs(active.timebase.baseUs)
-            listener.onRecordingStarted(active.sessionId, firstFrameServerMs, active.profile)
+            listener.onRecordingStarted(active.sessionId, firstFrameServerMs, active.profile, active.applied())
         }
     }
 
@@ -413,6 +448,7 @@ class CourtCameraRecorder(
         val startAtServerMs: Long,
         val timebase: SessionTimebase,
         val segmenters: Map<String, TsSegmenter>,
+        val applied: () -> AppliedCapture?,
     ) {
         @Volatile
         var stopAtServerMs: Long = Long.MAX_VALUE
@@ -430,12 +466,21 @@ class CourtCameraRecorder(
         var audio: AudioPipeline? = null
     }
 
-    private inner class CameraPipeline(val profile: RecordProfile) {
+    private inner class CameraPipeline(val key: PipelineKey, private val plan: CapturePlan) {
+        val profile: RecordProfile get() = key.profile
         private val thread = HandlerThread("CourtCamera").apply { start() }
         private val handler = Handler(thread.looper)
         private val manager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
-        private val cameraId: String = backCameraId(manager)
+        private val cameraId: String = plan.cameraId
         private val characteristics = manager.getCameraCharacteristics(cameraId)
+
+        /** Handler thread writes, the encoder drain reads: the last capture result. */
+        @Volatile
+        private var readback = CaptureReadback()
+
+        /** The auto exposure the warm-up settled on; the fixed shutter keeps its brightness. */
+        private var autoExposureNs: Long? = null
+        private var autoIso: Int? = null
         private val encoders = mutableMapOf<String, VideoEncoder>()
 
         /** Read once: a surface set later joins at the next open. */
@@ -469,6 +514,12 @@ class CourtCameraRecorder(
 
         fun encoder(tier: String): VideoEncoder = encoders.getValue(tier)
 
+        /** C1 1.16 `recording.started.applied`: null once closed or when the camera did not say. */
+        fun applied(): AppliedCapture? {
+            val master = encoders[C1.TIER_MASTER]?.output ?: return null
+            return appliedCapture(plan, readback, master)
+        }
+
         @Synchronized
         fun config(tier: String): ByteArray? = configs[tier]
 
@@ -479,12 +530,9 @@ class CourtCameraRecorder(
 
         @SuppressLint("MissingPermission")
         fun open() {
-            val sizes = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
-                ?.getOutputSizes(MediaCodec::class.java)
-                ?.toList()
-                .orEmpty()
-            val masterSize = pickSize(sizes, RecordProfile.sizeFor(profile.masterRes))
-            val proxySize = pickSize(sizes, RecordProfile.sizeFor(profile.proxyRes))
+            // The planner already checked both sizes are among the camera's MediaCodec outputs.
+            val masterSize = Size(plan.masterSize.first, plan.masterSize.second)
+            val proxySize = Size(plan.proxySize.first, plan.proxySize.second)
             encoders[C1.TIER_MASTER] = VideoEncoder(C1.TIER_MASTER, masterSize, profile.fps, profile.masterKbps)
             encoders[C1.TIER_PROXY] = VideoEncoder(C1.TIER_PROXY, proxySize, profile.fps, profile.proxyKbps)
             encoders.values.forEach { it.start() }
@@ -522,7 +570,8 @@ class CourtCameraRecorder(
             openError?.let { throw it }
             logger.info(
                 TAG,
-                "Camera $cameraId open: master $masterSize, proxy $proxySize @ ${profile.fps} fps, " +
+                "Camera $cameraId (${plan.lens}, ${plan.zoomRatio}x) open: master $masterSize, proxy $proxySize " +
+                    "@ ${profile.fps} fps, shutter ${plan.shutterNs ?: "auto"} ns, " +
                     "preview output ${if (previewInSession) "on" else "off"}.",
             )
         }
@@ -570,26 +619,17 @@ class CourtCameraRecorder(
             request.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_VIDEO)
             request.set(CaptureRequest.CONTROL_AWB_MODE, CaptureRequest.CONTROL_AWB_MODE_AUTO)
             request.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF)
-            // EIS and OIS off: both shift the image, which breaks the fixed court calibration.
+            // C1 1.16 capture.stabilization (K2 default off): EIS and OIS shift the image, which
+            // breaks the fixed court calibration.
             request.set(
                 CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE,
-                CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE_OFF,
+                plan.videoStabilizationMode ?: CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE_OFF,
             )
-            val oisModes = characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_OPTICAL_STABILIZATION)
-            if (oisModes?.contains(CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE_OFF) == true) {
-                request.set(
-                    CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE,
-                    CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE_OFF,
-                )
+            plan.oisMode?.let { request.set(CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE, it) }
+            if (plan.zoomControl && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                request.set(CaptureRequest.CONTROL_ZOOM_RATIO, plan.zoomRatio.toFloat())
             }
-            fixedFpsRange()?.let { request.set(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, it) }
-        }
-
-        private fun fixedFpsRange(): Range<Int>? {
-            val ranges = characteristics.get(CameraCharacteristics.CONTROL_AE_AVAILABLE_TARGET_FPS_RANGES)
-                ?: return null
-            return ranges.firstOrNull { it.lower == profile.fps && it.upper == profile.fps }
-                ?: ranges.filter { it.upper == profile.fps }.maxByOrNull { it.lower }
+            request.set(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, Range(plan.fpsRange.first, plan.fpsRange.last))
         }
 
         /**
@@ -606,11 +646,10 @@ class CourtCameraRecorder(
             val target = preview?.takeIf { previewInSession }
             val pattern = if (target == null) listOf(false) else PreviewBurst.pattern(profile.fps, previewFps)
             val requests = pattern.map { show -> build(request, target?.takeIf { show }) }
-            val callback = if (locked) null else warmupCallback
             if (requests.size == 1) {
-                current.setRepeatingRequest(requests.first(), callback, handler)
+                current.setRepeatingRequest(requests.first(), resultCallback, handler)
             } else {
-                current.setRepeatingBurst(requests, callback, handler)
+                current.setRepeatingBurst(requests, resultCallback, handler)
             }
         }
 
@@ -637,15 +676,19 @@ class CourtCameraRecorder(
             }
         }
 
-        private val warmupCallback = object : CameraCaptureSession.CaptureCallback() {
+        /** Every result is read back for `applied`; until the lock it also drives the warm-up. */
+        private val resultCallback = object : CameraCaptureSession.CaptureCallback() {
             override fun onCaptureCompleted(
                 captureSession: CameraCaptureSession,
                 request: CaptureRequest,
                 result: TotalCaptureResult,
             ) {
+                readback = readbackOf(result)
                 if (locked) {
                     return
                 }
+                result.get(CaptureResult.SENSOR_EXPOSURE_TIME)?.let { autoExposureNs = it }
+                result.get(CaptureResult.SENSOR_SENSITIVITY)?.let { autoIso = it }
                 result.get(CaptureResult.LENS_FOCUS_DISTANCE)?.let { lastFocusDistance = it }
                 val ae = result.get(CaptureResult.CONTROL_AE_STATE)
                 val awb = result.get(CaptureResult.CONTROL_AWB_STATE)
@@ -661,11 +704,50 @@ class CourtCameraRecorder(
             }
         }
 
+        private fun readbackOf(result: TotalCaptureResult) = CaptureReadback(
+            aeMode = result.get(CaptureResult.CONTROL_AE_MODE),
+            aeLock = result.get(CaptureResult.CONTROL_AE_LOCK),
+            afMode = result.get(CaptureResult.CONTROL_AF_MODE),
+            afState = result.get(CaptureResult.CONTROL_AF_STATE),
+            awbMode = result.get(CaptureResult.CONTROL_AWB_MODE),
+            awbLock = result.get(CaptureResult.CONTROL_AWB_LOCK),
+            zoomRatio = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                result.get(CaptureResult.CONTROL_ZOOM_RATIO)?.toDouble()
+            } else {
+                null
+            },
+            videoStabilizationMode = result.get(CaptureResult.CONTROL_VIDEO_STABILIZATION_MODE),
+            oisMode = result.get(CaptureResult.LENS_OPTICAL_STABILIZATION_MODE),
+            frameDurationNs = result.get(CaptureResult.SENSOR_FRAME_DURATION),
+            exposureTimeNs = result.get(CaptureResult.SENSOR_EXPOSURE_TIME),
+            sensitivity = result.get(CaptureResult.SENSOR_SENSITIVITY),
+        )
+
+        /**
+         * Runs on [handler]: fixes the shutter at [CapturePlan.shutterNs] with the ISO that keeps the
+         * warm-up's brightness (PRD C.1); AE lock when the lens has no manual sensor.
+         */
+        private fun lockExposure(request: CaptureRequest.Builder): String {
+            val shutter = plan.shutterNs
+            val exposure = autoExposureNs
+            val gain = autoIso
+            val iso = if (exposure != null && gain != null) plan.isoFor(gain, exposure) else null
+            if (shutter == null || iso == null) {
+                request.set(CaptureRequest.CONTROL_AE_LOCK, true)
+                return "ae_lock"
+            }
+            request.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_OFF)
+            request.set(CaptureRequest.SENSOR_EXPOSURE_TIME, shutter)
+            request.set(CaptureRequest.SENSOR_SENSITIVITY, iso)
+            request.set(CaptureRequest.SENSOR_FRAME_DURATION, plan.frameDurationNs)
+            return "shutter $shutter ns at ISO $iso (auto $exposure ns at ISO $gain)"
+        }
+
         /** Runs on [handler] (capture callback). */
         private fun lock(elapsedMs: Long, converged: Boolean) {
             val request = builder ?: return
             locked = true
-            request.set(CaptureRequest.CONTROL_AE_LOCK, true)
+            val exposureMode = lockExposure(request)
             request.set(CaptureRequest.CONTROL_AWB_LOCK, true)
             val minFocus = characteristics.get(CameraCharacteristics.LENS_INFO_MINIMUM_FOCUS_DISTANCE) ?: 0f
             val manualSensor = characteristics.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES)
@@ -685,7 +767,10 @@ class CourtCameraRecorder(
                 focusMode = "af_trigger"
             }
             submit()
-            logger.info(TAG, "3A locked after $elapsedMs ms (converged=$converged, focus=$focusMode).")
+            logger.info(
+                TAG,
+                "3A locked after $elapsedMs ms (converged=$converged, exposure=$exposureMode, focus=$focusMode).",
+            )
         }
 
         /**
@@ -703,9 +788,10 @@ class CourtCameraRecorder(
             }
         }
 
-        /** Runs on [handler]: back to open-time 3A; [warmupCallback] then locks again. */
+        /** Runs on [handler]: back to open-time 3A; [resultCallback] then locks again. */
         private fun unlock(sessionId: String) {
             val request = builder ?: return
+            request.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON)
             request.set(CaptureRequest.CONTROL_AE_LOCK, false)
             request.set(CaptureRequest.CONTROL_AWB_LOCK, false)
             request.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_VIDEO)
@@ -743,20 +829,15 @@ class CourtCameraRecorder(
             logger.info(TAG, "Camera closed.")
         }
 
-        private fun pickSize(sizes: List<Size>, wanted: Pair<Int, Int>): Size {
-            val (width, height) = wanted
-            sizes.firstOrNull { it.width == width && it.height == height }?.let { return it }
-            return sizes
-                .filter { it.width * ASPECT_H == it.height * ASPECT_W && it.width <= width }
-                .maxByOrNull { it.width }
-                ?: sizes.minByOrNull { abs(it.width - width) }
-                ?: Size(width, height)
-        }
-
-        inner class VideoEncoder(private val tier: String, size: Size, fps: Int, kbps: Int) {
+        inner class VideoEncoder(private val tier: String, size: Size, fps: Int, private val kbps: Int) {
             private val codec = MediaCodec.createEncoderByType(MediaFormat.MIMETYPE_VIDEO_AVC)
             val surface: Surface
             private val info = MediaCodec.BufferInfo()
+
+            /** What the encoder reports it outputs; the configured size until it says. */
+            @Volatile
+            var output = EncoderReadback(MIME_AVC, size.width, size.height, kbps)
+                private set
 
             @Volatile
             private var running = true
@@ -801,7 +882,9 @@ class CourtCameraRecorder(
                     // null: the codec was released under us, so the session is stopping.
                     val index = dequeueOrNull() ?: break
                     if (index == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
-                        configFromFormat(codec.outputFormat)?.let { publishConfig(it) }
+                        val format = codec.outputFormat
+                        output = readbackOf(format, kbps, output)
+                        configFromFormat(format)?.let { publishConfig(it) }
                     } else if (index >= 0) {
                         endOfStream = handleOutput(index)
                     }
@@ -993,13 +1076,78 @@ class CourtCameraRecorder(
         private const val AUDIO_BIT_RATE = 96_000
         private const val AUDIO_CHUNK_BYTES = 4_096
         private const val AUDIO_BUFFER_CHUNKS = 4
-        private const val ASPECT_W = 16
-        private const val ASPECT_H = 9
 
         fun backCameraId(manager: CameraManager): String = manager.cameraIdList.firstOrNull { id ->
             manager.getCameraCharacteristics(id).get(CameraCharacteristics.LENS_FACING) ==
                 CameraCharacteristics.LENS_FACING_BACK
         } ?: manager.cameraIdList.firstOrNull() ?: error("No camera.")
+
+        /** Every back camera Camera2 lists, for [CapturePlanner]. */
+        fun backLenses(manager: CameraManager): List<LensInfo> = manager.cameraIdList.mapNotNull { id ->
+            val characteristics = manager.getCameraCharacteristics(id)
+            val back = characteristics.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_BACK
+            if (back) lensInfo(id, characteristics) else null
+        }
+
+        private fun lensInfo(id: String, characteristics: CameraCharacteristics): LensInfo {
+            val capabilities = characteristics.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES)
+            val zoom = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                characteristics.get(CameraCharacteristics.CONTROL_ZOOM_RATIO_RANGE)
+                    ?.let { it.lower.toDouble()..it.upper.toDouble() }
+            } else {
+                null
+            }
+            return LensInfo(
+                cameraId = id,
+                viewWidth = LensInfo.viewWidth(
+                    characteristics.get(CameraCharacteristics.SENSOR_INFO_PHYSICAL_SIZE)?.width,
+                    characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_FOCAL_LENGTHS),
+                ),
+                zoomRange = zoom,
+                aeFpsRanges = characteristics.get(CameraCharacteristics.CONTROL_AE_AVAILABLE_TARGET_FPS_RANGES)
+                    ?.map { it.lower..it.upper }
+                    .orEmpty(),
+                videoSizes = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+                    ?.getOutputSizes(MediaCodec::class.java)
+                    ?.map { it.width to it.height }
+                    .orEmpty(),
+                videoStabilizationModes = characteristics
+                    .get(CameraCharacteristics.CONTROL_AVAILABLE_VIDEO_STABILIZATION_MODES)
+                    ?.toList(),
+                oisModes = characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_OPTICAL_STABILIZATION)
+                    ?.toList(),
+                manualSensor = capabilities
+                    ?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_SENSOR) == true,
+                exposureRangeNs = characteristics.get(CameraCharacteristics.SENSOR_INFO_EXPOSURE_TIME_RANGE)
+                    ?.let { it.lower..it.upper },
+                isoRange = characteristics.get(CameraCharacteristics.SENSOR_INFO_SENSITIVITY_RANGE)
+                    ?.let { it.lower..it.upper },
+                fixedFocus = (characteristics.get(CameraCharacteristics.LENS_INFO_MINIMUM_FOCUS_DISTANCE) ?: 0f) == 0f,
+            )
+        }
+
+        /** The encoder's output format: the cropped picture when it says so, else its width and height. */
+        private fun readbackOf(format: MediaFormat, kbps: Int, fallback: EncoderReadback): EncoderReadback {
+            val mime = format.getString(MediaFormat.KEY_MIME) ?: fallback.mime
+            val cropped = listOf(CROP_LEFT, CROP_RIGHT, CROP_TOP, CROP_BOTTOM).all { format.containsKey(it) }
+            val width = when {
+                cropped -> format.getInteger(CROP_RIGHT) - format.getInteger(CROP_LEFT) + 1
+                format.containsKey(MediaFormat.KEY_WIDTH) -> format.getInteger(MediaFormat.KEY_WIDTH)
+                else -> fallback.width
+            }
+            val height = when {
+                cropped -> format.getInteger(CROP_BOTTOM) - format.getInteger(CROP_TOP) + 1
+                format.containsKey(MediaFormat.KEY_HEIGHT) -> format.getInteger(MediaFormat.KEY_HEIGHT)
+                else -> fallback.height
+            }
+            return EncoderReadback(mime, width, height, kbps)
+        }
+
+        /** `MediaFormat.KEY_CROP_*` (API 33) by name, which older encoders also report. */
+        private const val CROP_LEFT = "crop-left"
+        private const val CROP_RIGHT = "crop-right"
+        private const val CROP_TOP = "crop-top"
+        private const val CROP_BOTTOM = "crop-bottom"
 
         private fun videoFormat(size: Size, fps: Int, kbps: Int, withProfile: Boolean): MediaFormat =
             MediaFormat.createVideoFormat(MediaFormat.MIMETYPE_VIDEO_AVC, size.width, size.height).apply {

@@ -1,5 +1,5 @@
 {
-  "contractVersion": "1.11",
+  "contractVersion": "1.24",
   "schemas": {
     "c0": [
       "device-access-claims",
@@ -16,6 +16,8 @@
     ],
     "c1": [
       "profile",
+      "capture-target",
+      "applied-capture",
       "device-mode",
       "ack",
       "nack",
@@ -89,6 +91,12 @@
       "auth-start-query",
       "consent-item",
       "consent-request",
+      "terms-request",
+      "member-terms",
+      "account-export",
+      "marketing-state",
+      "marketing-request",
+      "marketing-confirm",
       "pipeline-state",
       "session-state",
       "side",
@@ -115,6 +123,7 @@
       "visitor-analysis",
       "analysis-not-ready-error",
       "markers-response",
+      "join-request",
       "join-response",
       "join-pending-error",
       "join-status",
@@ -128,11 +137,26 @@
       "claim-request",
       "admin-claims-query",
       "admin-claim-decision",
-      "admin-merge-request"
+      "admin-merge-request",
+      "referee-call-kind",
+      "kit-colour",
+      "referee-side-kit",
+      "referee-kits",
+      "referee-score",
+      "referee-match-request",
+      "referee-match",
+      "referee-matches-response",
+      "referee-call-request",
+      "referee-call",
+      "referee-match-detail",
+      "referee-rally",
+      "referee-rallies-response"
     ],
     "c5": [
       "player-side",
       "recording-export",
+      "camera-capture",
+      "recording-referee-match",
       "analysis-bundle",
       "recording-gap",
       "masters-request",
@@ -143,7 +167,12 @@
       "signal-id",
       "gesture-id",
       "marker",
-      "signal-log"
+      "signal-log",
+      "gesture-marker-request",
+      "live-recording",
+      "live-recordings-response",
+      "live-proxy-query",
+      "live-proxy"
     ]
   }
 }

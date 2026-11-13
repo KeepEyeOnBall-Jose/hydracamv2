@@ -2,11 +2,17 @@ package com.amaia23.hydracam.court
 
 /** What the state machine asks of the camera pipeline. Every call returns quickly; work is async. */
 interface CourtRecorderPort {
-    /** Open the camera, warm up and lock AE/AF/AWB. */
-    fun prepare(sessionId: String, profile: RecordProfile)
+    /**
+     * C1 1.16: why this phone cannot record [profile] with [capture] (`unsupported`, field first);
+     * null when it can. Called before [prepare], so a refused prepare never touches the camera.
+     */
+    fun unsupported(profile: RecordProfile, capture: CaptureTarget): CaptureUnsupported? = null
+
+    /** Open the camera as [capture] asks, warm up and lock AE/AF/AWB. */
+    fun prepare(sessionId: String, profile: RecordProfile, capture: CaptureTarget)
 
     /** Start (or resume after a crash) segmenting [command.sessionId] at `startAtServerMs`. */
-    fun start(command: RecordStart, profile: RecordProfile)
+    fun start(command: RecordStart, profile: RecordProfile, capture: CaptureTarget)
 
     /** K2 re-sent `record.start` for the session already recording: keep going, refresh the grant. */
     fun refresh(command: RecordStart)
@@ -60,7 +66,12 @@ class CourtStateMachine(
     sealed class Phase {
         object Idle : Phase()
 
-        data class Armed(val sessionId: String, val profile: RecordProfile, val maxDurationS: Int? = null) : Phase()
+        data class Armed(
+            val sessionId: String,
+            val profile: RecordProfile,
+            val maxDurationS: Int? = null,
+            val capture: CaptureTarget = CaptureTarget.DEFAULT,
+        ) : Phase()
 
         data class Recording(val sessionId: String) : Phase()
 
@@ -225,16 +236,29 @@ class CourtStateMachine(
     }
 
     private fun arm(command: RecordPrepare): CommandResult {
-        phase = Phase.Armed(command.sessionId, command.profile, command.maxDurationS)
+        val capture = command.capture ?: CaptureTarget.DEFAULT
+        phase = Phase.Armed(command.sessionId, command.profile, command.maxDurationS, capture)
         lastProfile = command.profile
-        recorder.prepare(command.sessionId, command.profile)
+        recorder.prepare(command.sessionId, command.profile, capture)
         return CommandResult.Ack
     }
 
-    /** A prepare that names a duration is refused when it cannot be stored; without one it is not checked. */
+    /**
+     * C1 1.16: a capture or profile this phone cannot record is `unsupported`, naming the field. A
+     * prepare that names a duration is refused when it cannot be stored; without one it is not checked.
+     */
     private fun refusedPrepare(command: RecordPrepare): CommandResult? {
-        val seconds = command.maxDurationS ?: return null
-        return if (storage.refuses(seconds.toLong(), command.profile)) storageFull(command.sessionId, seconds) else null
+        val unsupported = recorder.unsupported(command.profile, command.capture ?: CaptureTarget.DEFAULT)
+        val seconds = command.maxDurationS
+        return when {
+            unsupported != null -> {
+                logger.warn(TAG, "record.prepare ${command.sessionId} refused: ${unsupported.reason}")
+                CommandResult.Nack(C1NackCode.UNSUPPORTED, unsupported.reason)
+            }
+            seconds != null && storage.refuses(seconds.toLong(), command.profile) ->
+                storageFull(command.sessionId, seconds)
+            else -> null
+        }
     }
 
     private fun begin(command: RecordStart, armed: Phase.Armed): CommandResult {
@@ -249,7 +273,7 @@ class CourtStateMachine(
         }
         phase = Phase.Recording(command.sessionId)
         setActive(command.sessionId)
-        recorder.start(command, armed.profile)
+        recorder.start(command, armed.profile, armed.capture)
         return CommandResult.Ack
     }
 

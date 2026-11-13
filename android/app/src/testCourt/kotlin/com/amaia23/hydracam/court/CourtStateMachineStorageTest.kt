@@ -10,11 +10,11 @@ class CourtStateMachineStorageTest {
     private class FakeRecorder : CourtRecorderPort {
         val calls = mutableListOf<String>()
 
-        override fun prepare(sessionId: String, profile: RecordProfile) {
+        override fun prepare(sessionId: String, profile: RecordProfile, capture: CaptureTarget) {
             calls += "prepare:$sessionId:${profile.fps}"
         }
 
-        override fun start(command: RecordStart, profile: RecordProfile) {
+        override fun start(command: RecordStart, profile: RecordProfile, capture: CaptureTarget) {
             calls += "start:${command.sessionId}:${profile.fps}"
         }
 
