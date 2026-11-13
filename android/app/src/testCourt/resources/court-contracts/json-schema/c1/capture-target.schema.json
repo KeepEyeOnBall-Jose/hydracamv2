@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "lens": {
+      "type": "string",
+      "enum": [
+        "wide",
+        "ultrawide",
+        "tele"
+      ]
+    },
+    "zoomRatio": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "stabilization": {
+      "type": "boolean"
+    },
+    "codec": {
+      "type": "string",
+      "enum": [
+        "avc",
+        "hevc"
+      ]
+    },
+    "rotationDeg": {
+      "type": "number",
+      "enum": [
+        0,
+        90,
+        180,
+        270
+      ]
+    }
+  },
+  "required": [
+    "lens",
+    "zoomRatio",
+    "stabilization",
+    "codec",
+    "rotationDeg"
+  ]
+}

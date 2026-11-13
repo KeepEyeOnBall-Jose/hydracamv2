@@ -441,6 +441,90 @@
                 "proxyKbps",
                 "segmentS"
               ]
+            },
+            "applied": {
+              "type": "object",
+              "properties": {
+                "cameraId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "lens": {
+                  "type": "string",
+                  "enum": [
+                    "wide",
+                    "ultrawide",
+                    "tele"
+                  ]
+                },
+                "width": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "height": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "fps": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "codec": {
+                  "type": "string",
+                  "enum": [
+                    "avc",
+                    "hevc"
+                  ]
+                },
+                "masterKbps": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "rotationDeg": {
+                  "type": "number",
+                  "enum": [
+                    0,
+                    90,
+                    180,
+                    270
+                  ]
+                },
+                "zoomRatio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "stabilization": {
+                  "type": "boolean"
+                },
+                "aeLocked": {
+                  "type": "boolean"
+                },
+                "afLocked": {
+                  "type": "boolean"
+                },
+                "awbLocked": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "cameraId",
+                "lens",
+                "width",
+                "height",
+                "fps",
+                "codec",
+                "masterKbps",
+                "rotationDeg",
+                "zoomRatio",
+                "stabilization",
+                "aeLocked",
+                "afLocked",
+                "awbLocked"
+              ]
             }
           },
           "required": [
@@ -693,7 +777,8 @@
             "gesture": {
               "type": "string",
               "enum": [
-                "review"
+                "review",
+                "highlight"
               ]
             },
             "tServerMs": {

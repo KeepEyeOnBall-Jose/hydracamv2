@@ -164,9 +164,9 @@ class DeviceStatusProbe(private val context: Context) {
             val widest = sizes.maxOfOrNull { it.width } ?: 0
             maxRes = RecordProfile.resFor(widest)
             val ranges = characteristics.get(CameraCharacteristics.CONTROL_AE_AVAILABLE_TARGET_FPS_RANGES).orEmpty()
-            if (ranges.any { it.upper >= HIGH_FPS }) {
-                fps = listOf(BASE_FPS, HIGH_FPS)
-            }
+            // Promise only what record.prepare accepts (C1 1.16 nacks any other fps `unsupported`).
+            fps = CapturePlanner.recordableFps(ranges.map { it.lower..it.upper }, listOf(BASE_FPS, HIGH_FPS))
+                .ifEmpty { listOf(BASE_FPS) }
             torch = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
         } catch (error: Exception) {
             Log.w(TAG, "Camera caps unavailable.", error)

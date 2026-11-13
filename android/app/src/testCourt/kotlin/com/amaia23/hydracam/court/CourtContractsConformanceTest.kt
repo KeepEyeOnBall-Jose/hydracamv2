@@ -72,6 +72,56 @@ class CourtContractsConformanceTest {
     }
 
     @Test
+    fun k1ParsesTheContractCaptureAndRefusesEveryBadOne() {
+        val good = File(root, "fixtures/c1/good/capture-target.json")
+        val parsed = CaptureTarget.fromJson(JSONObject(good.readText()))
+        val bad = fixtures("bad").filter { key(it) == CAPTURE_TARGET }
+
+        assertEquals(CaptureTarget.DEFAULT, parsed)
+        assertTrue(bad.isNotEmpty())
+        bad.forEach { fixture ->
+            val error = runCatching { CaptureTarget.fromJson(JSONObject(fixture.readText())) }.exceptionOrNull()
+            assertTrue(fixture.name, error is C1ProtocolException)
+        }
+    }
+
+    @Test
+    fun k1CaptureAndAppliedMatchTheirSchemas() {
+        val applied = AppliedCapture(
+            cameraId = "2",
+            lens = CaptureTarget.LENS_ULTRAWIDE,
+            width = 1920,
+            height = 1080,
+            fps = 30,
+            codec = CaptureTarget.CODEC_AVC,
+            masterKbps = 12_000,
+            rotationDeg = 0,
+            zoomRatio = 1.0,
+            stabilization = false,
+            aeLocked = true,
+            afLocked = true,
+            awbLocked = true,
+            exposureTimeNs = 2_000_000,
+            iso = 640,
+        )
+        val started = C1Envelope.create(
+            C1.RECORDING_STARTED,
+            C1Events.recordingStarted("s1", 1_793_700_000_000, -12, RecordProfile(masterKbps = 12_000), applied),
+            nowMs = 1,
+        )
+
+        assertValid(CAPTURE_TARGET, CaptureTarget(zoomRatio = 1.5).toJson())
+        assertValid(APPLIED_CAPTURE, applied.toJson())
+        assertValid(C1.RECORDING_STARTED, JSONObject(started.encode()))
+    }
+
+    private fun assertValid(schema: String, json: JSONObject) {
+        val errors = schemas.getSchema(File(root, "json-schema/c1/$schema$SCHEMA_SUFFIX").readText())
+            .validate(mapper.readTree(json.toString()))
+        assertTrue("$schema: $errors", errors.isEmpty())
+    }
+
+    @Test
     fun everyGoodFixtureMatchesItsSchema() {
         val good = fixtures("good")
         assertTrue(good.size >= MIN_GOOD)
@@ -152,7 +202,9 @@ class CourtContractsConformanceTest {
         const val ROOT = "court-contracts"
         const val MANIFEST = "MANIFEST.sha256"
         const val SCHEMA_SUFFIX = ".schema.json"
-        const val CONTRACT_VERSION = "1.11"
+        const val CONTRACT_VERSION = "1.24"
+        const val CAPTURE_TARGET = "capture-target"
+        const val APPLIED_CAPTURE = "applied-capture"
         const val MIN_GOOD = 40
         const val MIN_BAD = 130
         val RANGE_RULES = setOf("end-before-start", "empty-range")

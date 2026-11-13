@@ -8,13 +8,19 @@ import org.junit.Test
 class CourtStateMachineTest {
     private class FakeRecorder : CourtRecorderPort {
         val calls = mutableListOf<String>()
+        val captures = mutableListOf<CaptureTarget>()
+        var refusal: CaptureUnsupported? = null
 
-        override fun prepare(sessionId: String, profile: RecordProfile) {
+        override fun unsupported(profile: RecordProfile, capture: CaptureTarget): CaptureUnsupported? = refusal
+
+        override fun prepare(sessionId: String, profile: RecordProfile, capture: CaptureTarget) {
             calls += "prepare:$sessionId:${profile.fps}"
+            captures += capture
         }
 
-        override fun start(command: RecordStart, profile: RecordProfile) {
+        override fun start(command: RecordStart, profile: RecordProfile, capture: CaptureTarget) {
             calls += "start:${command.sessionId}:${profile.fps}"
+            captures += capture
         }
 
         override fun refresh(command: RecordStart) {
@@ -269,6 +275,49 @@ class CourtStateMachineTest {
         assertEquals(CourtStateMachine.Phase.Idle, machine.phase)
         assertEquals("camera_disconnected", machine.lastError)
         assertTrue(recorder.calls.isEmpty())
+    }
+
+    @Test
+    fun aCaptureThePhoneCannotApplyIsNackedUnsupportedNamingTheField() {
+        recorder.refusal = CaptureUnsupported("profile.fps", "60 fps is not recordable; at most 30")
+
+        val result = prepare(fps = 60) as CommandResult.Nack
+
+        assertEquals(C1NackCode.UNSUPPORTED, result.code)
+        assertEquals("profile.fps: 60 fps is not recordable; at most 30", result.reason)
+        assertTrue(recorder.calls.isEmpty())
+        assertEquals(CourtStateMachine.Phase.Idle, machine.phase)
+    }
+
+    @Test
+    fun anUnsupportedRePrepareKeepsTheArmedSession() {
+        prepare("s1", fps = 30)
+        recorder.refusal = CaptureUnsupported("capture.lens", "no ultrawide")
+
+        val result = prepare("s2") as CommandResult.Nack
+
+        assertEquals(C1NackCode.UNSUPPORTED, result.code)
+        assertEquals(listOf("prepare:s1:30"), recorder.calls)
+        assertEquals("s1", (machine.phase as CourtStateMachine.Phase.Armed).sessionId)
+    }
+
+    @Test
+    fun theArmedCaptureIsTheOneRecorded() {
+        val ultrawide = CaptureTarget(lens = CaptureTarget.LENS_ULTRAWIDE)
+
+        machine.onPrepare(RecordPrepare("s1", RecordProfile(), capture = ultrawide))
+        start()
+
+        assertEquals(listOf(ultrawide, ultrawide), recorder.captures)
+        assertEquals(CourtStateMachine.Phase.Recording("s1"), machine.phase)
+    }
+
+    @Test
+    fun aPrepareWithoutCaptureUsesTheDefault() {
+        prepare()
+
+        assertEquals(listOf(CaptureTarget.DEFAULT), recorder.captures)
+        assertEquals(CaptureTarget.DEFAULT, (machine.phase as CourtStateMachine.Phase.Armed).capture)
     }
 
     @Test

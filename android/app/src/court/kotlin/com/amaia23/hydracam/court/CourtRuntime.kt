@@ -538,17 +538,20 @@ class CourtRuntime private constructor(context: Context) {
     /** Adds grant bookkeeping and the max-duration timer around the camera recorder. */
     private inner class RecorderPort : CourtRecorderPort {
         // The state machine leaves Idle before calling prepare/start, so a preempted master stays paused.
-        override fun prepare(sessionId: String, profile: RecordProfile) {
+        override fun unsupported(profile: RecordProfile, capture: CaptureTarget) =
+            recorder.unsupported(profile, capture)
+
+        override fun prepare(sessionId: String, profile: RecordProfile, capture: CaptureTarget) {
             uploader.preemptMasters()
-            recorder.prepare(sessionId, profile)
+            recorder.prepare(sessionId, profile, capture)
         }
 
-        override fun start(command: RecordStart, profile: RecordProfile) {
+        override fun start(command: RecordStart, profile: RecordProfile, capture: CaptureTarget) {
             uploader.preemptMasters()
             uploadAlert = null
             rememberGrant(command, restart = true)
             scheduleMaxDuration(command)
-            recorder.start(command, profile)
+            recorder.start(command, profile, capture)
         }
 
         override fun refresh(command: RecordStart) {
@@ -566,10 +569,15 @@ class CourtRuntime private constructor(context: Context) {
     }
 
     private inner class RecorderEvents : CourtRecorderListener {
-        override fun onRecordingStarted(sessionId: String, firstFrameServerMs: Long, profile: RecordProfile) {
+        override fun onRecordingStarted(
+            sessionId: String,
+            firstFrameServerMs: Long,
+            profile: RecordProfile,
+            applied: AppliedCapture?,
+        ) {
             ws.sendEvent(
                 C1.RECORDING_STARTED,
-                C1Events.recordingStarted(sessionId, firstFrameServerMs, clockEstimator.offsetMs(), profile),
+                C1Events.recordingStarted(sessionId, firstFrameServerMs, clockEstimator.offsetMs(), profile, applied),
             )
             ws.sendStateNow()
         }
