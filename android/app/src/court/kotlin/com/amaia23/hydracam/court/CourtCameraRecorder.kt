@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.SurfaceTexture
 import android.hardware.camera2.CameraCaptureSession
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraDevice
@@ -347,7 +348,9 @@ class CourtCameraRecorder(
     private fun plan(profile: RecordProfile, capture: CaptureTarget): CapturePlanResult {
         val manager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
         val known = lenses ?: backLenses(manager).also { lenses = it }
-        return CapturePlanner.plan(profile, capture, known, backCameraId(manager))
+        return CapturePlanner.plan(profile, capture, known, backCameraId(manager)) { cameraId, size ->
+            privateMinFrameDurationNs(manager, cameraId, size)
+        }
     }
 
     /** The prepare already nacked an unsupported capture; one here means the phone changed under us. */
@@ -531,7 +534,7 @@ class CourtCameraRecorder(
 
         @SuppressLint("MissingPermission")
         fun open() {
-            // The planner already checked both sizes are among the camera's MediaCodec outputs.
+            // Encoder sizes stay independent of a larger PRIVATE camera source selected for GL.
             val masterSize = Size(plan.masterSize.first, plan.masterSize.second)
             val proxySize = Size(plan.proxySize.first, plan.proxySize.second)
             encoders[C1.TIER_MASTER] = VideoEncoder(C1.TIER_MASTER, masterSize, profile.fps, profile.masterKbps)
@@ -573,18 +576,18 @@ class CourtCameraRecorder(
             logger.info(
                 TAG,
                 "Camera $cameraId (${plan.lens}, ${plan.zoomRatio}x) open: master $masterSize, proxy $proxySize " +
+                    "camera source ${plan.masterCameraSize}, " +
                     "@ ${profile.fps} fps, shutter ${plan.shutterNs ?: "auto"} ns, " +
                     "preview output ${if (previewInSession) "on" else "off"}.",
             )
         }
 
         private fun openFanout(masterSize: Size, proxySize: Size) {
-            val rotated = plan.rotationDeg == CapturePlanner.HALF_TURN
-            if (!rotated && (profile.masterRes != "2160p" || preview == null)) return
-            // Upright masters stay direct. A half-turn must rotate actual pixels in every tier,
-            // so one full-size camera texture feeds all encoders with the same sensor timestamps.
+            val source = plan.fanoutSourceSize(preview != null) ?: return
+            // Exact-size upright masters stay direct. Scaling and half-turns use one camera
+            // texture for all encoders, preserving sensor timestamps and the requested framing.
             val outputs = buildList {
-                if (rotated) {
+                if (plan.needsMasterFanout) {
                     add(
                         CourtPreviewFanout.Output(
                             "master",
@@ -613,11 +616,10 @@ class CourtCameraRecorder(
                     )
                 }
             }
-            val source = if (rotated) masterSize else proxySize
             fanout = CourtPreviewFanout(
                 outputs,
-                source.width,
-                source.height,
+                source.first,
+                source.second,
                 profile.fps,
                 plan.rotationDeg,
                 characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION) ?: 0,
@@ -627,7 +629,7 @@ class CourtCameraRecorder(
 
         private fun configureSession(camera: CameraDevice, withPreview: Boolean = true, done: (Exception?) -> Unit) {
             val recordSurfaces = fanout?.let {
-                if (plan.rotationDeg == CapturePlanner.HALF_TURN) {
+                if (plan.needsMasterFanout) {
                     listOf(it.inputSurface)
                 } else {
                     listOf(encoder(C1.TIER_MASTER).surface, it.inputSurface)
@@ -1153,6 +1155,16 @@ class CourtCameraRecorder(
             val characteristics = manager.getCameraCharacteristics(id)
             val back = characteristics.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_BACK
             if (back) lensInfo(id, characteristics) else null
+        }
+
+        /** Shared by hello and prepare: PRIVATE camera timing for direct and GL consumers. */
+        fun privateMinFrameDurationNs(manager: CameraManager, cameraId: String, size: Pair<Int, Int>): Long? {
+            val map = manager.getCameraCharacteristics(cameraId)
+                .get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP) ?: return null
+            val dimensions = Size(size.first, size.second)
+            val codecNs = map.getOutputMinFrameDuration(MediaCodec::class.java, dimensions).takeIf { it > 0 }
+            val textureNs = map.getOutputMinFrameDuration(SurfaceTexture::class.java, dimensions).takeIf { it > 0 }
+            return if (codecNs == null || textureNs == null) null else maxOf(codecNs, textureNs)
         }
 
         private fun lensInfo(id: String, characteristics: CameraCharacteristics): LensInfo {

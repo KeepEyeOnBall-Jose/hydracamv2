@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
-import android.graphics.SurfaceTexture
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.media.AudioManager
@@ -22,7 +21,6 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
 import android.util.Log
-import android.util.Size
 import org.json.JSONObject
 import java.io.IOException
 import java.io.InputStream
@@ -174,19 +172,7 @@ class DeviceStatusProbe(private val context: Context) {
             captureProfiles = CaptureCapabilities.profiles(
                 CourtCameraRecorder.backLenses(manager),
                 { cameraId, size ->
-                    val map = manager.getCameraCharacteristics(cameraId)
-                        .get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
-                    val dimensions = Size(size.first, size.second)
-                    val codecNs = map?.getOutputMinFrameDuration(MediaCodec::class.java, dimensions)?.takeIf { it > 0 }
-                    // A half-turn uses the full-size texture as input to every encoder; the
-                    // upright path still shares its 720p proxy with preview. Promise both paths.
-                    val textureNs = map?.getOutputMinFrameDuration(SurfaceTexture::class.java, dimensions)
-                        ?.takeIf { it > 0 }
-                    if (codecNs == null || textureNs == null) {
-                        null
-                    } else {
-                        maxOf(codecNs, textureNs)
-                    }
+                    CourtCameraRecorder.privateMinFrameDurationNs(manager, cameraId, size)
                 },
                 ::encoderMaxKbps,
             )
