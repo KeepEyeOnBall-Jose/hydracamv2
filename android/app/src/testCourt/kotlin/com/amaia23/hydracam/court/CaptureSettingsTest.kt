@@ -123,9 +123,27 @@ class CaptureSettingsTest {
     }
 
     @Test
-    fun aRotatedPictureIsUnsupported() {
-        listOf(90, 180, 270).forEach { degrees ->
+    fun quarterTurnsRemainUnsupported() {
+        listOf(90, 270).forEach { degrees ->
             assertEquals("capture.rotationDeg", refused(CaptureTarget(rotationDeg = degrees)).field)
+        }
+    }
+
+    @Test
+    fun theCourtThreeHalfTurnPreservesResolutionAndReportsPixelRotation() {
+        listOf("1080p", "2160p").forEach { resolution ->
+            val plan = plan(
+                CaptureTarget(rotationDeg = 180),
+                wanted = profile.copy(masterRes = resolution),
+            ) as CapturePlan
+            assertEquals(RecordProfile.sizeFor(resolution), plan.masterSize)
+            val applied = appliedCapture(
+                plan,
+                CaptureReadback(zoomRatio = 1.0),
+                EncoderReadback(MIME_AVC, plan.masterSize.first, plan.masterSize.second, 45_000),
+            )!!
+            assertEquals(180, applied.rotationDeg)
+            assertEquals(30, applied.fps)
         }
     }
 

@@ -32,6 +32,7 @@ class CourtPreviewFanout(
     val srcWidth: Int,
     val srcHeight: Int,
     private val srcFps: Int,
+    private val rotationDeg: Int = 0,
 ) : SurfaceTexture.OnFrameAvailableListener {
     class Output(val name: String, val surface: Surface, val width: Int, val height: Int, val fps: () -> Int) {
         internal var egl: EGLSurface = EGL14.EGL_NO_SURFACE
@@ -177,6 +178,7 @@ class CourtPreviewFanout(
         }
         lastTimestamp = texture.timestamp
         texture.getTransformMatrix(texMatrix)
+        if (rotationDeg == CapturePlanner.HALF_TURN) rotateHalfTurn(texMatrix)
         val index = frameIndex++
         outputs.filter { includes(it.fps(), index) }.forEach { drawTo(it) }
         val us = SystemClock.elapsedRealtimeNanos() / 1_000 - startUs
@@ -227,6 +229,15 @@ class CourtPreviewFanout(
     }
 
     companion object {
+        /** Compose the camera crop/flip with (s, t) -> (1-s, 1-t), without allocating per frame. */
+        internal fun rotateHalfTurn(matrix: FloatArray) {
+            for (row in 0..3) {
+                matrix[12 + row] += matrix[row] + matrix[4 + row]
+                matrix[row] = -matrix[row]
+                matrix[4 + row] = -matrix[4 + row]
+            }
+        }
+
         private const val EGL_RECORDABLE_ANDROID = 0x3142
 
         /** x, y, s, t for a full-screen triangle strip. */

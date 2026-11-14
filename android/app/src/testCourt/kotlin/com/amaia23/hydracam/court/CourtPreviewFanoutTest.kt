@@ -5,6 +5,7 @@ import android.opengl.EGL14
 import android.opengl.EGLContext
 import android.opengl.EGLDisplay
 import android.view.Surface
+import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -19,6 +20,21 @@ import org.robolectric.util.ReflectionHelpers
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28], manifest = Config.NONE)
 class CourtPreviewFanoutTest {
+    @Test
+    fun aHalfTurnMapsOppositeCornersInsideTheCameraTextureCrop() {
+        // SurfaceTexture's vertical flip and crop must remain outside the image rotation.
+        val cameraTransform = floatArrayOf(
+            0.8f, 0f, 0f, 0f,
+            0f, -0.6f, 0f, 0f,
+            0f, 0f, 1f, 0f,
+            0.1f, 0.8f, 0f, 1f,
+        )
+        CourtPreviewFanout.rotateHalfTurn(cameraTransform)
+        assertArrayEquals(floatArrayOf(-0.8f, 0f, 0f, 0f), cameraTransform.copyOfRange(0, 4), 0.000001f)
+        assertArrayEquals(floatArrayOf(0f, 0.6f, 0f, 0f), cameraTransform.copyOfRange(4, 8), 0.000001f)
+        assertArrayEquals(floatArrayOf(0.9f, 0.2f, 0f, 1f), cameraTransform.copyOfRange(12, 16), 0.000001f)
+    }
+
     @Before
     fun androidSentinelsWithoutANativeGlDriver() {
         // Robolectric does not initialize EGL's native sentinel handles. No rendering is mocked:

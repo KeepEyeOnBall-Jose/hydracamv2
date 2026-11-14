@@ -537,26 +537,7 @@ class CourtCameraRecorder(
             encoders[C1.TIER_MASTER] = VideoEncoder(C1.TIER_MASTER, masterSize, profile.fps, profile.masterKbps)
             encoders[C1.TIER_PROXY] = VideoEncoder(C1.TIER_PROXY, proxySize, profile.fps, profile.proxyKbps)
             encoders.values.forEach { it.start() }
-            if (profile.masterRes == "2160p" && preview != null) {
-                // LIMITED cameras guarantee two processed outputs at 4K. Keep the master direct;
-                // copy the 720p output to proxy and preview with the original sensor timestamps.
-                val outputs = listOf(
-                    CourtPreviewFanout.Output(
-                        "proxy",
-                        encoder(C1.TIER_PROXY).surface,
-                        proxySize.width,
-                        proxySize.height,
-                    ) { profile.fps },
-                    CourtPreviewFanout.Output(
-                        "preview",
-                        preview,
-                        PreviewStart.WIDTH.toInt(),
-                        PreviewStart.HEIGHT.toInt(),
-                    ) { previewFps },
-                )
-                fanout = CourtPreviewFanout(outputs, proxySize.width, proxySize.height, profile.fps)
-                fanout?.start()
-            }
+            openFanout(masterSize, proxySize)
 
             val opened = CountDownLatch(1)
             var openError: Exception? = null
@@ -597,8 +578,54 @@ class CourtCameraRecorder(
             )
         }
 
+        private fun openFanout(masterSize: Size, proxySize: Size) {
+            val rotated = plan.rotationDeg == CapturePlanner.HALF_TURN
+            if (!rotated && (profile.masterRes != "2160p" || preview == null)) return
+            // Upright masters stay direct. A half-turn must rotate actual pixels in every tier,
+            // so one full-size camera texture feeds all encoders with the same sensor timestamps.
+            val outputs = buildList {
+                if (rotated) {
+                    add(
+                        CourtPreviewFanout.Output(
+                            "master",
+                            encoder(C1.TIER_MASTER).surface,
+                            masterSize.width,
+                            masterSize.height,
+                        ) { profile.fps },
+                    )
+                }
+                add(
+                    CourtPreviewFanout.Output(
+                        "proxy",
+                        encoder(C1.TIER_PROXY).surface,
+                        proxySize.width,
+                        proxySize.height,
+                    ) { profile.fps },
+                )
+                preview?.let { surface ->
+                    add(
+                        CourtPreviewFanout.Output(
+                            "preview",
+                            surface,
+                            PreviewStart.WIDTH.toInt(),
+                            PreviewStart.HEIGHT.toInt(),
+                        ) { previewFps },
+                    )
+                }
+            }
+            val source = if (rotated) masterSize else proxySize
+            fanout = CourtPreviewFanout(outputs, source.width, source.height, profile.fps, plan.rotationDeg)
+            fanout?.start()
+        }
+
         private fun configureSession(camera: CameraDevice, withPreview: Boolean = true, done: (Exception?) -> Unit) {
-            val recordSurfaces = fanout?.let { listOf(encoder(C1.TIER_MASTER).surface, it.inputSurface) }
+            val recordSurfaces = fanout?.let {
+                if (plan.rotationDeg == CapturePlanner.HALF_TURN) {
+                    listOf(it.inputSurface)
+                } else {
+                    listOf(encoder(C1.TIER_MASTER).surface, it.inputSurface)
+                }
+            }
                 ?: encoders.values.map { it.surface }
             val extra = preview?.takeIf { withPreview && fanout == null }
             camera.createCaptureSession(
@@ -607,7 +634,7 @@ class CourtCameraRecorder(
                     override fun onConfigured(configured: CameraCaptureSession) {
                         try {
                             session = configured
-                            previewInSession = extra != null || fanout != null
+                            previewInSession = extra != null || (fanout != null && preview != null)
                             // The builder targets the encoders only; submit() adds the preview per burst slot.
                             val request = camera.createCaptureRequest(CameraDevice.TEMPLATE_RECORD)
                             recordSurfaces.forEach { request.addTarget(it) }

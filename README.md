@@ -67,16 +67,24 @@ the simultaneous 720p proxy. Court Cloud selects 3840×2160 at 30 fps and
 45 Mbps only when the advertised mode supports it; older clients retain their
 compatible profile. Unsupported or unknown capabilities are not advertised.
 
-At 4K the master feeds its encoder directly. A second 720p camera output is
+At 4K with no rotation the master feeds its encoder directly. A second 720p camera output is
 copied by the GPU to the proxy and live preview, preserving sensor timestamps
 without requiring three Camera2 outputs. `recording.started.applied` reports
 the accepted camera and encoder settings.
+
+For an upside-down mount, `capture.rotationDeg: 180` rotates actual pixels in
+the master, proxy and live preview through a full-resolution GPU input. The
+capability list also checks that input's frame timing. Quarter turns remain
+unsupported. The applied rotation describes encoded pixels, so viewers must
+not turn that picture a second time.
 
 The existing real-device harness accepts `--master-res 2160p --master-kbps
 45000 --record-s 30` in `tool/court_mock_k2.dart`. Use its loopback endpoint
 only on a confirmed idle phone, retain both uploaded tiers and the C1 log,
 and restore the phone's production enrollment after testing. It records real
-camera frames; it does not generate media.
+camera frames; it does not generate media. `--rotation-deg 180` exercises an
+upside-down mount; `--preview-url` can send the actual preview to a loopback
+RTMP receiver for simultaneous verification.
 
 ## Architecture and Components
 

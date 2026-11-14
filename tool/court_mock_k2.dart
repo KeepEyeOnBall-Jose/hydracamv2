@@ -33,6 +33,8 @@ class _Options {
     required this.signals,
     required this.masterRes,
     required this.masterKbps,
+    required this.rotationDeg,
+    this.previewUrl,
   });
 
   final int port;
@@ -45,6 +47,8 @@ class _Options {
   final bool signals;
   final String masterRes;
   final int masterKbps;
+  final int rotationDeg;
+  final String? previewUrl;
 
   factory _Options.parse(List<String> args) {
     final values = <String, String>{};
@@ -63,7 +67,8 @@ class _Options {
       stderr.writeln("usage: court_mock_k2.dart --out <dir> [--port 8787] "
           "[--idle-s 20] [--record-s 30] [--audio] [--tiers proxy,master] "
           "[--exit-after-s 900] [--no-signals] "
-          "[--master-res 1080p] [--master-kbps 12000]");
+          "[--master-res 1080p] [--master-kbps 12000] "
+          "[--rotation-deg 0] [--preview-url <loopback-RTMP-url>]");
       exit(64);
     }
     return _Options(
@@ -77,6 +82,8 @@ class _Options {
       signals: values["no-signals"] != "true",
       masterRes: values["master-res"] ?? "1080p",
       masterKbps: int.parse(values["master-kbps"] ?? "12000"),
+      rotationDeg: int.parse(values["rotation-deg"] ?? "0"),
+      previewUrl: values["preview-url"],
     );
   }
 }
@@ -291,12 +298,26 @@ class _MockK2 {
           "zoomRatio": 1.0,
           "stabilization": false,
           "codec": "avc",
-          "rotationDeg": 0,
+          "rotationDeg": options.rotationDeg,
         },
       });
       Timer(const Duration(seconds: 2), () {
         _leaseActive = true;
         _sendRecordStart(resend: false);
+        final previewUrl = options.previewUrl;
+        if (previewUrl != null) {
+          Timer(const Duration(seconds: 3), () {
+            _send("preview.start", {
+              "publishUrl": previewUrl,
+              "token": "isolated-hardware-test",
+              "width": 640,
+              "height": 360,
+              "fps": 20,
+              "kbps": 500,
+              "ttlS": options.recordS + 60,
+            });
+          });
+        }
         Timer(Duration(seconds: options.recordS), _stopScenario);
       });
     });
@@ -345,6 +366,7 @@ class _MockK2 {
       });
     }
     _send("record.stop", {"sessionId": _sessionId, "stopAtServerMs": stopAt});
+    if (options.previewUrl != null) _send("preview.stop", <String, Object?>{});
   }
 
   void _ack(Map<String, Object?> envelope) {
