@@ -87,6 +87,56 @@
             },
             "speaker": {
               "type": "boolean"
+            },
+            "captureProfiles": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "masterRes": {
+                    "type": "string",
+                    "enum": [
+                      "2160p",
+                      "1080p",
+                      "720p"
+                    ]
+                  },
+                  "fps": {
+                    "type": "number",
+                    "enum": [
+                      30,
+                      60
+                    ]
+                  },
+                  "lens": {
+                    "type": "string",
+                    "enum": [
+                      "wide",
+                      "ultrawide",
+                      "tele"
+                    ]
+                  },
+                  "codec": {
+                    "type": "string",
+                    "enum": [
+                      "avc",
+                      "hevc"
+                    ]
+                  },
+                  "maxMasterKbps": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "masterRes",
+                  "fps",
+                  "lens",
+                  "codec",
+                  "maxMasterKbps"
+                ]
+              }
             }
           },
           "required": [

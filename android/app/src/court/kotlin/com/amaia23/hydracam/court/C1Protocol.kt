@@ -16,7 +16,7 @@ object C1 {
      * (`stream`, `masterMaxKbps`, `record.prepare.maxDurationS`) only to a device that declares 1.11+,
      * and 1.16 `record.prepare.capture` only to 1.16+; K1 answers it with `recording.started.applied`.
      */
-    const val CONTRACT_VERSION = "1.24"
+    const val CONTRACT_VERSION = "1.25"
 
     const val ACK = "ack"
     const val NACK = "nack"
@@ -146,6 +146,7 @@ data class CourtCaps(
     val encoders: Int,
     val torch: Boolean,
     val speaker: Boolean,
+    val captureProfiles: List<CaptureProfileCapability>? = null,
 ) {
     fun toJson(): JSONObject = JSONObject()
         .put("maxRes", maxRes)
@@ -154,6 +155,7 @@ data class CourtCaps(
         .put("encoders", encoders)
         .put("torch", torch)
         .put("speaker", speaker)
+        .apply { captureProfiles?.let { put("captureProfiles", JSONArray(it.map(CaptureProfileCapability::toJson))) } }
 }
 
 data class HelloBody(

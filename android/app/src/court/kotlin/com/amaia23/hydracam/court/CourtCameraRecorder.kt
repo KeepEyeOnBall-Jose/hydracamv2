@@ -485,6 +485,7 @@ class CourtCameraRecorder(
 
         /** Read once: a surface set later joins at the next open. */
         private val preview: Surface? = previewSurface
+        private var fanout: CourtPreviewFanout? = null
         private val configs = mutableMapOf<String, ByteArray>()
         private var device: CameraDevice? = null
         private var session: CameraCaptureSession? = null
@@ -536,6 +537,26 @@ class CourtCameraRecorder(
             encoders[C1.TIER_MASTER] = VideoEncoder(C1.TIER_MASTER, masterSize, profile.fps, profile.masterKbps)
             encoders[C1.TIER_PROXY] = VideoEncoder(C1.TIER_PROXY, proxySize, profile.fps, profile.proxyKbps)
             encoders.values.forEach { it.start() }
+            if (profile.masterRes == "2160p" && preview != null) {
+                // LIMITED cameras guarantee two processed outputs at 4K. Keep the master direct;
+                // copy the 720p output to proxy and preview with the original sensor timestamps.
+                val outputs = listOf(
+                    CourtPreviewFanout.Output(
+                        "proxy",
+                        encoder(C1.TIER_PROXY).surface,
+                        proxySize.width,
+                        proxySize.height,
+                    ) { profile.fps },
+                    CourtPreviewFanout.Output(
+                        "preview",
+                        preview,
+                        PreviewStart.WIDTH.toInt(),
+                        PreviewStart.HEIGHT.toInt(),
+                    ) { previewFps },
+                )
+                fanout = CourtPreviewFanout(outputs, proxySize.width, proxySize.height, profile.fps)
+                fanout?.start()
+            }
 
             val opened = CountDownLatch(1)
             var openError: Exception? = null
@@ -577,15 +598,16 @@ class CourtCameraRecorder(
         }
 
         private fun configureSession(camera: CameraDevice, withPreview: Boolean = true, done: (Exception?) -> Unit) {
-            val recordSurfaces = encoders.values.map { it.surface }
-            val extra = preview?.takeIf { withPreview }
+            val recordSurfaces = fanout?.let { listOf(encoder(C1.TIER_MASTER).surface, it.inputSurface) }
+                ?: encoders.values.map { it.surface }
+            val extra = preview?.takeIf { withPreview && fanout == null }
             camera.createCaptureSession(
                 recordSurfaces + listOfNotNull(extra),
                 object : CameraCaptureSession.StateCallback() {
                     override fun onConfigured(configured: CameraCaptureSession) {
                         try {
                             session = configured
-                            previewInSession = extra != null
+                            previewInSession = extra != null || fanout != null
                             // The builder targets the encoders only; submit() adds the preview per burst slot.
                             val request = camera.createCaptureRequest(CameraDevice.TEMPLATE_RECORD)
                             recordSurfaces.forEach { request.addTarget(it) }
@@ -643,7 +665,7 @@ class CourtCameraRecorder(
                 CaptureRequest.FLASH_MODE,
                 if (torchOn) CaptureRequest.FLASH_MODE_TORCH else CaptureRequest.FLASH_MODE_OFF,
             )
-            val target = preview?.takeIf { previewInSession }
+            val target = preview?.takeIf { previewInSession && fanout == null }
             val pattern = if (target == null) listOf(false) else PreviewBurst.pattern(profile.fps, previewFps)
             val requests = pattern.map { show -> build(request, target?.takeIf { show }) }
             if (requests.size == 1) {
@@ -823,6 +845,8 @@ class CourtCameraRecorder(
             device?.close()
             session = null
             device = null
+            fanout?.release()
+            fanout = null
             encoders.values.forEach { it.release() }
             encoders.clear()
             thread.quitSafely()
