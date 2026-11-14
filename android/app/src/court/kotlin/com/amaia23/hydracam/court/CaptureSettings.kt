@@ -55,7 +55,19 @@ data class CapturePlan(
     val fixedFocus: Boolean,
     val isoRange: IntRange? = null,
     val rotationDeg: Int = 0,
+    /** Camera PRIVATE input; the encoder still outputs [masterSize]. */
+    val masterCameraSize: Pair<Int, Int> = masterSize,
 ) : CapturePlanResult {
+    val needsMasterFanout: Boolean
+        get() = rotationDeg == CapturePlanner.HALF_TURN || masterCameraSize != masterSize
+
+    /** A scaled or rotated master must use GL even when no live preview is attached. */
+    fun fanoutSourceSize(hasPreview: Boolean): Pair<Int, Int>? = when {
+        needsMasterFanout -> masterCameraSize
+        masterSize == RecordProfile.sizeFor("2160p") && hasPreview -> proxySize
+        else -> null
+    }
+
     /**
      * The ISO that keeps the auto-exposure brightness at the fixed shutter: the warm-up chose
      * [autoExposureNs] at [autoIso], so a faster shutter needs proportionally more gain. Null when
@@ -91,6 +103,7 @@ object CapturePlanner {
         target: CaptureTarget,
         lenses: List<LensInfo>,
         wideId: String = WIDE_ID,
+        minFrameDurationNs: (String, Pair<Int, Int>) -> Long? = { _, _ -> null },
     ): CapturePlanResult {
         val lens = lensFor(target.lens, lenses, wideId)
             ?: return CaptureUnsupported("capture.lens", "this phone has no ${target.lens} back lens")
@@ -109,10 +122,15 @@ object CapturePlanner {
             ?: return CaptureUnsupported("capture.stabilization", stabilizationDetail(target.stabilization, lens))
         val fpsRange = fpsRangeFor(profile.fps, lens.aeFpsRanges)
             ?: return CaptureUnsupported("profile.fps", fpsDetail(profile.fps, lens))
-        val master = videoSize(profile.masterRes, lens)
-            ?: return CaptureUnsupported("profile.masterRes", sizeDetail(profile.masterRes, lens))
+        val masterSource = masterCameraSize(
+            RecordProfile.sizeFor(profile.masterRes),
+            profile.fps,
+            lens,
+            minFrameDurationNs,
+        ) ?: return CaptureUnsupported("profile.masterRes", sizeDetail(profile.masterRes, lens))
         val proxy = videoSize(profile.proxyRes, lens)
             ?: return CaptureUnsupported("profile.proxyRes", sizeDetail(profile.proxyRes, lens))
+        val master = RecordProfile.sizeFor(profile.masterRes)
         val frameDurationNs = NANOS_PER_SECOND / profile.fps
         return CapturePlan(
             cameraId = lens.cameraId,
@@ -129,6 +147,7 @@ object CapturePlanner {
             fixedFocus = lens.fixedFocus,
             isoRange = lens.isoRange,
             rotationDeg = target.rotationDeg,
+            masterCameraSize = masterSource,
         )
     }
 
@@ -202,6 +221,23 @@ object CapturePlanner {
 
     private fun videoSize(res: String, lens: LensInfo): Pair<Int, Int>? =
         RecordProfile.sizeFor(res).takeIf { it in lens.videoSizes }
+
+    private fun masterCameraSize(
+        output: Pair<Int, Int>,
+        fps: Int,
+        lens: LensInfo,
+        minFrameDurationNs: (String, Pair<Int, Int>) -> Long?,
+    ): Pair<Int, Int>? {
+        if (output in lens.videoSizes) return output
+        val frameNs = (NANOS_PER_SECOND + fps - 1) / fps
+        return lens.videoSizes.asSequence().filter { (width, height) ->
+            width >= output.first && height >= output.second &&
+                width.toLong() * output.second == height.toLong() * output.first
+        }.sortedBy { (width, height) -> width.toLong() * height }
+            .firstOrNull { size ->
+                minFrameDurationNs(lens.cameraId, size)?.let { it > 0 && it <= frameNs } == true
+            }
+    }
 
     private fun sizeDetail(res: String, lens: LensInfo): String {
         val (width, height) = RecordProfile.sizeFor(res)

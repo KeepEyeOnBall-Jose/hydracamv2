@@ -47,9 +47,13 @@ object CaptureCapabilities {
         return listOf("wide", "ultrawide", "tele").flatMap { role ->
             listOf("2160p", "1080p", "720p").mapNotNull { resolution ->
                 val profile = RecordProfile(masterRes = resolution, fps = fps)
-                val plan = CapturePlanner.plan(profile, CaptureTarget(lens = role), lenses) as? CapturePlan
-                    ?: return@mapNotNull null
-                val sizes = listOf(plan.masterSize, proxy)
+                val plan = CapturePlanner.plan(
+                    profile,
+                    CaptureTarget(lens = role),
+                    lenses,
+                    minFrameDurationNs = minFrameDurationNs,
+                ) as? CapturePlan ?: return@mapNotNull null
+                val sizes = listOf(plan.masterCameraSize, proxy)
                 val timed = sizes.all { size ->
                     val duration = minFrameDurationNs(plan.cameraId, size)
                     duration != null && duration > 0 && duration <= frameNs

@@ -137,6 +137,10 @@ class CaptureSettingsTest {
                 wanted = profile.copy(masterRes = resolution),
             ) as CapturePlan
             assertEquals(RecordProfile.sizeFor(resolution), plan.masterSize)
+            assertEquals(plan.masterSize, plan.masterCameraSize)
+            assertTrue(plan.needsMasterFanout)
+            assertEquals(plan.masterSize, plan.fanoutSourceSize(hasPreview = false))
+            assertEquals(plan.masterSize, plan.fanoutSourceSize(hasPreview = true))
             val applied = appliedCapture(
                 plan,
                 CaptureReadback(zoomRatio = 1.0),
@@ -144,6 +148,20 @@ class CaptureSettingsTest {
             )!!
             assertEquals(180, applied.rotationDeg)
             assertEquals(30, applied.fps)
+        }
+    }
+
+    @Test
+    fun exactUprightMasterStaysDirectAtHdAndUhdWithOrWithoutPreview() {
+        listOf("1080p", "2160p").forEach { resolution ->
+            val plan = plan(wanted = profile.copy(masterRes = resolution)) as CapturePlan
+            assertEquals(RecordProfile.sizeFor(resolution), plan.masterCameraSize)
+            assertFalse(plan.needsMasterFanout)
+            assertNull(plan.fanoutSourceSize(hasPreview = false))
+            assertEquals(
+                if (resolution == "2160p") 1280 to 720 else null,
+                plan.fanoutSourceSize(hasPreview = true),
+            )
         }
     }
 

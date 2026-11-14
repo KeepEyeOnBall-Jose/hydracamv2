@@ -67,9 +67,30 @@ the simultaneous 720p proxy. Court Cloud selects 3840×2160 at 30 fps and
 45 Mbps only when the advertised mode supports it; older clients retain their
 compatible profile. Unsupported or unknown capabilities are not advertised.
 
-At 4K with no rotation the master feeds its encoder directly. A second 720p camera output is
+At 4K with an exact camera size and no rotation the master feeds its encoder directly.
+A second 720p camera output is
 copied by the GPU to the proxy and live preview, preserving sensor timestamps
-without requiring three Camera2 outputs. `recording.started.applied` preserves
+without requiring three Camera2 outputs.
+
+When the exact master size is absent, the planner can select the smallest
+sufficiently large PRIVATE camera source with the same aspect ratio and known
+frame timing at the requested rate. The existing GPU path scales that source
+into the requested master, proxy and optional preview, including at 0° and with
+preview off. Encoder size and bitrate checks remain tied to the encoded output.
+Hello and prepare use the same camera timing query. No upscaling or aspect-ratio
+change is allowed; exact-size direct paths remain preferred.
+
+The S7 candidate uses retained Camera2 PRIVATE metadata for 4032×2268 at
+33,331,760 ns to plan a 3840×2160 master. Those declarations and unit tests do
+not prove sustained GPU and simultaneous encoder throughput. This candidate
+remains a draft: source-only validation does not authorize phone installation
+or capture. Production rollout and merge require a separately authorized
+physical canary to pass. Verify actual
+master/proxy frame timestamps, decoded dimensions and framing, orientation,
+preview pressure and any requested audio; boot checks are not capture proof.
+Existing deployed APKs are unaffected by this source-only candidate.
+
+`recording.started.applied` preserves
 legacy camera and encoder values, which may include configured fallbacks.
 `masterKbps` is the encoder target, not measured throughput. The optional
 `captureResult` object retains the latest completed Camera2 result when the
