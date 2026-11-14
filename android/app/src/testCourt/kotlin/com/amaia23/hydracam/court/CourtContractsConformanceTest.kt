@@ -103,6 +103,7 @@ class CourtContractsConformanceTest {
             awbLocked = true,
             exposureTimeNs = 2_000_000,
             iso = 640,
+            captureResult = CaptureReadback(exposureTimeNs = 2_000_000, sensitivity = 640),
         )
         val started = C1Envelope.create(
             C1.RECORDING_STARTED,
@@ -112,6 +113,8 @@ class CourtContractsConformanceTest {
 
         assertValid(CAPTURE_TARGET, CaptureTarget(zoomRatio = 1.5).toJson())
         assertValid(APPLIED_CAPTURE, applied.toJson())
+        assertValid(APPLIED_CAPTURE, applied.copy(zoomRatio = null).toJson())
+        assertValid(APPLIED_CAPTURE, applied.copy(captureResult = null).toJson())
         assertValid(C1.RECORDING_STARTED, JSONObject(started.encode()))
     }
 
@@ -202,7 +205,7 @@ class CourtContractsConformanceTest {
         const val ROOT = "court-contracts"
         const val MANIFEST = "MANIFEST.sha256"
         const val SCHEMA_SUFFIX = ".schema.json"
-        const val CONTRACT_VERSION = "1.25"
+        const val CONTRACT_VERSION = "1.27"
         const val CAPTURE_TARGET = "capture-target"
         const val APPLIED_CAPTURE = "applied-capture"
         const val MIN_GOOD = 40

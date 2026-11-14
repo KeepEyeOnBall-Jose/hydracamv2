@@ -15,8 +15,9 @@ object C1 {
      * The court-contracts version K1 implements, sent as `hello.contractVersion`. K2 sends 1.11 values
      * (`stream`, `masterMaxKbps`, `record.prepare.maxDurationS`) only to a device that declares 1.11+,
      * and 1.16 `record.prepare.capture` only to 1.16+; K1 answers it with `recording.started.applied`.
+     * Version 1.27 preserves raw completed-result observations and allows an unobserved zoom to be null.
      */
-    const val CONTRACT_VERSION = "1.25"
+    const val CONTRACT_VERSION = "1.27"
 
     const val ACK = "ack"
     const val NACK = "nack"

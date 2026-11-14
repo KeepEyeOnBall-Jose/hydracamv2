@@ -60,7 +60,7 @@ for scripted device control.
 
 ### Court camera capture
 
-The Android `court` flavor reports C1 1.25 `hello.caps.captureProfiles` per
+The Android `court` flavor advertises C1 1.27 and reports `hello.caps.captureProfiles` per
 lens, resolution, frame rate, codec and bitrate limit. The list requires
 Camera2 size-specific frame timing and hardware AVC encoder support, including
 the simultaneous 720p proxy. Court Cloud selects 3840×2160 at 30 fps and
@@ -69,8 +69,34 @@ compatible profile. Unsupported or unknown capabilities are not advertised.
 
 At 4K with no rotation the master feeds its encoder directly. A second 720p camera output is
 copied by the GPU to the proxy and live preview, preserving sensor timestamps
-without requiring three Camera2 outputs. `recording.started.applied` reports
-the accepted camera and encoder settings.
+without requiring three Camera2 outputs. `recording.started.applied` preserves
+legacy camera and encoder values, which may include configured fallbacks.
+`masterKbps` is the encoder target, not measured throughput. The optional
+`captureResult` object retains the latest completed Camera2 result when the
+start is announced: its twelve fields are raw observations, with explicit
+`null` for unavailable values and no requested-value substitutions. The object
+is absent until a result from the current repeating request completes. Rewarm,
+lock and request updates invalidate prior observations; delayed callbacks from
+superseded requests cannot restore them. It is not matched to the exact encoded
+first frame. Observed shutter and ISO also remain available in the top-level
+`exposureTimeNs` and `iso` fields. Missing zoom is explicitly `null` on a
+zoom-capable camera and does not discard other observations. Older recordings
+without this raw object cannot prove which legacy values came from a camera result.
+
+For this C1 1.27 APK, the existing deployment preflight must verify and retain
+version evidence for **every serving and fallback K2 reader at 1.27 or newer
+before any phone installation**. Verify that K2 accepts both older numeric-zoom
+events and new nullable-zoom events. An unknown or older reader blocks deployment;
+a successful connection alone does not establish event compatibility. This is a
+server-first operational gate, with no runtime version negotiation. Preserve the
+usual court-free, device-lock, APK-backup, enrollment and reconnect checks.
+
+Rollback must restore compatible phone APKs first while K2 1.27 still accepts
+both event shapes. Then drain and verify each device's durable recording-event
+outbox, retaining K2 acceptance evidence, before rolling back any server reader
+below 1.27. Do not clear app data or delete queued events. `CourtWsClient` removes
+an outbox event on `nack`, so connecting a newer queued event to an older reader
+can lose that event. Missing outbox or acceptance evidence blocks server rollback.
 
 For an upside-down mount, `capture.rotationDeg: 180` rotates actual pixels in
 the master, proxy and live preview through a full-resolution GPU input. The
