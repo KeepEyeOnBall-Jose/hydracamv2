@@ -21,6 +21,40 @@ import org.robolectric.util.ReflectionHelpers
 @Config(sdk = [28], manifest = Config.NONE)
 class CourtPreviewFanoutTest {
     @Test
+    fun cameraSensorQuarterTurnsAreRemovedWithoutLosingCropOrGlFlip() {
+        val nativeCrop = floatArrayOf(
+            0.8f, 0f, 0f, 0f,
+            0f, -0.6f, 0f, 0f,
+            0f, 0f, 1f, 0f,
+            0.1f, 0.8f, 0f, 1f,
+        )
+        val cameraTransforms = mapOf(
+            90 to floatArrayOf(
+                0f, -0.6f, 0f, 0f,
+                -0.8f, 0f, 0f, 0f,
+                0f, 0f, 1f, 0f,
+                0.9f, 0.8f, 0f, 1f,
+            ),
+            270 to floatArrayOf(
+                0f, 0.6f, 0f, 0f,
+                0.8f, 0f, 0f, 0f,
+                0f, 0f, 1f, 0f,
+                0.1f, 0.2f, 0f, 1f,
+            ),
+        )
+        cameraTransforms.forEach { (sensorOrientation, matrix) ->
+            CourtPreviewFanout.removeCameraRotation(matrix, sensorOrientation)
+            assertArrayEquals("sensor $sensorOrientation", nativeCrop, matrix, 0.000001f)
+            CourtPreviewFanout.rotateHalfTurn(matrix)
+            assertArrayEquals(
+                floatArrayOf(-0.8f, 0f, 0f, 0f, 0f, 0.6f, 0f, 0f, 0f, 0f, 1f, 0f, 0.9f, 0.2f, 0f, 1f),
+                matrix,
+                0.000001f,
+            )
+        }
+    }
+
+    @Test
     fun aHalfTurnMapsOppositeCornersInsideTheCameraTextureCrop() {
         // SurfaceTexture's vertical flip and crop must remain outside the image rotation.
         val cameraTransform = floatArrayOf(

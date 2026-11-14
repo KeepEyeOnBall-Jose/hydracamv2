@@ -614,7 +614,14 @@ class CourtCameraRecorder(
                 }
             }
             val source = if (rotated) masterSize else proxySize
-            fanout = CourtPreviewFanout(outputs, source.width, source.height, profile.fps, plan.rotationDeg)
+            fanout = CourtPreviewFanout(
+                outputs,
+                source.width,
+                source.height,
+                profile.fps,
+                plan.rotationDeg,
+                characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION) ?: 0,
+            )
             fanout?.start()
         }
 
