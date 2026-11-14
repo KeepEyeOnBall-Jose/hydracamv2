@@ -106,6 +106,40 @@ class C1CaptureTest {
     }
 
     @Test
+    fun appliedCaptureKeepsEveryObservedValueIncludingFalseAndZero() {
+        val observed = CaptureReadback(
+            aeMode = 0,
+            aeLock = false,
+            afMode = 1,
+            afState = 4,
+            awbMode = 1,
+            awbLock = true,
+            zoomRatio = 1.5,
+            videoStabilizationMode = 0,
+            oisMode = 1,
+            frameDurationNs = 33_333_334,
+            exposureTimeNs = 2_000_000,
+            sensitivity = 678,
+        )
+
+        val raw = applied().copy(captureResult = observed).toJson().getJSONObject("captureResult")
+
+        assertEquals(12, raw.length())
+        assertEquals(0, raw.getInt("aeMode"))
+        assertFalse(raw.getBoolean("aeLock"))
+        assertEquals(1, raw.getInt("afMode"))
+        assertEquals(4, raw.getInt("afState"))
+        assertEquals(1, raw.getInt("awbMode"))
+        assertTrue(raw.getBoolean("awbLock"))
+        assertEquals(1.5, raw.getDouble("zoomRatio"), 0.0)
+        assertEquals(0, raw.getInt("videoStabilizationMode"))
+        assertEquals(1, raw.getInt("oisMode"))
+        assertEquals(33_333_334L, raw.getLong("frameDurationNs"))
+        assertEquals(2_000_000L, raw.getLong("exposureTimeNs"))
+        assertEquals(678, raw.getInt("sensitivity"))
+    }
+
+    @Test
     fun recordPrepareCarriesTheCaptureWhenK2SendsOne() {
         val body = JSONObject().put("sessionId", "s1").put("capture", JSONObject(wanted))
 

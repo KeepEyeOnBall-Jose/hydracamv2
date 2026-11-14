@@ -474,9 +474,9 @@ class CourtCameraRecorder(
         private val cameraId: String = plan.cameraId
         private val characteristics = manager.getCameraCharacteristics(cameraId)
 
-        /** Handler thread writes, the encoder drain reads: the last capture result. */
-        @Volatile
-        private var readback = CaptureReadback()
+        /** Handler writes, the encoder drain reads; superseded request results cannot restore it. */
+        private val readback = CaptureReadbackState()
+        private var requestGeneration = readback.reset()
 
         /** The auto exposure the warm-up settled on; the fixed shutter keeps its brightness. */
         private var autoExposureNs: Long? = null
@@ -515,10 +515,10 @@ class CourtCameraRecorder(
 
         fun encoder(tier: String): VideoEncoder = encoders.getValue(tier)
 
-        /** C1 1.16 `recording.started.applied`: null once closed or when the camera did not say. */
+        /** Latest completed result at announcement time; not matched to the encoded frame timestamp. */
         fun applied(): AppliedCapture? {
             val master = encoders[C1.TIER_MASTER]?.output ?: return null
-            return appliedCapture(plan, readback, master)
+            return appliedCapture(plan, readback.latest(), master)
         }
 
         @Synchronized
@@ -695,6 +695,8 @@ class CourtCameraRecorder(
         private fun submit() {
             val request = builder ?: return
             val current = session ?: return
+            requestGeneration = readback.transition(requestGeneration) ?: return
+            request.setTag(requestGeneration)
             request.set(
                 CaptureRequest.FLASH_MODE,
                 if (torchOn) CaptureRequest.FLASH_MODE_TORCH else CaptureRequest.FLASH_MODE_OFF,
@@ -739,7 +741,7 @@ class CourtCameraRecorder(
                 request: CaptureRequest,
                 result: TotalCaptureResult,
             ) {
-                readback = readbackOf(result)
+                if (!readback.completed(request.tag, readbackOf(result))) return
                 if (locked) {
                     return
                 }
@@ -802,6 +804,7 @@ class CourtCameraRecorder(
         /** Runs on [handler] (capture callback). */
         private fun lock(elapsedMs: Long, converged: Boolean) {
             val request = builder ?: return
+            requestGeneration = readback.transition(requestGeneration) ?: return
             locked = true
             val exposureMode = lockExposure(request)
             request.set(CaptureRequest.CONTROL_AWB_LOCK, true)
@@ -834,10 +837,11 @@ class CourtCameraRecorder(
          * locks again for it instead of keeping what the preview (or the last session) locked.
          */
         fun rewarm(sessionId: String) {
+            val generation = readback.reset()
             warmedFor = sessionId
             handler.post {
                 try {
-                    unlock(sessionId)
+                    unlock(sessionId, generation)
                 } catch (error: Exception) {
                     logger.warn(TAG, "3A warm-up for $sessionId failed; keeping the old lock.", error)
                 }
@@ -845,8 +849,9 @@ class CourtCameraRecorder(
         }
 
         /** Runs on [handler]: back to open-time 3A; [resultCallback] then locks again. */
-        private fun unlock(sessionId: String) {
+        private fun unlock(sessionId: String, generation: Long) {
             val request = builder ?: return
+            requestGeneration = generation
             request.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON)
             request.set(CaptureRequest.CONTROL_AE_LOCK, false)
             request.set(CaptureRequest.CONTROL_AWB_LOCK, false)
@@ -858,6 +863,8 @@ class CourtCameraRecorder(
                 afTriggered = false
             }
             lastFocusDistance = null
+            autoExposureNs = null
+            autoIso = null
             openedAtMs = SystemClock.elapsedRealtime()
             locked = false
             submit()
@@ -870,6 +877,7 @@ class CourtCameraRecorder(
         }
 
         fun close() {
+            readback.reset()
             try {
                 session?.stopRepeating()
             } catch (error: Exception) {

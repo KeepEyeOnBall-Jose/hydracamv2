@@ -218,7 +218,7 @@ object CapturePlanner {
     }
 }
 
-/** What the camera reported in the last capture result before recording; null: not reported. */
+/** What the latest completed camera result reported; null fields were not reported. */
 data class CaptureReadback(
     val aeMode: Int? = null,
     val aeLock: Boolean? = null,
@@ -256,16 +256,20 @@ const val MIME_HEVC = "video/hevc"
 data class EncoderReadback(val mime: String, val width: Int, val height: Int, val kbps: Int)
 
 /**
- * C1 1.16 `recording.started.applied` from the plan, the camera's readback and the encoder. Null
- * when the zoom could not be read back on a lens that zooms, or the codec is not a contract one:
- * K2 is then told nothing rather than something unverified.
+ * Legacy `recording.started.applied` values retain their configured fallbacks; [captureResult]
+ * preserves only observations. Missing zoom remains null without discarding other observations;
+ * the whole object is null only when the encoder codec is not a contract codec.
  */
-fun appliedCapture(plan: CapturePlan, readback: CaptureReadback, encoder: EncoderReadback): AppliedCapture? {
-    val zoom = readback.zoomRatio ?: 1.0.takeUnless { plan.zoomControl } ?: return null
+fun appliedCapture(plan: CapturePlan, captureResult: CaptureReadback?, encoder: EncoderReadback): AppliedCapture? {
+    val readback = captureResult ?: CaptureReadback()
+    val zoom = readback.zoomRatio ?: 1.0.takeUnless { plan.zoomControl }
     val codec = when (encoder.mime) {
         MIME_AVC -> CaptureTarget.CODEC_AVC
         MIME_HEVC -> CaptureTarget.CODEC_HEVC
-        else -> return null
+        else -> null
+    }
+    if (codec == null) {
+        return null
     }
     val fps = readback.frameDurationNs?.takeIf { it > 0 }?.let { (NANOS_PER_SECOND_D / it).roundToInt() }
         ?: plan.fpsRange.last
@@ -287,6 +291,7 @@ fun appliedCapture(plan: CapturePlan, readback: CaptureReadback, encoder: Encode
         awbLocked = readback.awbLocked,
         exposureTimeNs = readback.exposureTimeNs,
         iso = readback.sensitivity,
+        captureResult = captureResult,
     )
 }
 

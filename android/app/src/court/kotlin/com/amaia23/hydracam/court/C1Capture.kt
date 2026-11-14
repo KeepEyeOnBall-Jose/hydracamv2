@@ -70,9 +70,10 @@ data class CaptureTarget(
 }
 
 /**
- * C1 1.16 `recording.started.body.applied`: what the camera and encoder actually accepted, read
- * back from the capture result and the encoder's output format. [exposureTimeNs] and [iso] are
- * sent whenever the camera reports them; contract 1.24 does not list them yet, so K2 drops them.
+ * `recording.started.body.applied`: legacy applied values plus optional raw camera observations.
+ * [masterKbps] is the configured encoder target, not measured throughput. [captureResult] contains
+ * no planned substitutes; a null field means the completed result did not report that value.
+ * [exposureTimeNs] and [iso] remain present whenever the camera reports them.
  */
 data class AppliedCapture(
     val cameraId: String,
@@ -83,13 +84,14 @@ data class AppliedCapture(
     val codec: String,
     val masterKbps: Int,
     val rotationDeg: Int,
-    val zoomRatio: Double,
+    val zoomRatio: Double?,
     val stabilization: Boolean,
     val aeLocked: Boolean,
     val afLocked: Boolean,
     val awbLocked: Boolean,
     val exposureTimeNs: Long? = null,
     val iso: Int? = null,
+    val captureResult: CaptureReadback? = null,
 ) {
     fun toJson(): JSONObject {
         val json = JSONObject()
@@ -101,7 +103,7 @@ data class AppliedCapture(
             .put("codec", codec)
             .put("masterKbps", masterKbps)
             .put("rotationDeg", rotationDeg)
-            .put("zoomRatio", zoomRatio)
+            .put("zoomRatio", zoomRatio ?: JSONObject.NULL)
             .put("stabilization", stabilization)
             .put("aeLocked", aeLocked)
             .put("afLocked", afLocked)
@@ -112,6 +114,24 @@ data class AppliedCapture(
         if (iso != null) {
             json.put("iso", iso)
         }
+        if (captureResult != null) {
+            json.put("captureResult", captureResult.toJson())
+        }
         return json
     }
 }
+
+/** Explicit nulls distinguish absent observations from configured or inferred legacy values. */
+private fun CaptureReadback.toJson(): JSONObject = JSONObject()
+    .put("aeMode", aeMode ?: JSONObject.NULL)
+    .put("aeLock", aeLock ?: JSONObject.NULL)
+    .put("afMode", afMode ?: JSONObject.NULL)
+    .put("afState", afState ?: JSONObject.NULL)
+    .put("awbMode", awbMode ?: JSONObject.NULL)
+    .put("awbLock", awbLock ?: JSONObject.NULL)
+    .put("zoomRatio", zoomRatio ?: JSONObject.NULL)
+    .put("videoStabilizationMode", videoStabilizationMode ?: JSONObject.NULL)
+    .put("oisMode", oisMode ?: JSONObject.NULL)
+    .put("frameDurationNs", frameDurationNs ?: JSONObject.NULL)
+    .put("exposureTimeNs", exposureTimeNs ?: JSONObject.NULL)
+    .put("sensitivity", sensitivity ?: JSONObject.NULL)

@@ -319,6 +319,7 @@ class CaptureSettingsTest {
                 awbLocked = true,
                 exposureTimeNs = 2_000_000L,
                 iso = 640,
+                captureResult = readback,
             ),
             applied,
         )
@@ -331,7 +332,7 @@ class CaptureSettingsTest {
         val applied = appliedCapture(plan, CaptureReadback(), EncoderReadback(MIME_AVC, 1920, 1080, 12_000))!!
 
         assertEquals(30, applied.fps)
-        assertEquals(1.0, applied.zoomRatio, 0.0)
+        assertEquals(1.0, applied.zoomRatio!!, 0.0)
         assertFalse(applied.stabilization)
         assertNull(applied.exposureTimeNs)
         assertNull(applied.iso)
@@ -348,10 +349,10 @@ class CaptureSettingsTest {
     }
 
     @Test
-    fun appliedIsUnknownWithoutAZoomReadbackOrAContractCodec() {
+    fun appliedRetainsUnknownZoomButRejectsAnUnknownCodec() {
         val plan = planned()
 
-        assertNull(appliedCapture(plan, CaptureReadback(), EncoderReadback(MIME_AVC, 1920, 1080, 12_000)))
+        assertNull(appliedCapture(plan, CaptureReadback(), EncoderReadback(MIME_AVC, 1920, 1080, 12_000))!!.zoomRatio)
         val vp8 = EncoderReadback("video/x-vnd.on2.vp8", 1920, 1080, 1)
         assertNull(appliedCapture(plan, CaptureReadback(zoomRatio = 1.0), vp8))
         assertEquals(
