@@ -12,6 +12,7 @@ import android.opengl.GLES20
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.SystemClock
+import android.util.Log
 import android.view.Surface
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -32,6 +33,8 @@ class CourtPreviewFanout(
     val srcWidth: Int,
     val srcHeight: Int,
     private val srcFps: Int,
+    private val rotationDeg: Int = 0,
+    private val sensorOrientationDeg: Int = 0,
 ) : SurfaceTexture.OnFrameAvailableListener {
     class Output(val name: String, val surface: Surface, val width: Int, val height: Int, val fps: () -> Int) {
         internal var egl: EGLSurface = EGL14.EGL_NO_SURFACE
@@ -177,6 +180,14 @@ class CourtPreviewFanout(
         }
         lastTimestamp = texture.timestamp
         texture.getTransformMatrix(texMatrix)
+        if (frameIndex == 0L) {
+            Log.i(
+                "CourtPreview",
+                "sensorOrientation=$sensorOrientationDeg rotation=$rotationDeg texture=${texMatrix.toList()}",
+            )
+        }
+        removeCameraRotation(texMatrix, sensorOrientationDeg)
+        if (rotationDeg == CapturePlanner.HALF_TURN) rotateHalfTurn(texMatrix)
         val index = frameIndex++
         outputs.filter { includes(it.fps(), index) }.forEach { drawTo(it) }
         val us = SystemClock.elapsedRealtimeNanos() / 1_000 - startUs
@@ -227,6 +238,36 @@ class CourtPreviewFanout(
     }
 
     companion object {
+        /**
+         * Camera2's SurfaceTexture matrix includes sensor rotation; direct encoder buffers do not.
+         * Compose its inverse around (0.5, 0.5), retaining the actual texture crop and GL flip.
+         * The resulting raster matches the direct master before applying the requested mount turn.
+         */
+        internal fun removeCameraRotation(matrix: FloatArray, sensorOrientationDeg: Int) {
+            when (sensorOrientationDeg) {
+                0 -> Unit
+                180 -> rotateHalfTurn(matrix)
+                90, 270 -> for (row in 0..3) {
+                    val x = matrix[row]
+                    val y = matrix[4 + row]
+                    val clockwise = sensorOrientationDeg == 90
+                    matrix[12 + row] += if (clockwise) y else x
+                    matrix[row] = if (clockwise) -y else y
+                    matrix[4 + row] = if (clockwise) x else -x
+                }
+                else -> error("Invalid sensor orientation $sensorOrientationDeg")
+            }
+        }
+
+        /** Compose the camera crop/flip with (s, t) -> (1-s, 1-t), without allocating per frame. */
+        internal fun rotateHalfTurn(matrix: FloatArray) {
+            for (row in 0..3) {
+                matrix[12 + row] += matrix[row] + matrix[4 + row]
+                matrix[row] = -matrix[row]
+                matrix[4 + row] = -matrix[4 + row]
+            }
+        }
+
         private const val EGL_RECORDABLE_ANDROID = 0x3142
 
         /** x, y, s, t for a full-screen triangle strip. */

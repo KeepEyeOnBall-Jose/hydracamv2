@@ -178,17 +178,14 @@ class DeviceStatusProbe(private val context: Context) {
                         .get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
                     val dimensions = Size(size.first, size.second)
                     val codecNs = map?.getOutputMinFrameDuration(MediaCodec::class.java, dimensions)?.takeIf { it > 0 }
-                    if (size == RecordProfile.sizeFor("720p")) {
-                        // At 4K the proxy and preview share one camera output through the GPU.
-                        val textureNs = map?.getOutputMinFrameDuration(SurfaceTexture::class.java, dimensions)
-                            ?.takeIf { it > 0 }
-                        if (codecNs == null || textureNs == null) {
-                            null
-                        } else {
-                            maxOf(codecNs, textureNs)
-                        }
+                    // A half-turn uses the full-size texture as input to every encoder; the
+                    // upright path still shares its 720p proxy with preview. Promise both paths.
+                    val textureNs = map?.getOutputMinFrameDuration(SurfaceTexture::class.java, dimensions)
+                        ?.takeIf { it > 0 }
+                    if (codecNs == null || textureNs == null) {
+                        null
                     } else {
-                        codecNs
+                        maxOf(codecNs, textureNs)
                     }
                 },
                 ::encoderMaxKbps,

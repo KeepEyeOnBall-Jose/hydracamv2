@@ -54,6 +54,7 @@ data class CapturePlan(
     val frameDurationNs: Long,
     val fixedFocus: Boolean,
     val isoRange: IntRange? = null,
+    val rotationDeg: Int = 0,
 ) : CapturePlanResult {
     /**
      * The ISO that keeps the auto-exposure brightness at the fixed shutter: the warm-up chose
@@ -69,6 +70,8 @@ data class CapturePlan(
 
 /** C1 1.16 on K1: which lens and Camera2 settings a capture target maps to, or why it cannot. */
 object CapturePlanner {
+    const val HALF_TURN = 180
+
     /** 1/500 s: sharp ball and racket frames at 30 fps (PRD C.1). */
     const val DEFAULT_SHUTTER_NS = 2_000_000L
     const val STABILIZATION_OFF = 0
@@ -94,10 +97,10 @@ object CapturePlanner {
         if (target.codec != CaptureTarget.CODEC_AVC) {
             return CaptureUnsupported("capture.codec", "only avc is recorded")
         }
-        if (target.rotationDeg != 0) {
+        if (target.rotationDeg != 0 && target.rotationDeg != HALF_TURN) {
             return CaptureUnsupported(
                 "capture.rotationDeg",
-                "the encoder cannot rotate the picture; mount the phone upright",
+                "only 0 and 180 degree pixel rotation are supported",
             )
         }
         val zoom = zoomFor(target.zoomRatio, lens)
@@ -125,6 +128,7 @@ object CapturePlanner {
             frameDurationNs = frameDurationNs,
             fixedFocus = lens.fixedFocus,
             isoRange = lens.isoRange,
+            rotationDeg = target.rotationDeg,
         )
     }
 
@@ -275,7 +279,7 @@ fun appliedCapture(plan: CapturePlan, readback: CaptureReadback, encoder: Encode
         fps = fps,
         codec = codec,
         masterKbps = encoder.kbps,
-        rotationDeg = 0,
+        rotationDeg = plan.rotationDeg,
         zoomRatio = zoom,
         stabilization = video == CapturePlanner.STABILIZATION_ON || ois == CapturePlanner.STABILIZATION_ON,
         aeLocked = readback.aeLocked,
