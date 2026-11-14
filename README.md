@@ -58,6 +58,26 @@ constants. Hardware/emulator UI automation builds pass
 `scripts/run_hardware_ui_e2e.py`) to enable the in-app automation bridge used
 for scripted device control.
 
+### Court camera capture
+
+The Android `court` flavor reports C1 1.25 `hello.caps.captureProfiles` per
+lens, resolution, frame rate, codec and bitrate limit. The list requires
+Camera2 size-specific frame timing and hardware AVC encoder support, including
+the simultaneous 720p proxy. Court Cloud selects 3840×2160 at 30 fps and
+45 Mbps only when the advertised mode supports it; older clients retain their
+compatible profile. Unsupported or unknown capabilities are not advertised.
+
+At 4K the master feeds its encoder directly. A second 720p camera output is
+copied by the GPU to the proxy and live preview, preserving sensor timestamps
+without requiring three Camera2 outputs. `recording.started.applied` reports
+the accepted camera and encoder settings.
+
+The existing real-device harness accepts `--master-res 2160p --master-kbps
+45000 --record-s 30` in `tool/court_mock_k2.dart`. Use its loopback endpoint
+only on a confirmed idle phone, retain both uploaded tiers and the C1 log,
+and restore the phone's production enrollment after testing. It records real
+camera frames; it does not generate media.
+
 ## Architecture and Components
 
 ### Architecture

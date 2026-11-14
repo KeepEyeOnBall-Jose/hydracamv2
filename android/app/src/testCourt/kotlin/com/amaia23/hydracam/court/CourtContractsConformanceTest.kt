@@ -202,7 +202,7 @@ class CourtContractsConformanceTest {
         const val ROOT = "court-contracts"
         const val MANIFEST = "MANIFEST.sha256"
         const val SCHEMA_SUFFIX = ".schema.json"
-        const val CONTRACT_VERSION = "1.24"
+        const val CONTRACT_VERSION = "1.25"
         const val CAPTURE_TARGET = "capture-target"
         const val APPLIED_CAPTURE = "applied-capture"
         const val MIN_GOOD = 40

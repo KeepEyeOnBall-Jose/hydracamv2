@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.graphics.SurfaceTexture
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.media.AudioManager
@@ -21,6 +22,7 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
 import android.util.Log
+import android.util.Size
 import org.json.JSONObject
 import java.io.IOException
 import java.io.InputStream
@@ -155,6 +157,7 @@ class DeviceStatusProbe(private val context: Context) {
         var maxRes = "720p"
         var fps = listOf(BASE_FPS)
         var torch = false
+        var captureProfiles = emptyList<CaptureProfileCapability>()
         try {
             val manager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
             val characteristics = manager.getCameraCharacteristics(CourtCameraRecorder.backCameraId(manager))
@@ -168,6 +171,28 @@ class DeviceStatusProbe(private val context: Context) {
             fps = CapturePlanner.recordableFps(ranges.map { it.lower..it.upper }, listOf(BASE_FPS, HIGH_FPS))
                 .ifEmpty { listOf(BASE_FPS) }
             torch = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
+            captureProfiles = CaptureCapabilities.profiles(
+                CourtCameraRecorder.backLenses(manager),
+                { cameraId, size ->
+                    val map = manager.getCameraCharacteristics(cameraId)
+                        .get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+                    val dimensions = Size(size.first, size.second)
+                    val codecNs = map?.getOutputMinFrameDuration(MediaCodec::class.java, dimensions)?.takeIf { it > 0 }
+                    if (size == RecordProfile.sizeFor("720p")) {
+                        // At 4K the proxy and preview share one camera output through the GPU.
+                        val textureNs = map?.getOutputMinFrameDuration(SurfaceTexture::class.java, dimensions)
+                            ?.takeIf { it > 0 }
+                        if (codecNs == null || textureNs == null) {
+                            null
+                        } else {
+                            maxOf(codecNs, textureNs)
+                        }
+                    } else {
+                        codecNs
+                    }
+                },
+                ::encoderMaxKbps,
+            )
         } catch (error: Exception) {
             Log.w(TAG, "Camera caps unavailable.", error)
         }
@@ -175,7 +200,24 @@ class DeviceStatusProbe(private val context: Context) {
             info.isEncoder && info.supportedTypes.any { it.equals(MediaFormat.MIMETYPE_VIDEO_HEVC, ignoreCase = true) }
         }
         val speaker = context.packageManager.hasSystemFeature(PackageManager.FEATURE_AUDIO_OUTPUT)
-        return CourtCaps(maxRes = maxRes, fps = fps, hevc = hevc, encoders = 2, torch = torch, speaker = speaker)
+        return CourtCaps(maxRes, fps, hevc, 2, torch, speaker, captureProfiles)
+    }
+
+    private fun encoderMaxKbps(size: Pair<Int, Int>, fps: Int): Int? {
+        // Match createEncoderByType in the recorder; a different available encoder is not proof.
+        val info = MediaCodecList(MediaCodecList.REGULAR_CODECS).codecInfos.firstOrNull { info ->
+            info.isEncoder && info.supportedTypes.any { it.equals(MediaFormat.MIMETYPE_VIDEO_AVC, true) }
+        } ?: return null
+        val hardware = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            info.isHardwareAccelerated
+        } else {
+            !info.name.startsWith("OMX.google.") && !info.name.startsWith("c2.android.")
+        }
+        val caps = info.getCapabilitiesForType(MediaFormat.MIMETYPE_VIDEO_AVC)
+        val video = caps.videoCapabilities ?: return null
+        val supported = hardware && caps.maxSupportedInstances >= REQUIRED_VIDEO_ENCODERS &&
+            video.areSizeAndRateSupported(size.first, size.second, fps.toDouble())
+        return (video.bitrateRange.upper / 1_000).takeIf { supported }
     }
 
     private companion object {
@@ -188,6 +230,7 @@ class DeviceStatusProbe(private val context: Context) {
         const val TENTHS_PER_DEGREE = 10.0
         const val BASE_FPS = 30
         const val HIGH_FPS = 60
+        const val REQUIRED_VIDEO_ENCODERS = 3
     }
 }
 

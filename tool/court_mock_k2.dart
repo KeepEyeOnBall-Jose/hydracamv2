@@ -31,6 +31,8 @@ class _Options {
     required this.tiers,
     required this.exitAfterS,
     required this.signals,
+    required this.masterRes,
+    required this.masterKbps,
   });
 
   final int port;
@@ -41,6 +43,8 @@ class _Options {
   final List<String> tiers;
   final int exitAfterS;
   final bool signals;
+  final String masterRes;
+  final int masterKbps;
 
   factory _Options.parse(List<String> args) {
     final values = <String, String>{};
@@ -58,7 +62,8 @@ class _Options {
     if (out == null) {
       stderr.writeln("usage: court_mock_k2.dart --out <dir> [--port 8787] "
           "[--idle-s 20] [--record-s 30] [--audio] [--tiers proxy,master] "
-          "[--exit-after-s 900] [--no-signals]");
+          "[--exit-after-s 900] [--no-signals] "
+          "[--master-res 1080p] [--master-kbps 12000]");
       exit(64);
     }
     return _Options(
@@ -70,6 +75,8 @@ class _Options {
       tiers: (values["tiers"] ?? "proxy,master").split(","),
       exitAfterS: int.parse(values["exit-after-s"] ?? "900"),
       signals: values["no-signals"] != "true",
+      masterRes: values["master-res"] ?? "1080p",
+      masterKbps: int.parse(values["master-kbps"] ?? "12000"),
     );
   }
 }
@@ -271,7 +278,21 @@ class _MockK2 {
     Timer(Duration(seconds: options.idleS), () {
       _send("record.prepare", {
         "sessionId": _sessionId,
-        "profile": {"masterRes": "1920x1080", "fps": 30, "segmentS": 6},
+        "profile": {
+          "masterRes": options.masterRes,
+          "masterKbps": options.masterKbps,
+          "proxyRes": "720p",
+          "proxyKbps": 2000,
+          "fps": 30,
+          "segmentS": 6,
+        },
+        "capture": {
+          "lens": "wide",
+          "zoomRatio": 1.0,
+          "stabilization": false,
+          "codec": "avc",
+          "rotationDeg": 0,
+        },
       });
       Timer(const Duration(seconds: 2), () {
         _leaseActive = true;
