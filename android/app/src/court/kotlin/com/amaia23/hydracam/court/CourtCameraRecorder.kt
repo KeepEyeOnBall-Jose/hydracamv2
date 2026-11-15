@@ -491,7 +491,8 @@ class CourtCameraRecorder(
         private var session: CameraCaptureSession? = null
         private var builder: CaptureRequest.Builder? = null
         private var openedAtMs = 0L
-        private var lastFocusDistance: Float? = null
+        private var exposureLocked = false
+        private var focusLocked = false
         private var afTriggered = false
         private var torchOn = false
 
@@ -734,7 +735,7 @@ class CourtCameraRecorder(
             }
         }
 
-        /** Every result is read back for `applied`; until the lock it also drives the warm-up. */
+        /** Every result is read back; autofocus may finish after the bounded exposure warm-up. */
         private val resultCallback = object : CameraCaptureSession.CaptureCallback() {
             override fun onCaptureCompleted(
                 captureSession: CameraCaptureSession,
@@ -745,20 +746,26 @@ class CourtCameraRecorder(
                 if (locked) {
                     return
                 }
-                result.get(CaptureResult.SENSOR_EXPOSURE_TIME)?.let { autoExposureNs = it }
-                result.get(CaptureResult.SENSOR_SENSITIVITY)?.let { autoIso = it }
-                result.get(CaptureResult.LENS_FOCUS_DISTANCE)?.let { lastFocusDistance = it }
-                val ae = result.get(CaptureResult.CONTROL_AE_STATE)
-                val awb = result.get(CaptureResult.CONTROL_AWB_STATE)
-                val aeReady = ae == null ||
-                    ae == CaptureResult.CONTROL_AE_STATE_CONVERGED ||
-                    ae == CaptureResult.CONTROL_AE_STATE_FLASH_REQUIRED
-                val awbReady = awb == null || awb == CaptureResult.CONTROL_AWB_STATE_CONVERGED
-                val converged = aeReady && awbReady
-                val elapsed = SystemClock.elapsedRealtime() - openedAtMs
-                if ((elapsed >= WARMUP_MIN_MS && converged) || elapsed >= WARMUP_MAX_MS) {
-                    lock(elapsed, converged)
+                if (!exposureLocked) {
+                    result.get(CaptureResult.SENSOR_EXPOSURE_TIME)?.let { autoExposureNs = it }
+                    result.get(CaptureResult.SENSOR_SENSITIVITY)?.let { autoIso = it }
                 }
+                val elapsed = SystemClock.elapsedRealtime() - openedAtMs
+                val action = captureWarmupAction(
+                    elapsed,
+                    WarmupProgress(exposureLocked, focusLocked),
+                    plan.fixedFocus,
+                    characteristics.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES)
+                        ?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_SENSOR) == true,
+                    WarmupObservation(
+                        result.get(CaptureResult.CONTROL_AE_STATE),
+                        result.get(CaptureResult.CONTROL_AWB_STATE),
+                        result.get(CaptureResult.CONTROL_AF_STATE),
+                        result.get(CaptureResult.LENS_STATE),
+                        result.get(CaptureResult.LENS_FOCUS_DISTANCE),
+                    ),
+                ) ?: return
+                lock(elapsed, action)
             }
         }
 
@@ -802,34 +809,43 @@ class CourtCameraRecorder(
         }
 
         /** Runs on [handler] (capture callback). */
-        private fun lock(elapsedMs: Long, converged: Boolean) {
+        private fun lock(elapsedMs: Long, action: CaptureWarmupAction) {
             val request = builder ?: return
             requestGeneration = readback.transition(requestGeneration) ?: return
-            locked = true
-            val exposureMode = lockExposure(request)
-            request.set(CaptureRequest.CONTROL_AWB_LOCK, true)
-            val minFocus = characteristics.get(CameraCharacteristics.LENS_INFO_MINIMUM_FOCUS_DISTANCE) ?: 0f
-            val manualSensor = characteristics.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES)
-                ?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_SENSOR) == true
-            val focus = lastFocusDistance
-            var focusMode = "fixed"
-            if (minFocus > 0f && manualSensor && focus != null) {
+            val exposureMode = if (action.lockExposure) {
+                exposureLocked = true
+                request.set(CaptureRequest.CONTROL_AWB_LOCK, true)
+                lockExposure(request)
+            } else {
+                "unchanged"
+            }
+            val focusMode = lockFocus(request, action.focus)
+            focusLocked = focusLocked || action.focus != null
+            locked = exposureLocked && focusLocked
+            submit()
+            logger.info(
+                TAG,
+                "3A update after $elapsedMs ms (locked=$locked, exposureConverged=${action.exposureConverged}, " +
+                    "exposure=$exposureMode, focus=$focusMode).",
+            )
+        }
+
+        private fun lockFocus(request: CaptureRequest.Builder, focus: FocusLock?): String = when (focus) {
+            null -> "pending"
+            FocusLock.Fixed -> "fixed"
+            is FocusLock.Manual -> {
                 request.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_OFF)
-                request.set(CaptureRequest.LENS_FOCUS_DISTANCE, focus)
-                focusMode = "manual $focus dpt"
-            } else if (minFocus > 0f) {
-                // No manual focus: an AF trigger in continuous-video mode locks focus where it is.
+                request.set(CaptureRequest.LENS_FOCUS_DISTANCE, focus.distance)
+                "manual ${focus.distance} dpt"
+            }
+            FocusLock.Trigger -> {
+                // Trigger only after a completed result confirms focus, never merely on timeout.
                 request.set(CaptureRequest.CONTROL_AF_TRIGGER, CaptureRequest.CONTROL_AF_TRIGGER_START)
                 session?.capture(request.build(), null, handler)
                 request.set(CaptureRequest.CONTROL_AF_TRIGGER, CaptureRequest.CONTROL_AF_TRIGGER_IDLE)
                 afTriggered = true
-                focusMode = "af_trigger"
+                "af_trigger"
             }
-            submit()
-            logger.info(
-                TAG,
-                "3A locked after $elapsedMs ms (converged=$converged, exposure=$exposureMode, focus=$focusMode).",
-            )
         }
 
         /**
@@ -862,7 +878,8 @@ class CourtCameraRecorder(
                 request.set(CaptureRequest.CONTROL_AF_TRIGGER, CaptureRequest.CONTROL_AF_TRIGGER_IDLE)
                 afTriggered = false
             }
-            lastFocusDistance = null
+            exposureLocked = false
+            focusLocked = false
             autoExposureNs = null
             autoIso = null
             openedAtMs = SystemClock.elapsedRealtime()
@@ -1130,8 +1147,6 @@ class CourtCameraRecorder(
     companion object {
         private const val TAG = "CourtRecorder"
         private const val OPEN_TIMEOUT_MS = 5_000L
-        private const val WARMUP_MIN_MS = 1_500L
-        private const val WARMUP_MAX_MS = 4_000L
         private const val MAX_STOP_WAIT_MS = 10_000L
         private const val STOP_GRACE_MS = 300L
         private const val DRAIN_TIMEOUT_US = 10_000L

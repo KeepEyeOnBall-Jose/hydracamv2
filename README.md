@@ -83,6 +83,14 @@ first frame. Observed shutter and ISO also remain available in the top-level
 zoom-capable camera and does not discard other observations. Older recordings
 without this raw object cannot prove which legacy values came from a camera result.
 
+Court warm-up freezes a movable lens only after Camera2 reports focused AF and,
+when available, a stationary lens. Manual focus uses that same completed result's
+distance, never an earlier scan position. Fixed-focus cameras are exempt. After
+four seconds, exposure/AWB can lock while continuous AF keeps working; a later
+current-generation focused result can finish the focus lock. Rewarm invalidates
+old callbacks. Recording does not wait for focus readiness, so early applied
+results may report unlocked AF; a lock report does not certify image sharpness.
+
 For this C1 1.27 APK, the existing deployment preflight must verify and retain
 version evidence for **every serving and fallback K2 reader at 1.27 or newer
 before any phone installation**. Verify that K2 accepts both older numeric-zoom
