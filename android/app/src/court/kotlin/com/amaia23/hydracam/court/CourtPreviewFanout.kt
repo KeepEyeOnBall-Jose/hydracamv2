@@ -66,6 +66,7 @@ class CourtPreviewFanout(
     private var aTexCoord = 0
     private var uTexMatrix = 0
     private val texMatrix = FloatArray(16)
+    private val outputTexMatrix = FloatArray(16)
     private val quad = ByteBuffer.allocateDirect(QUAD.size * 4).order(ByteOrder.nativeOrder())
         .asFloatBuffer().apply { put(QUAD).position(0) }
 
@@ -187,7 +188,6 @@ class CourtPreviewFanout(
             )
         }
         removeCameraRotation(texMatrix, sensorOrientationDeg)
-        if (rotationDeg == CapturePlanner.HALF_TURN) rotateHalfTurn(texMatrix)
         val index = frameIndex++
         outputs.filter { includes(it.fps(), index) }.forEach { drawTo(it) }
         val us = SystemClock.elapsedRealtimeNanos() / 1_000 - startUs
@@ -211,7 +211,8 @@ class CourtPreviewFanout(
         quad.position(2)
         GLES20.glVertexAttribPointer(aTexCoord, 2, GLES20.GL_FLOAT, false, 16, quad)
         GLES20.glEnableVertexAttribArray(aTexCoord)
-        GLES20.glUniformMatrix4fv(uTexMatrix, 1, false, texMatrix, 0)
+        outputTextureMatrix(texMatrix, outputTexMatrix, output.name, rotationDeg)
+        GLES20.glUniformMatrix4fv(uTexMatrix, 1, false, outputTexMatrix, 0)
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4)
         // Camera SurfaceTexture timestamps are sensor timestamps, so encoder PTS stay sensor time.
         EGLExt.eglPresentationTimeANDROID(display, output.egl, texture.timestamp)
@@ -238,6 +239,12 @@ class CourtPreviewFanout(
     }
 
     companion object {
+        /** Court 1.4.1 previews stay raw in every mode; recording tiers retain the mount turn. */
+        internal fun outputTextureMatrix(raw: FloatArray, output: FloatArray, name: String, rotationDeg: Int) {
+            raw.copyInto(output)
+            if (name != "preview" && rotationDeg == CapturePlanner.HALF_TURN) rotateHalfTurn(output)
+        }
+
         /**
          * Camera2's SurfaceTexture matrix includes sensor rotation; direct encoder buffers do not.
          * Compose its inverse around (0.5, 0.5), retaining the actual texture crop and GL flip.

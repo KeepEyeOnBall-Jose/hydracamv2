@@ -21,6 +21,31 @@ import org.robolectric.util.ReflectionHelpers
 @Config(sdk = [28], manifest = Config.NONE)
 class CourtPreviewFanoutTest {
     @Test
+    fun livePreviewKeepsRawOrientationWhileRecordingOutputsTurn() {
+        val raw = floatArrayOf(
+            0.8f, 0f, 0f, 0f,
+            0f, -0.6f, 0f, 0f,
+            0f, 0f, 1f, 0f,
+            0.1f, 0.8f, 0f, 1f,
+        )
+        val turned = floatArrayOf(
+            -0.8f, 0f, 0f, 0f,
+            0f, 0.6f, 0f, 0f,
+            0f, 0f, 1f, 0f,
+            0.9f, 0.2f, 0f, 1f,
+        )
+        val output = FloatArray(16)
+        // Reuse the same matrix, as the GL loop does, across idle and retained recording pipelines.
+        listOf(0, 180, 180, 0).forEach { rotation ->
+            listOf("master", "preview", "proxy", "preview").forEach { name ->
+                CourtPreviewFanout.outputTextureMatrix(raw, output, name, rotation)
+                val expected = if (name == "preview" || rotation == 0) raw else turned
+                assertArrayEquals("$name at $rotation", expected, output, 0.000001f)
+            }
+        }
+    }
+
+    @Test
     fun cameraSensorQuarterTurnsAreRemovedWithoutLosingCropOrGlFlip() {
         val nativeCrop = floatArrayOf(
             0.8f, 0f, 0f, 0f,

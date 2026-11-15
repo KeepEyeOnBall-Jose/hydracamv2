@@ -581,8 +581,8 @@ class CourtCameraRecorder(
         private fun openFanout(masterSize: Size, proxySize: Size) {
             val rotated = plan.rotationDeg == CapturePlanner.HALF_TURN
             if (!rotated && (profile.masterRes != "2160p" || preview == null)) return
-            // Upright masters stay direct. A half-turn must rotate actual pixels in every tier,
-            // so one full-size camera texture feeds all encoders with the same sensor timestamps.
+            // Upright masters stay direct. A half-turn rotates actual pixels in recording tiers;
+            // live preview stays raw. All encoders retain the same sensor timestamps.
             val outputs = buildList {
                 if (rotated) {
                     add(
