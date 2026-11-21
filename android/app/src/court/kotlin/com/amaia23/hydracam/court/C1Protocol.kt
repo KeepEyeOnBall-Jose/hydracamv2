@@ -7,6 +7,14 @@ import java.net.URI
 import java.net.URISyntaxException
 import java.util.UUID
 
+/** Relationship between a peer's declared contract version and [C1.CONTRACT_VERSION]. */
+enum class ContractSkew {
+    SAME,
+    OLDER,
+    NEWER,
+    UNKNOWN,
+}
+
 /** C1 v1 device ⇄ Court Cloud protocol (court-remote/01-contracts.md, C1). */
 object C1 {
     const val VERSION = 1
@@ -14,10 +22,28 @@ object C1 {
     /**
      * The court-contracts version K1 implements, sent as `hello.contractVersion`. K2 sends 1.11 values
      * (`stream`, `masterMaxKbps`, `record.prepare.maxDurationS`) only to a device that declares 1.11+,
-     * and 1.16 `record.prepare.capture` only to 1.16+; K1 answers it with `recording.started.applied`.
-     * Version 1.27 preserves raw completed-result observations and allows an unobserved zoom to be null.
+     * 1.16 `record.prepare.capture` only to 1.16+ (K1 answers it with `recording.started.applied`),
+     * 1.27 raw completed-result observations with nullable zoom, and 1.29 `hello` `ack.contractVersion`.
      */
-    const val CONTRACT_VERSION = "1.27"
+    const val CONTRACT_VERSION = "1.29"
+    private val CONTRACT_VERSION_REGEX = Regex("""^\d+(?:\.\d+)+$""")
+    private val EXPECTED_VERSION_PARTS = CONTRACT_VERSION.split('.').map(String::toLong)
+
+    /** Compares [version] against [CONTRACT_VERSION] as dotted integers (`1.29.0` == `1.29`). */
+    fun contractSkew(version: String?): ContractSkew {
+        val actual = parseVersionParts(version) ?: return ContractSkew.UNKNOWN
+        val count = maxOf(actual.size, EXPECTED_VERSION_PARTS.size)
+        for (index in 0 until count) {
+            val diff = actual.getOrElse(index) { 0L }.compareTo(EXPECTED_VERSION_PARTS.getOrElse(index) { 0L })
+            if (diff != 0) return if (diff < 0) ContractSkew.OLDER else ContractSkew.NEWER
+        }
+        return ContractSkew.SAME
+    }
+
+    private fun parseVersionParts(version: String?): List<Long>? {
+        if (version == null || !CONTRACT_VERSION_REGEX.matches(version)) return null
+        return version.split('.').map { it.toLongOrNull() ?: return null }
+    }
 
     const val ACK = "ack"
     const val NACK = "nack"

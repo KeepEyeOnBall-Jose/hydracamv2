@@ -483,6 +483,121 @@ class CourtWsClientTest {
         assertEquals(listOf("K2 nacked event $nacked: ${C1NackCode.BAD_REQUEST}"), warnings.filter { "nacked" in it })
     }
 
+    private fun sendHelloAck(k2: FakeK2, contractVersion: Any? = null, omitField: Boolean = false): WebSocket {
+        val hello = k2.next(C1.HELLO)
+        val socket = k2.opened.await()
+        val body = JSONObject().put("ref", hello.id)
+        if (!omitField) {
+            body.put("contractVersion", contractVersion ?: JSONObject.NULL)
+        }
+        socket.send(C1Envelope.create(C1.ACK, body, 0).encode())
+        return socket
+    }
+
+    @Test
+    fun helloAckRecordsMatchingVersionAndIgnoresNonHelloAckVersion() {
+        val logger = RecordingLogger()
+        replaceClient(newClient(logger = logger))
+        val k2 = FakeK2()
+        upgrade(k2)
+        client.start()
+
+        val socket = sendHelloAck(k2, C1.CONTRACT_VERSION)
+        eventually("matching server contract version") {
+            client.serverContractVersion == C1.CONTRACT_VERSION &&
+                synchronized(logger) { logger.infos.any { "matches K1" in it } }
+        }
+        assertTrue(synchronized(logger) { logger.warnings.isEmpty() })
+
+        // Non-hello ack must not overwrite the hello-negotiated server version.
+        val eventId = client.sendEvent(C1.RECORDING_STARTED, JSONObject().put("sessionId", "s1"))
+        k2.next(C1.RECORDING_STARTED)
+        socket.send(
+            C1Envelope.create(C1.ACK, JSONObject().put("ref", eventId).put("contractVersion", "9.9"), 0).encode(),
+        )
+        eventually("event acked") { outbox.size() == 0 }
+        assertEquals(C1.CONTRACT_VERSION, client.serverContractVersion)
+    }
+
+    @Test
+    fun helloAckWithSkewLogsWarningAndContinuesOperating() {
+        val logger = RecordingLogger()
+        replaceClient(newClient(logger = logger))
+        val older = FakeK2()
+        val newer = FakeK2()
+        upgrade(older)
+        upgrade(newer)
+        client.start()
+
+        val s1 = sendHelloAck(older, "1.28")
+        eventually("older server skew logged") {
+            client.serverContractVersion == "1.28" &&
+                synchronized(logger) { logger.warnings.any { "contract skew" in it && "1.28" in it } }
+        }
+
+        s1.close(1000, "newer-skew-check")
+        val s2 = sendHelloAck(newer, "1.30")
+        eventually("newer server skew logged") {
+            client.serverContractVersion == "1.30" &&
+                synchronized(logger) { logger.warnings.any { "contract skew" in it && "1.30" in it } }
+        }
+
+        s2.send(C1Envelope.create(C1.RECORD_STOP, JSONObject().put("sessionId", "s1"), 1).encode())
+        assertEquals(C1.RECORD_STOP, commands.await().type)
+    }
+
+    @Test
+    fun helloAckHandlesBarePre129AndNullVersionsGracefully() {
+        val logger = RecordingLogger()
+        replaceClient(newClient(logger = logger))
+        val bare = FakeK2()
+        val nullField = FakeK2()
+        upgrade(bare)
+        upgrade(nullField)
+        client.start()
+
+        val s1 = sendHelloAck(bare, omitField = true)
+        eventually("bare hello ack logged") {
+            synchronized(logger) { logger.infos.any { "without contractVersion" in it } }
+        }
+        assertNull(client.serverContractVersion)
+
+        s1.close(1000, "json-null")
+        val s2 = sendHelloAck(nullField, contractVersion = null)
+        eventually("null hello ack logged") {
+            synchronized(logger) { logger.infos.count { "without contractVersion" in it } == 2 }
+        }
+        assertNull(client.serverContractVersion)
+        s2.send(C1Envelope.create(C1.RECORD_STOP, JSONObject().put("sessionId", "s1"), 1).encode())
+        assertEquals(C1.RECORD_STOP, commands.await().type)
+    }
+
+    @Test
+    fun helloAckHandlesMalformedAndNumericVersionsGracefully() {
+        val logger = RecordingLogger()
+        replaceClient(newClient(logger = logger))
+        val malformed = FakeK2()
+        val numeric = FakeK2()
+        upgrade(malformed)
+        upgrade(numeric)
+        client.start()
+
+        val s1 = sendHelloAck(malformed, "bad")
+        eventually("malformed hello ack logged") {
+            synchronized(logger) { logger.warnings.any { "invalid contractVersion" in it } }
+        }
+        assertNull(client.serverContractVersion)
+
+        s1.close(1000, "numeric")
+        val s2 = sendHelloAck(numeric, 1.29)
+        eventually("numeric hello ack logged") {
+            synchronized(logger) { logger.warnings.count { "invalid contractVersion" in it } == 2 }
+        }
+        assertNull(client.serverContractVersion)
+        s2.send(C1Envelope.create(C1.RECORD_STOP, JSONObject().put("sessionId", "s1"), 1).encode())
+        assertEquals(C1.RECORD_STOP, commands.await().type)
+    }
+
     private class FailingTokens(private val error: IOException) : AccessTokenProvider {
         override fun accessToken(): String = throw error
 

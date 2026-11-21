@@ -247,6 +247,8 @@ class CourtRuntime private constructor(context: Context) {
             "connected" to ws.isOpen,
             "connectedAtMs" to ws.connectedAtMs,
             "connectError" to ws.lastConnectError,
+            "contractVersion" to C1.CONTRACT_VERSION,
+            "serverContractVersion" to ws.serverContractVersion,
             "phase" to phase.javaClass.simpleName,
             "mode" to stateMachine.mode(pendingCount > 0, previewing).wire,
             "activeSessionId" to stateMachine.activeSessionId,
