@@ -4,29 +4,15 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-/** Upload lifecycle of one segment (H7). Files are deleted only on [VERIFIED]. */
-enum class UploadState {
-    PENDING,
-    UPLOADING,
-    VERIFYING,
-    VERIFIED,
-
-    /** K3 holds different bytes for the same key: the file is kept, lastError set. */
-    CONFLICT,
-
-    /** Terminal: grant expired or missing, or the file is gone. */
-    FAILED,
-
-    /** No grant lists this tier yet (masters before `masters.upload`): kept on the phone. */
-    HELD,
-    ;
-
-    val active: Boolean get() = this == PENDING || this == UPLOADING || this == VERIFYING
-
-    companion object {
-        fun parse(value: String): UploadState = entries.firstOrNull { it.name == value } ?: PENDING
-    }
-}
+typealias UploadState = com.amaia23.hydracam.phonecore.UploadState
+typealias UploadPolicyStore = com.amaia23.hydracam.phonecore.UploadPolicyStore
+typealias InMemoryUploadPolicyStore = com.amaia23.hydracam.phonecore.InMemoryUploadPolicyStore
+typealias UploadGrant = com.amaia23.hydracam.phonecore.UploadGrant
+typealias UploadSessionGrant = com.amaia23.hydracam.phonecore.UploadSessionGrant
+typealias UploadGrantCheck = com.amaia23.hydracam.phonecore.UploadGrantCheck
+typealias UploadPriorityKey = com.amaia23.hydracam.phonecore.UploadPriorityKey
+typealias UploadGrants = com.amaia23.hydracam.phonecore.UploadGrants
+typealias UploadLifecycle = com.amaia23.hydracam.phonecore.UploadLifecycle
 
 @Entity(tableName = "upload_items")
 data class UploadItem(
@@ -59,10 +45,12 @@ data class UploadItem(
 ) {
     val uploadState: UploadState get() = UploadState.parse(state)
 
+    internal fun priorityKey(): UploadPriorityKey = UploadPriorityKey(tier, priority, createdAtMs, seq)
+
     override fun toString(): String = "UploadItem($key, state=$state, attempts=$attempts, lastError=$lastError)"
 
     companion object {
-        fun keyOf(sessionId: String, tier: String, seq: Long): String = "$sessionId/$tier/$seq"
+        fun keyOf(sessionId: String, tier: String, seq: Long): String = UploadLifecycle.segmentKey(sessionId, tier, seq)
 
         fun from(segment: SegmentRecord, nowMs: Long): UploadItem = UploadItem(
             key = keyOf(segment.sessionId, segment.tier, segment.seq),
@@ -105,14 +93,24 @@ data class UploadSession(
     val masterIngestUrl: String? = null,
     @ColumnInfo(defaultValue = "0") val masterGrantExpMs: Long = 0,
 ) {
-    val tiers: List<String> get() = tiersCsv.split(',').filter { it.isNotBlank() }
+    val tiers: List<String> get() = UploadGrants.parseTiersCsv(tiersCsv)
+
+    internal fun toGrant(): UploadSessionGrant = UploadSessionGrant(
+        uploadGrant = uploadGrant,
+        ingestUrl = ingestUrl,
+        grantExpMs = grantExpMs,
+        grantedTiers = tiers,
+        masterGrant = masterGrant,
+        masterIngestUrl = masterIngestUrl,
+        masterGrantExpMs = masterGrantExpMs,
+    )
 
     override fun toString(): String =
         "UploadSession($sessionId, tiers=$tiersCsv, stoppedAtMs=$stoppedAtMs, manifest=$manifestState)"
 
     companion object {
-        const val MANIFEST_COMPLETE = "complete"
-        const val MANIFEST_PARTIAL = "partial"
+        const val MANIFEST_COMPLETE = UploadLifecycle.MANIFEST_COMPLETE
+        const val MANIFEST_PARTIAL = UploadLifecycle.MANIFEST_PARTIAL
 
         fun from(command: RecordStart, slot: String, nowMs: Long): UploadSession {
             val claims = UploadGrantClaims.decode(command.uploadGrant)
@@ -121,9 +119,9 @@ data class UploadSession(
                 slot = slot,
                 uploadGrant = command.uploadGrant,
                 ingestUrl = command.ingestUrl,
-                grantExpMs = claims?.expMs?.takeIf { it > 0 } ?: Long.MAX_VALUE,
+                grantExpMs = UploadGrants.grantExpiryMs(claims),
                 // A grant without readable tiers falls back to proxy only: never upload unlisted masters.
-                tiersCsv = (claims?.tiers?.takeIf { it.isNotEmpty() } ?: listOf(C1.TIER_PROXY)).joinToString(","),
+                tiersCsv = UploadGrants.grantedTiers(claims).joinToString(","),
                 createdAtMs = nowMs,
             )
         }
@@ -151,32 +149,15 @@ data class MasterRequest(
     override fun toString(): String = "MasterRequest($id, session=$sessionId, state=$state, lastError=$lastError)"
 
     companion object {
-        const val STATE_PENDING = "pending"
-        const val STATE_SENT = "sent"
-        const val STATE_REJECTED = "rejected"
-        const val STATE_GONE = "gone"
+        const val STATE_PENDING = UploadLifecycle.MASTER_STATE_PENDING
+        const val STATE_SENT = UploadLifecycle.MASTER_STATE_SENT
+        const val STATE_REJECTED = UploadLifecycle.MASTER_STATE_REJECTED
+        const val STATE_GONE = UploadLifecycle.MASTER_STATE_GONE
     }
 }
 
 @Entity(tableName = "seq_counters", primaryKeys = ["sessionId", "tier"])
 data class SeqCounter(val sessionId: String, val tier: String, val lastSeq: Long)
-
-/** Last applied `upload.policy` (R10). Android: SharedPreferences; tests: [InMemoryUploadPolicyStore]. */
-interface UploadPolicyStore {
-    fun load(): UploadPolicy
-
-    fun save(policy: UploadPolicy)
-}
-
-class InMemoryUploadPolicyStore(private var policy: UploadPolicy = UploadPolicy.DEFAULT) : UploadPolicyStore {
-    @Synchronized
-    override fun load(): UploadPolicy = policy
-
-    @Synchronized
-    override fun save(policy: UploadPolicy) {
-        this.policy = policy
-    }
-}
 
 /** Durable queue + seq counters. Android: Room ([RoomUploadQueueStore]); tests: [InMemoryUploadQueueStore]. */
 interface UploadQueueStore : SegmentSeqStore {
@@ -249,19 +230,14 @@ class InMemoryUploadQueueStore : UploadQueueStore {
 
     @Synchronized
     override fun nextDue(nowMs: Long, includeMasters: Boolean): UploadItem? = items.values
-        .filter {
-            it.uploadState.active && it.nextAttemptAtMs <= nowMs &&
-                (includeMasters || it.tier == C1.TIER_PROXY)
-        }
-        .sortedWith(
-            compareBy({ if (it.tier == C1.TIER_PROXY) 0 else 1 }, { -it.priority }, { it.createdAtMs }, { it.seq }),
-        )
+        .filter { UploadLifecycle.isItemDue(it.tier, it.uploadState, it.nextAttemptAtMs, nowMs, includeMasters) }
+        .sortedBy { it.priorityKey() }
         .firstOrNull()
 
     @Synchronized
     override fun nextWakeAtMs(includeMasters: Boolean): Long? {
         val itemWake = items.values
-            .filter { it.uploadState.active && (includeMasters || it.tier == C1.TIER_PROXY) }
+            .filter { UploadLifecycle.isItemWakeEligible(it.tier, it.uploadState, includeMasters) }
             .minOfOrNull { it.nextAttemptAtMs }
         val requestWake = masterRequests.values
             .filter { it.state == MasterRequest.STATE_PENDING }

@@ -1,133 +1,23 @@
 package com.amaia23.hydracam.court
 
+import com.amaia23.hydracam.phonecore.CommandResyncDecision
+import com.amaia23.hydracam.phonecore.CommandResyncHold
+import com.amaia23.hydracam.phonecore.CourtWsProtocol
+import com.amaia23.hydracam.phonecore.HelloAckOutcome
+import com.amaia23.hydracam.phonecore.WsConnectionState
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
-import org.json.JSONException
 import org.json.JSONObject
-import java.io.File
-import java.io.FileOutputStream
 import java.io.IOException
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
-import kotlin.math.abs
 
-/**
- * Durable store of device events K2 has not acked yet. C1: un-acked events are re-sent with the
- * same id, so they must survive reconnects and process death.
- */
-class EventOutbox(
-    private val directory: File?,
-    private val maxEntries: Int = 5_000,
-    private val logger: CourtLogger = NoopCourtLogger,
-) {
-    private data class Entry(val envelope: C1Envelope, val order: Long, var lastSentAtMs: Long)
-
-    private val entries = LinkedHashMap<String, Entry>()
-    private var nextOrder = 0L
-
-    init {
-        load()
-    }
-
-    @Synchronized
-    fun add(envelope: C1Envelope) {
-        val entry = Entry(envelope, nextOrder++, lastSentAtMs = 0)
-        entries[envelope.id] = entry
-        persist(entry)
-        while (entries.size > maxEntries) {
-            val oldest = entries.values.first()
-            logger.warn(TAG, "Outbox full; dropping ${oldest.envelope.type} id=${oldest.envelope.id}.")
-            remove(oldest.envelope.id)
-        }
-    }
-
-    /** Returns true when [id] was pending. */
-    @Synchronized
-    fun ack(id: String): Boolean = remove(id)
-
-    @Synchronized
-    fun size(): Int = entries.size
-
-    @Synchronized
-    fun pendingIds(): List<String> = entries.keys.toList()
-
-    /** Entries never sent, or sent longer than [resendAfterMs] ago. Marks them sent at [nowMs]. */
-    @Synchronized
-    fun takeDue(nowMs: Long, resendAfterMs: Long): List<C1Envelope> {
-        val due = entries.values.filter {
-            it.lastSentAtMs == 0L || nowMs - it.lastSentAtMs >= resendAfterMs
-        }
-        due.forEach { it.lastSentAtMs = nowMs }
-        return due.map { it.envelope }
-    }
-
-    /** New connection: everything pending is due again. */
-    @Synchronized
-    fun markAllUnsent() {
-        entries.values.forEach { it.lastSentAtMs = 0 }
-    }
-
-    private fun remove(id: String): Boolean {
-        val entry = entries.remove(id) ?: return false
-        directory?.let { File(it, fileName(entry)).delete() }
-        return true
-    }
-
-    private fun persist(entry: Entry) {
-        val dir = directory ?: return
-        val json = JSONObject()
-            .put("order", entry.order)
-            .put("envelope", JSONObject(entry.envelope.encode()))
-        try {
-            dir.mkdirs()
-            val temp = File(dir, fileName(entry) + ".tmp")
-            // Synced before the rename, so a power cut cannot leave an empty file that load() drops.
-            FileOutputStream(temp).use { stream ->
-                stream.write(json.toString().toByteArray())
-                stream.fd.sync()
-            }
-            if (!temp.renameTo(File(dir, fileName(entry)))) {
-                throw IOException("rename failed")
-            }
-        } catch (error: IOException) {
-            logger.warn(TAG, "Could not persist outbox entry ${entry.envelope.id}.", error)
-        }
-    }
-
-    private fun load() {
-        val dir = directory ?: return
-        val files = dir.listFiles { file -> file.name.endsWith(".json") } ?: return
-        val loaded = files.mapNotNull { file ->
-            val failure: Exception = try {
-                val json = JSONObject(file.readText())
-                val envelope = C1Envelope.decode(json.getJSONObject("envelope").toString())
-                return@mapNotNull Entry(envelope, json.getLong("order"), lastSentAtMs = 0)
-            } catch (error: IOException) {
-                error
-            } catch (error: JSONException) {
-                error
-            } catch (error: C1ProtocolException) {
-                error
-            }
-            logger.warn(TAG, "Dropping unreadable outbox file ${file.name}.", failure)
-            file.delete()
-            null
-        }
-        loaded.sortedBy { it.order }.forEach { entries[it.envelope.id] = it }
-        nextOrder = (loaded.maxOfOrNull { it.order } ?: -1) + 1
-    }
-
-    private fun fileName(entry: Entry): String = "%012d-%s.json".format(entry.order, entry.envelope.id)
-
-    private companion object {
-        const val TAG = "CourtOutbox"
-    }
-}
+typealias EventOutbox = com.amaia23.hydracam.phonecore.EventOutbox
 
 /**
  * H4: C1 v1 WebSocket client.
@@ -151,7 +41,7 @@ class CourtWsClient(
     private val clockEstimator: ClockOffsetEstimator,
     private val onCommand: (C1Envelope) -> Unit,
     private val clock: CourtClock = CourtClock.SYSTEM,
-    private val backoff: ReconnectBackoff = ReconnectBackoff(),
+    backoff: ReconnectBackoff = ReconnectBackoff(),
     private val logger: CourtLogger = NoopCourtLogger,
     private val scheduler: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor(),
     private val stateIntervalMs: Long = 5_000,
@@ -164,58 +54,40 @@ class CourtWsClient(
     private val clockResyncHoldMs: Long = 2_000,
     private val onConnectionChanged: (Boolean, String?) -> Unit = { _, _ -> },
 ) {
+    private val wsState = WsConnectionState(backoff)
+    private val resyncHold = CommandResyncHold()
     private var socket: WebSocket? = null
-    private var generation = 0
-    private var open = false
-    private var running = false
     private var reconnectTask: ScheduledFuture<*>? = null
     private val periodicTasks = mutableListOf<ScheduledFuture<*>>()
-    private val heldCommands = ArrayDeque<C1Envelope>()
-    private var holding = false
     private var holdTimeout: ScheduledFuture<*>? = null
-    private var pendingHelloId: String? = null
 
-    @get:Synchronized
-    var serverContractVersion: String? = null
-        private set
+    val serverContractVersion: String?
+        @Synchronized get() = wsState.serverContractVersion
 
-    @get:Synchronized
-    var lastConnectError: String? = null
-        private set
+    val lastConnectError: String?
+        @Synchronized get() = wsState.lastConnectError
 
-    @get:Synchronized
-    var connectedAtMs: Long = 0
-        private set
+    val connectedAtMs: Long
+        @Synchronized get() = wsState.connectedAtMs
 
     val isOpen: Boolean
-        @Synchronized get() = open
+        @Synchronized get() = wsState.open
 
     fun start() {
-        val startedGeneration = synchronized(this) {
-            if (running) {
-                return
-            }
-            running = true
-            generation
-        }
+        val startedGeneration = synchronized(this) { wsState.beginStart() } ?: return
         scheduler.execute { connect(startedGeneration) }
     }
 
     fun stop() {
         synchronized(this) {
-            running = false
-            generation += 1
+            wsState.stop()
             reconnectTask?.cancel(false)
             cancelPeriodic()
             holdTimeout?.cancel(false)
             holdTimeout = null
-            heldCommands.clear()
-            holding = false
-            pendingHelloId = null
-            serverContractVersion = null
+            resyncHold.clear()
             socket?.close(NORMAL_CLOSURE, "stopping")
             socket = null
-            open = false
         }
         onConnectionChanged(false, "stopped")
     }
@@ -239,7 +111,7 @@ class CourtWsClient(
 
     /** Opens a socket for [currentGeneration]; a connect queued before a stop/start opens nothing. */
     private fun connect(currentGeneration: Int) {
-        if (synchronized(this) { !running || generation != currentGeneration }) return
+        if (synchronized(this) { !wsState.isCurrentConnect(currentGeneration) }) return
         val url = webSocketUrl()
         if (url == null) {
             failAndRetry(currentGeneration, "not_enrolled")
@@ -252,7 +124,7 @@ class CourtWsClient(
             .build()
         val listener = Listener(currentGeneration)
         synchronized(this) {
-            if (running && generation == currentGeneration) {
+            if (wsState.isCurrentConnect(currentGeneration)) {
                 socket = http.newWebSocket(request, listener)
             }
         }
@@ -262,10 +134,8 @@ class CourtWsClient(
     private fun accessTokenOrRetry(currentGeneration: Int): String? {
         val failure = try {
             return tokens.accessToken()
-        } catch (error: CourtAuthException) {
-            if (error.rejected) "auth_rejected" else "auth_unavailable"
-        } catch (ignored: IOException) {
-            "auth_unreachable"
+        } catch (error: IOException) {
+            CourtWsProtocol.authFailureReason(error)
         }
         failAndRetry(currentGeneration, failure)
         return null
@@ -273,23 +143,20 @@ class CourtWsClient(
 
     private inner class Listener(private val listenerGeneration: Int) : WebSocketListener() {
         override fun onOpen(webSocket: WebSocket, response: Response) {
-            synchronized(this@CourtWsClient) {
-                if (listenerGeneration != generation) {
-                    webSocket.close(NORMAL_CLOSURE, "stale")
-                    return
-                }
-                open = true
-                connectedAtMs = clock.nowMs()
-                lastConnectError = null
+            val accepted = synchronized(this@CourtWsClient) {
+                wsState.onOpened(listenerGeneration, clock.nowMs())
             }
-            backoff.reset()
+            if (!accepted) {
+                webSocket.close(NORMAL_CLOSURE, "stale")
+                return
+            }
             logger.info(TAG, "Connected to K2.")
             onConnectionChanged(true, null)
             scheduler.execute { onOpened() }
         }
 
         override fun onMessage(webSocket: WebSocket, text: String) {
-            if (listenerGeneration != synchronized(this@CourtWsClient) { generation }) {
+            if (listenerGeneration != synchronized(this@CourtWsClient) { wsState.generation }) {
                 return
             }
             handleMessage(text)
@@ -300,24 +167,21 @@ class CourtWsClient(
         }
 
         override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
-            dropped(listenerGeneration, "closed_$code")
+            dropped(listenerGeneration, CourtWsProtocol.closeReason(code))
         }
 
         override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
-            if (response?.code == HttpStatus.UNAUTHORIZED) {
+            if (CourtWsProtocol.shouldInvalidateToken(response?.code)) {
                 tokens.invalidate()
             }
-            val reason = response?.let { "http_${it.code}" } ?: (t.javaClass.simpleName)
+            val reason = response?.let { CourtWsProtocol.httpFailureReason(it.code) } ?: t.javaClass.simpleName
             dropped(listenerGeneration, reason)
         }
     }
 
     private fun onOpened() {
         val helloEnvelope = C1Envelope.create(C1.HELLO, hello().toJson(), serverNow())
-        synchronized(this) {
-            pendingHelloId = helloEnvelope.id
-            serverContractVersion = null
-        }
+        synchronized(this) { wsState.onHelloPrepared(helloEnvelope.id) }
         sendRaw(helloEnvelope)
         outbox.markAllUnsent()
         flushOutbox()
@@ -369,44 +233,23 @@ class CourtWsClient(
     private fun onAck(body: JSONObject) {
         val ref = body.optString("ref")
         outbox.ack(ref)
-        val isHelloAck = synchronized(this) {
-            val matched = pendingHelloId != null && ref == pendingHelloId
-            if (matched) pendingHelloId = null
-            matched
-        }
-        if (!isHelloAck) return
-        val raw = body.opt("contractVersion")
-        if (raw == null || raw == JSONObject.NULL) {
-            synchronized(this) { serverContractVersion = null }
-            logger.info(TAG, "K2 acked hello without contractVersion (server < 1.29).")
-            return
-        }
-        val version = raw as? String
-        val skew = C1.contractSkew(version)
-        synchronized(this) {
-            serverContractVersion = if (skew != ContractSkew.UNKNOWN) version else null
-        }
-        when (skew) {
-            ContractSkew.SAME -> logger.info(TAG, "K2 contract $version matches K1 ${C1.CONTRACT_VERSION}.")
-            ContractSkew.OLDER, ContractSkew.NEWER ->
-                logger.warn(TAG, "K2 contract skew: server=$version, device=${C1.CONTRACT_VERSION}.")
-            ContractSkew.UNKNOWN ->
-                logger.warn(TAG, "K2 acked hello with invalid contractVersion '$raw'.")
+        when (val outcome = synchronized(this) { wsState.evaluateHelloAck(body) }) {
+            HelloAckOutcome.Ignored -> Unit
+            HelloAckOutcome.MissingVersion ->
+                logger.info(TAG, "K2 acked hello without contractVersion (server < 1.29).")
+            is HelloAckOutcome.Matched ->
+                logger.info(TAG, "K2 contract ${outcome.version} matches K1 ${C1.CONTRACT_VERSION}.")
+            is HelloAckOutcome.Skewed ->
+                logger.warn(TAG, "K2 contract skew: server=${outcome.version}, device=${C1.CONTRACT_VERSION}.")
+            is HelloAckOutcome.InvalidVersion ->
+                logger.warn(TAG, "K2 acked hello with invalid contractVersion '${outcome.raw}'.")
         }
     }
 
     private fun onServerCommand(envelope: C1Envelope) {
-        val driftMs = if (envelope.ts > 0) envelope.ts - serverNow() else 0L
-        val resync: Boolean
-        synchronized(this) {
-            if (holding) {
-                heldCommands += envelope
-                return
-            }
-            resync = abs(driftMs) > clockResyncDriftMs
-            if (resync) {
-                holding = true
-                heldCommands += envelope
+        val decision = synchronized(this) {
+            val result = resyncHold.accept(envelope, serverNow(), clockResyncDriftMs)
+            if (result is CommandResyncDecision.StartResync) {
                 clockEstimator.markStale()
                 holdTimeout = scheduler.schedule(
                     { releaseHeld(timedOut = true) },
@@ -414,13 +257,19 @@ class CourtWsClient(
                     TimeUnit.MILLISECONDS,
                 )
             }
+            result
         }
-        if (!resync) {
-            onCommand(envelope)
-            return
+        when (decision) {
+            CommandResyncDecision.DispatchNow -> onCommand(envelope)
+            CommandResyncDecision.HeldDuringResync -> Unit
+            is CommandResyncDecision.StartResync -> {
+                logger.warn(
+                    TAG,
+                    "${envelope.type} server time is ${decision.driftMs} ms off our clock; re-syncing first.",
+                )
+                startClockBurst()
+            }
         }
-        logger.warn(TAG, "${envelope.type} server time is $driftMs ms off our clock; re-syncing first.")
-        startClockBurst()
     }
 
     /** Hands held commands on in order; only the first caller (pong or hold timeout) drains. */
@@ -431,26 +280,13 @@ class CourtWsClient(
             logger.warn(TAG, "No clock.pong within $clockResyncHoldMs ms; handling held commands on the old offset.")
         }
         while (true) {
-            val next = synchronized(this) {
-                heldCommands.removeFirstOrNull().also { if (it == null) holding = false }
-            } ?: return
+            val next = synchronized(this) { resyncHold.pollNextOrFinish() } ?: return
             onCommand(next)
         }
     }
 
-    /** A pong missing a time, or with times out of order, would win the min-RTT pick, so it is dropped. */
     private fun onClockPong(body: JSONObject) {
-        val t3 = clock.nowMs()
-        val sample = try {
-            ClockSample(
-                t0 = body.optLongOrNull("t0") ?: -1,
-                t1 = body.optLongOrNull("t1") ?: -1,
-                t2 = body.optLongOrNull("t2") ?: -1,
-                t3 = t3,
-            ).takeIf { it.t0 in 0..t3 && it.t1 >= 0 && it.t2 >= it.t1 }
-        } catch (ignored: C1ProtocolException) {
-            null
-        }
+        val sample = CourtWsProtocol.parseClockPong(body, clock.nowMs())
         if (sample == null) {
             logger.warn(TAG, "Dropping malformed clock.pong.")
             return
@@ -492,36 +328,28 @@ class CourtWsClient(
     }
 
     private fun sendRaw(envelope: C1Envelope): Boolean {
-        val target = synchronized(this) { if (open) socket else null } ?: return false
+        val target = synchronized(this) { if (wsState.open) socket else null } ?: return false
         return target.send(envelope.encode())
     }
 
     private fun dropped(listenerGeneration: Int, reason: String) {
-        synchronized(this) {
-            if (listenerGeneration != generation) {
-                return
+        val nextGeneration = synchronized(this) {
+            wsState.onDropped(listenerGeneration)?.also {
+                socket = null
+                cancelPeriodic()
             }
-            generation += 1
-            open = false
-            socket = null
-            pendingHelloId = null
-            serverContractVersion = null
-            cancelPeriodic()
-        }
+        } ?: return
         logger.info(TAG, "Disconnected from K2: $reason")
         onConnectionChanged(false, reason)
-        failAndRetry(synchronized(this) { generation }, reason)
+        failAndRetry(nextGeneration, reason)
     }
 
     private fun failAndRetry(failedGeneration: Int, reason: String) {
-        val delayMs = backoff.nextDelayMs()
-        synchronized(this) {
-            lastConnectError = reason
-            if (!running || failedGeneration != generation) {
-                return
-            }
+        val delayMs = synchronized(this) {
+            val delay = wsState.scheduleRetryDelayMs(failedGeneration, reason) ?: return
             reconnectTask?.cancel(false)
-            reconnectTask = scheduler.schedule({ connect(failedGeneration) }, delayMs, TimeUnit.MILLISECONDS)
+            reconnectTask = scheduler.schedule({ connect(failedGeneration) }, delay, TimeUnit.MILLISECONDS)
+            delay
         }
         logger.info(TAG, "Reconnect in $delayMs ms ($reason).")
     }
