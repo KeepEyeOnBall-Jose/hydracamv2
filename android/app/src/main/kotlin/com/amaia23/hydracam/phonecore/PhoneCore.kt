@@ -133,3 +133,42 @@ class ReconnectBackoff(
         const val MAX_SHIFT = 20
     }
 }
+
+/**
+ * Cached root status: [rooted] never blocks. A negative answer is re-checked every [retryMs]
+ * (the Magisk prompt may be approved later); [onChange] fires when the answer flips.
+ */
+class RootStatus(
+    private val logger: PhoneLogger,
+    private val probe: () -> Boolean,
+    private val retryMs: Long = 60_000,
+    private val clock: PhoneClock = PhoneClock.SYSTEM,
+) {
+    @Volatile
+    var rooted: Boolean = false
+        private set
+
+    @Volatile
+    var checkedAtMs: Long = 0
+        private set
+
+    /** Blocking; call off the main thread. */
+    fun check(onChange: (Boolean) -> Unit = {}): Boolean {
+        val now = clock.nowMs()
+        if (checkedAtMs > 0 && (rooted || now - checkedAtMs < retryMs)) {
+            return rooted
+        }
+        val result = probe()
+        checkedAtMs = now
+        logger.info(TAG, "Root available: $result.")
+        if (result != rooted) {
+            rooted = result
+            onChange(result)
+        }
+        return result
+    }
+
+    private companion object {
+        const val TAG = "CourtRoot"
+    }
+}

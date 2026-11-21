@@ -1,5 +1,7 @@
 package com.amaia23.hydracam.court
 
+import com.amaia23.hydracam.phonecore.CommandResult
+import com.amaia23.hydracam.phonecore.CourtStateMachine
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue

@@ -1,5 +1,7 @@
 package com.amaia23.hydracam.court
 
+import com.amaia23.hydracam.phonecore.CommandResult
+
 /** One encoded H.264 access unit (Annex B) from the preview encoder. */
 class PreviewFrame(val data: ByteArray, val ptsUs: Long, val keyFrame: Boolean)
 
