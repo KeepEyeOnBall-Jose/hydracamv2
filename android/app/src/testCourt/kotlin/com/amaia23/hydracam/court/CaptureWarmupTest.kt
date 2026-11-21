@@ -1,6 +1,7 @@
 package com.amaia23.hydracam.court
 
 import android.hardware.camera2.CaptureResult
+import com.amaia23.hydracam.phonecore.FocusLock
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

@@ -27,6 +27,7 @@ import android.util.Size
 import android.view.Surface
 import androidx.core.content.ContextCompat
 import com.amaia23.hydracam.phonecore.C1ContractConstants
+import com.amaia23.hydracam.phonecore.FocusLock
 import java.io.IOException
 import java.nio.ByteBuffer
 import java.util.concurrent.CountDownLatch

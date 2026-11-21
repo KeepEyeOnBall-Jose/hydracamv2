@@ -66,6 +66,7 @@ class PhoneCoreBoundaryTest {
             "android.",
             "androidx.",
             "com.amaia23.hydracam.court.",
+            "com.amaia23.hydracam.fixedcamera.",
             "com.pedro.",
         )
         val expectedMainFiles = setOf(
@@ -76,15 +77,18 @@ class PhoneCoreBoundaryTest {
             "CaptureCapabilities.kt",
             "CaptureReadbackState.kt",
             "CaptureSettings.kt",
+            "CaptureWarmup.kt",
             "CourtAuth.kt",
             "CourtCommandTable.kt",
             "CourtSignalPlayer.kt",
             "CourtStateMachine.kt",
             "CourtWsClient.kt",
             "CourtWsCore.kt",
+            "DeviceTokenClient.kt",
             "EventOutbox.kt",
             "MpegTsMuxer.kt",
             "PhoneCore.kt",
+            "PhoneCoreLiveSessionUploader.kt",
             "PipelineAction.kt",
             "PreviewBurst.kt",
             "PreviewController.kt",
@@ -107,10 +111,17 @@ class PhoneCoreBoundaryTest {
             "android.",
             "androidx.",
             "com.amaia23.hydracam.court.",
+            "com.amaia23.hydracam.fixedcamera.",
             "com.pedro.",
             "org.robolectric.",
             "org.mockito.",
         )
-        checkBoundary(testDir, forbidden, setOf("PhoneCoreBoundaryTest.kt"))
+        val expectedTestFiles = setOf(
+            "CaptureWarmupTest.kt",
+            "DeviceTokenClientTest.kt",
+            "PhoneCoreBoundaryTest.kt",
+            "PhoneCoreLiveSessionUploaderTest.kt",
+        )
+        checkBoundary(testDir, forbidden, expectedTestFiles)
     }
 }
