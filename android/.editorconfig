@@ -1,6 +1,11 @@
-# ktlint for the court (K1) runtime (scripts/court_quality_gate.sh). Hand-held Kotlin is not linted.
+# ktlint for the court (K1) runtime and shared phone-core (scripts/court_quality_gate.sh).
+# Hand-held Kotlin is not linted.
 root = true
 
 [app/src/{court,testCourt}/**.{kt,kts}]
+ktlint_code_style = intellij_idea
+max_line_length = 120
+
+[app/src/{main,test}/kotlin/com/amaia23/hydracam/phonecore/**.{kt,kts}]
 ktlint_code_style = intellij_idea
 max_line_length = 120
