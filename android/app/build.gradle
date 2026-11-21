@@ -176,21 +176,21 @@ dependencies {
     implementation "androidx.camera:camera-camera2:${cameraxVersion}"
     // ListenableFuture for Camera2CameraControl; same version as the plugin.
     implementation "com.google.guava:guava:33.5.0-android"
+    implementation "com.squareup.okhttp3:okhttp:4.12.0"
     testImplementation "junit:junit:4.13.2"
     testImplementation "org.mockito:mockito-core:5.23.0"
     testImplementation "org.mockito:mockito-inline:5.2.0"
     testImplementation "androidx.test:core:1.7.0"
     testImplementation "org.robolectric:robolectric:4.16"
     testImplementation "org.json:json:20180813"
+    testImplementation "com.squareup.okhttp3:mockwebserver:4.12.0"
     if (hydracamCourt) {
         courtImplementation "androidx.core:core-ktx:1.13.1"
         courtImplementation "androidx.room:room-runtime:2.7.2"
-        courtImplementation "com.squareup.okhttp3:okhttp:4.12.0"
         // H8/S1 live preview: RootEncoder's SRT and RTMP(S) transports only (no camera/GL code).
         courtImplementation "com.github.pedroSG94.RootEncoder:srt:2.8.1"
         courtImplementation "com.github.pedroSG94.RootEncoder:rtmp:2.8.1"
         kspCourt "androidx.room:room-compiler:2.7.2"
-        testCourtImplementation "com.squareup.okhttp3:mockwebserver:4.12.0"
         // Validates the vendored court-contracts JSON Schema (draft 2020-12) in CourtContractsConformanceTest.
         testCourtImplementation "com.networknt:json-schema-validator:1.5.6"
         // RootEncoder delivers its callbacks on Dispatchers.Main; PreviewFakeRelayTest sets one.
