@@ -1,6 +1,6 @@
 # HydraCam Control Plane
 
-Last reviewed: 2026-08-26 (content dated 2026-08-26).
+Last reviewed: 2026-11-21 (content dated 2026-11-21).
 
 This directory is the product/control-plane entrypoint for the HydraCam mobile
 repo. It replaces the Google Sheet as the canonical source for durable project
@@ -88,6 +88,9 @@ spreadsheet sprint rows.
   lanes.
 - `wireless-device-debugging.md`: Android ADB-over-WiFi and iPhone
   Xcode/CoreDevice setup for cable-free real-device debugging.
+- `court-phone-setup.md`: Samsung court-phone bring-up (`court_phone_setup.py`),
+  K2 Court Cloud C1 `1.29` single-device-record enrollment (`court_k2_enroll.py`),
+  boot-loop prevention rules, and phone-side root/boot scripts.
 - `fleet-operations-plan.md`: lab-managed always-on Android fleet plan,
   heartbeat contract, remote-operations boundaries, and S10e soak harness.
 - `macos-dev-host.md`: one-command deployment and validation for a new Mac
