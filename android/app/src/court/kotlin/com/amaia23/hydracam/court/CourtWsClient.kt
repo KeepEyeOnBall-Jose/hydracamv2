@@ -173,6 +173,11 @@ class CourtWsClient(
     private val heldCommands = ArrayDeque<C1Envelope>()
     private var holding = false
     private var holdTimeout: ScheduledFuture<*>? = null
+    private var pendingHelloId: String? = null
+
+    @get:Synchronized
+    var serverContractVersion: String? = null
+        private set
 
     @get:Synchronized
     var lastConnectError: String? = null
@@ -206,6 +211,8 @@ class CourtWsClient(
             holdTimeout = null
             heldCommands.clear()
             holding = false
+            pendingHelloId = null
+            serverContractVersion = null
             socket?.close(NORMAL_CLOSURE, "stopping")
             socket = null
             open = false
@@ -306,7 +313,12 @@ class CourtWsClient(
     }
 
     private fun onOpened() {
-        sendRaw(C1Envelope.create(C1.HELLO, hello().toJson(), serverNow()))
+        val helloEnvelope = C1Envelope.create(C1.HELLO, hello().toJson(), serverNow())
+        synchronized(this) {
+            pendingHelloId = helloEnvelope.id
+            serverContractVersion = null
+        }
+        sendRaw(helloEnvelope)
         outbox.markAllUnsent()
         flushOutbox()
         sendState()
@@ -342,7 +354,7 @@ class CourtWsClient(
             return
         }
         when (envelope.type) {
-            C1.ACK -> outbox.ack(envelope.body.optString("ref"))
+            C1.ACK -> onAck(envelope.body)
             C1.NACK -> {
                 val ref = envelope.body.optString("ref")
                 if (outbox.ack(ref)) {
@@ -351,6 +363,35 @@ class CourtWsClient(
             }
             C1.CLOCK_PONG -> onClockPong(envelope.body)
             else -> onServerCommand(envelope)
+        }
+    }
+
+    private fun onAck(body: JSONObject) {
+        val ref = body.optString("ref")
+        outbox.ack(ref)
+        val isHelloAck = synchronized(this) {
+            val matched = pendingHelloId != null && ref == pendingHelloId
+            if (matched) pendingHelloId = null
+            matched
+        }
+        if (!isHelloAck) return
+        val raw = body.opt("contractVersion")
+        if (raw == null || raw == JSONObject.NULL) {
+            synchronized(this) { serverContractVersion = null }
+            logger.info(TAG, "K2 acked hello without contractVersion (server < 1.29).")
+            return
+        }
+        val version = raw as? String
+        val skew = C1.contractSkew(version)
+        synchronized(this) {
+            serverContractVersion = if (skew != ContractSkew.UNKNOWN) version else null
+        }
+        when (skew) {
+            ContractSkew.SAME -> logger.info(TAG, "K2 contract $version matches K1 ${C1.CONTRACT_VERSION}.")
+            ContractSkew.OLDER, ContractSkew.NEWER ->
+                logger.warn(TAG, "K2 contract skew: server=$version, device=${C1.CONTRACT_VERSION}.")
+            ContractSkew.UNKNOWN ->
+                logger.warn(TAG, "K2 acked hello with invalid contractVersion '$raw'.")
         }
     }
 
@@ -463,6 +504,8 @@ class CourtWsClient(
             generation += 1
             open = false
             socket = null
+            pendingHelloId = null
+            serverContractVersion = null
             cancelPeriodic()
         }
         logger.info(TAG, "Disconnected from K2: $reason")

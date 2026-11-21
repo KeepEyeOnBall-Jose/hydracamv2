@@ -160,8 +160,23 @@ class C1ProtocolTest {
         val caps = CourtCaps("1080p", listOf(30), hevc = false, encoders = 1, torch = false, speaker = false)
         val hello = HelloBody("d", "v", 1, "m", 34, true, "c", "center", 0, caps, null).toJson()
 
-        assertEquals("1.27", C1.CONTRACT_VERSION)
+        assertEquals("1.29", C1.CONTRACT_VERSION)
         assertEquals(C1.CONTRACT_VERSION, hello.getString("contractVersion"))
+    }
+
+    @Test
+    fun contractSkewComparesDottedVersions() {
+        assertEquals(ContractSkew.SAME, C1.contractSkew("1.29"))
+        assertEquals(ContractSkew.SAME, C1.contractSkew("1.29.0"))
+        assertEquals(ContractSkew.OLDER, C1.contractSkew("1.28"))
+        assertEquals(ContractSkew.OLDER, C1.contractSkew("1.10.1"))
+        assertEquals(ContractSkew.OLDER, C1.contractSkew("0.9"))
+        assertEquals(ContractSkew.NEWER, C1.contractSkew("1.30"))
+        assertEquals(ContractSkew.NEWER, C1.contractSkew("1.29.1"))
+        assertEquals(ContractSkew.NEWER, C1.contractSkew("2.0"))
+        for (invalid in listOf(null, "", "1", "abc", "1.2a", ".1.2", "1.2.", "99999999999999999999999.0")) {
+            assertEquals("for $invalid", ContractSkew.UNKNOWN, C1.contractSkew(invalid))
+        }
     }
 
     @Test

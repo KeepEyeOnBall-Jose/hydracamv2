@@ -118,6 +118,18 @@ class CourtContractsConformanceTest {
         assertValid(C1.RECORDING_STARTED, JSONObject(started.encode()))
     }
 
+    @Test
+    fun vendoredHelloAckMatchesSchemaAndDecodesContractVersion() {
+        val fixture = File(root, "fixtures/c1/good/ack--hello.json")
+        assertValid(C1.ACK, JSONObject(fixture.readText()))
+
+        val envelope = C1Envelope.decode(fixture.readText())
+        assertEquals(C1.ACK, envelope.type)
+        val serverVersion = envelope.body.optStringOrNull("contractVersion")
+        assertEquals(CONTRACT_VERSION, serverVersion)
+        assertEquals(ContractSkew.SAME, C1.contractSkew(serverVersion))
+    }
+
     private fun assertValid(schema: String, json: JSONObject) {
         val errors = schemas.getSchema(File(root, "json-schema/c1/$schema$SCHEMA_SUFFIX").readText())
             .validate(mapper.readTree(json.toString()))
@@ -205,7 +217,7 @@ class CourtContractsConformanceTest {
         const val ROOT = "court-contracts"
         const val MANIFEST = "MANIFEST.sha256"
         const val SCHEMA_SUFFIX = ".schema.json"
-        const val CONTRACT_VERSION = "1.27"
+        const val CONTRACT_VERSION = "1.29"
         const val CAPTURE_TARGET = "capture-target"
         const val APPLIED_CAPTURE = "applied-capture"
         const val MIN_GOOD = 40
