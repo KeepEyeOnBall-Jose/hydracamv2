@@ -181,6 +181,7 @@ dependencies {
     testImplementation "org.mockito:mockito-inline:5.2.0"
     testImplementation "androidx.test:core:1.7.0"
     testImplementation "org.robolectric:robolectric:4.16"
+    testImplementation "org.json:json:20180813"
     if (hydracamCourt) {
         courtImplementation "androidx.core:core-ktx:1.13.1"
         courtImplementation "androidx.room:room-runtime:2.7.2"
@@ -190,7 +191,6 @@ dependencies {
         courtImplementation "com.github.pedroSG94.RootEncoder:rtmp:2.8.1"
         kspCourt "androidx.room:room-compiler:2.7.2"
         testCourtImplementation "com.squareup.okhttp3:mockwebserver:4.12.0"
-        testCourtImplementation "org.json:json:20180813"
         // Validates the vendored court-contracts JSON Schema (draft 2020-12) in CourtContractsConformanceTest.
         testCourtImplementation "com.networknt:json-schema-validator:1.5.6"
         // RootEncoder delivers its callbacks on Dispatchers.Main; PreviewFakeRelayTest sets one.
@@ -224,14 +224,25 @@ if (hydracamCourt) {
 
     ktlint {
         version = "1.7.1"
-        // Court sources only: the hand-held Kotlin keeps its current style.
+        // Court and shared phone-core sources only: the hand-held Kotlin keeps its current style.
         filter {
-            exclude { element -> !element.directory && !element.file.path.contains("/hydracam/court/") }
+            exclude { element ->
+                !element.directory &&
+                    !element.file.path.contains("/hydracam/court/") &&
+                    !element.file.path.contains("/hydracam/phonecore/")
+            }
         }
     }
 
     detekt {
-        source.setFrom(files("src/court/kotlin", "src/testCourt/kotlin"))
+        source.setFrom(
+            files(
+                "src/court/kotlin",
+                "src/testCourt/kotlin",
+                "src/main/kotlin/com/amaia23/hydracam/phonecore",
+                "src/test/kotlin/com/amaia23/hydracam/phonecore",
+            )
+        )
         config.setFrom(files("$rootDir/config/detekt/court.yml"))
         buildUponDefaultConfig = true
         parallel = true
@@ -250,7 +261,7 @@ if (hydracamCourt) {
         reports {
             filters {
                 includes {
-                    classes("com.amaia23.hydracam.court.*")
+                    classes("com.amaia23.hydracam.court.*", "com.amaia23.hydracam.phonecore.*")
                 }
                 // These need a phone (Camera2, MediaCodec, Room, Keystore, su, services) and are verified
                 // on device (logs/verification-runs/). Keep logic out of them so it stays JVM-tested.

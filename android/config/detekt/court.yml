@@ -27,7 +27,7 @@ exceptions:
 style:
   MagicNumber:
     # Tests use literal fixtures on purpose. MpegTsMuxer is a bit-for-bit ISO 13818-1 layout.
-    excludes: ['**/testCourt/**', '**/MpegTsMuxer.kt']
+    excludes: ['**/testCourt/**', '**/test/kotlin/com/amaia23/hydracam/phonecore/**', '**/MpegTsMuxer.kt']
     ignorePropertyDeclaration: true
     # 1000 and 1000000 are s/ms/us/ns conversions.
     ignoreNumbers: ['-1', '0', '1', '2', '1000', '1000000']
