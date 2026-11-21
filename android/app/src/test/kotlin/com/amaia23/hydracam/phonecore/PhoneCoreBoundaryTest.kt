@@ -6,8 +6,9 @@ import org.junit.Test
 import java.io.File
 
 /**
- * Pure JVM dependency boundary for `phonecore`: no Android framework, OkHttp, Okio,
- * RootEncoder, or `court` flavor imports may leak into shared `phonecore` code or tests.
+ * Pure JVM dependency boundary for `phonecore`: no Android framework (`android.*`, `androidx.*`
+ * including Room), RootEncoder (`com.pedro.*`), or `court` flavor imports may leak into shared
+ * `phonecore` code or tests. OkHttp/Okio are allowed shared transport dependencies.
  */
 class PhoneCoreBoundaryTest {
     private fun resolveDir(subpath: String): File = listOf(
@@ -64,8 +65,6 @@ class PhoneCoreBoundaryTest {
         val forbidden = listOf(
             "android.",
             "androidx.",
-            "okhttp3.",
-            "okio.",
             "com.amaia23.hydracam.court.",
             "com.pedro.",
         )
@@ -73,6 +72,7 @@ class PhoneCoreBoundaryTest {
             "C1Capture.kt",
             "C1ContractConstants.kt",
             "C1Protocol.kt",
+            "C2Uploader.kt",
             "CaptureCapabilities.kt",
             "CaptureReadbackState.kt",
             "CaptureSettings.kt",
@@ -80,6 +80,7 @@ class PhoneCoreBoundaryTest {
             "CourtCommandTable.kt",
             "CourtSignalPlayer.kt",
             "CourtStateMachine.kt",
+            "CourtWsClient.kt",
             "CourtWsCore.kt",
             "EventOutbox.kt",
             "MpegTsMuxer.kt",
@@ -93,6 +94,7 @@ class PhoneCoreBoundaryTest {
             "TsPartRecovery.kt",
             "TsSegmenter.kt",
             "UploadLifecycle.kt",
+            "UploadQueueStore.kt",
             "UploadThrottle.kt",
         )
         checkBoundary(mainDir, forbidden, expectedMainFiles)
@@ -104,8 +106,6 @@ class PhoneCoreBoundaryTest {
         val forbidden = listOf(
             "android.",
             "androidx.",
-            "okhttp3.",
-            "okio.",
             "com.amaia23.hydracam.court.",
             "com.pedro.",
             "org.robolectric.",
