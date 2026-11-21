@@ -21,14 +21,14 @@ data class CaptureTarget(
         .put("rotationDeg", rotationDeg)
 
     companion object {
-        const val LENS_WIDE = "wide"
-        const val LENS_ULTRAWIDE = "ultrawide"
-        const val LENS_TELE = "tele"
-        const val CODEC_AVC = "avc"
-        const val CODEC_HEVC = "hevc"
-        private val LENSES = setOf(LENS_WIDE, LENS_ULTRAWIDE, LENS_TELE)
-        private val CODECS = setOf(CODEC_AVC, CODEC_HEVC)
-        private val ROTATIONS = setOf(0, 90, 180, 270)
+        const val LENS_WIDE = C1ContractConstants.Lens.WIDE
+        const val LENS_ULTRAWIDE = C1ContractConstants.Lens.ULTRAWIDE
+        const val LENS_TELE = C1ContractConstants.Lens.TELE
+        const val CODEC_AVC = C1ContractConstants.VideoCodec.AVC
+        const val CODEC_HEVC = C1ContractConstants.VideoCodec.HEVC
+        private val LENSES = C1ContractConstants.Lens.ALL.toSet()
+        private val CODECS = C1ContractConstants.VideoCodec.ALL.toSet()
+        private val ROTATIONS = C1ContractConstants.Rotation.DEGREES.toSet()
 
         /** What K2 sends when no per-court override is set: wide, 1x, unstabilized, AVC, upright. */
         val DEFAULT = CaptureTarget()

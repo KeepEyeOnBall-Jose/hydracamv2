@@ -407,7 +407,7 @@ class CourtRuntime private constructor(context: Context) {
     }
 
     private fun onPreviewStop(): CommandResult {
-        onPreviewThread { it.stop("preview.stop") }
+        onPreviewThread { it.stop(C1.PREVIEW_STOP) }
         return CommandResult.Ack
     }
 

@@ -26,6 +26,7 @@ import android.util.Range
 import android.util.Size
 import android.view.Surface
 import androidx.core.content.ContextCompat
+import com.amaia23.hydracam.phonecore.C1ContractConstants
 import java.io.IOException
 import java.nio.ByteBuffer
 import java.util.concurrent.CountDownLatch
@@ -581,7 +582,9 @@ class CourtCameraRecorder(
 
         private fun openFanout(masterSize: Size, proxySize: Size) {
             val rotated = plan.rotationDeg == CapturePlanner.HALF_TURN
-            if (!rotated && (profile.masterRes != "2160p" || preview == null)) return
+            if (!rotated && (profile.masterRes != C1ContractConstants.Profile.MASTER_RES_2160P || preview == null)) {
+                return
+            }
             // Upright masters stay direct. A half-turn rotates actual pixels in recording tiers;
             // live preview stays raw. All encoders retain the same sensor timestamps.
             val outputs = buildList {

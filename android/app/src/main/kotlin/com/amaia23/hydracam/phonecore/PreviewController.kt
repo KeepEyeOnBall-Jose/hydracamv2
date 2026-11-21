@@ -369,7 +369,7 @@ class PreviewController(
 
     private companion object {
         const val TAG = "CourtPreview"
-        const val MAX_KBPS = 1_000
+        const val MAX_KBPS = C1ContractConstants.Preview.KBPS_MAX
         const val MS_PER_S = 1_000L
         const val CAMERA_PROBLEM = "preview_camera_closed"
     }

@@ -71,12 +71,14 @@ class PhoneCoreBoundaryTest {
         )
         val expectedMainFiles = setOf(
             "C1Capture.kt",
+            "C1ContractConstants.kt",
             "C1Protocol.kt",
             "CaptureCapabilities.kt",
             "CaptureReadbackState.kt",
             "CaptureSettings.kt",
             "CourtAuth.kt",
             "CourtCommandTable.kt",
+            "CourtSignalPlayer.kt",
             "CourtStateMachine.kt",
             "CourtWsCore.kt",
             "EventOutbox.kt",
