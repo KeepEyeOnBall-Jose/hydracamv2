@@ -17,7 +17,7 @@ enum class ContractSkew {
 
 /** C1 v1 device <-> Court Cloud protocol (court-remote/01-contracts.md, C1). */
 object C1 {
-    const val VERSION = 1
+    const val VERSION = C1ContractConstants.VERSION
 
     /**
      * The court-contracts version K1 implements, sent as `hello.contractVersion`. K2 sends 1.11 values
@@ -25,8 +25,8 @@ object C1 {
      * 1.16 `record.prepare.capture` only to 1.16+ (K1 answers it with `recording.started.applied`),
      * 1.27 raw completed-result observations with nullable zoom, and 1.29 `hello` `ack.contractVersion`.
      */
-    const val CONTRACT_VERSION = "1.29"
-    private val CONTRACT_VERSION_REGEX = Regex("""^\d+(?:\.\d+)+$""")
+    const val CONTRACT_VERSION = C1ContractConstants.CONTRACT_VERSION
+    private val CONTRACT_VERSION_REGEX = Regex(C1ContractConstants.CONTRACT_VERSION_PATTERN)
     private val EXPECTED_VERSION_PARTS = CONTRACT_VERSION.split('.').map(String::toLong)
 
     /** Compares [version] against [CONTRACT_VERSION] as dotted integers (`1.29.0` == `1.29`). */
@@ -45,59 +45,60 @@ object C1 {
         return version.split('.').map { it.toLongOrNull() ?: return null }
     }
 
-    const val ACK = "ack"
-    const val NACK = "nack"
+    const val ACK = C1ContractConstants.MessageType.ACK
+    const val NACK = C1ContractConstants.MessageType.NACK
 
     // Device -> Cloud
-    const val HELLO = "hello"
-    const val STATE = "state"
-    const val CLOCK_PING = "clock.ping"
-    const val RECORDING_STARTED = "recording.started"
-    const val RECORDING_SEGMENT = "recording.segment"
-    const val RECORDING_STOPPED = "recording.stopped"
-    const val RECORDING_GAP = "recording.gap"
+    const val HELLO = C1ContractConstants.MessageType.HELLO
+    const val STATE = C1ContractConstants.MessageType.STATE
+    const val CLOCK_PING = C1ContractConstants.MessageType.CLOCK_PING
+    const val RECORDING_STARTED = C1ContractConstants.MessageType.RECORDING_STARTED
+    const val RECORDING_SEGMENT = C1ContractConstants.MessageType.RECORDING_SEGMENT
+    const val RECORDING_STOPPED = C1ContractConstants.MessageType.RECORDING_STOPPED
+    const val RECORDING_GAP = C1ContractConstants.MessageType.RECORDING_GAP
+    const val GESTURE_DETECTED = C1ContractConstants.MessageType.GESTURE_DETECTED
 
     // Cloud -> Device
-    const val CLOCK_PONG = "clock.pong"
-    const val PREVIEW_START = "preview.start"
-    const val PREVIEW_STOP = "preview.stop"
-    const val RECORD_PREPARE = "record.prepare"
-    const val RECORD_START = "record.start"
-    const val RECORD_STOP = "record.stop"
-    const val SIGNAL_EMIT = "signal.emit"
-    const val SNAPSHOT = "snapshot"
-    const val UPLOAD_POLICY = "upload.policy"
-    const val MASTERS_UPLOAD = "masters.upload"
-    const val CONFIG_SET = "config.set"
-    const val APP_UPDATE = "app.update"
-    const val LOGS_UPLOAD = "logs.upload"
+    const val CLOCK_PONG = C1ContractConstants.MessageType.CLOCK_PONG
+    const val PREVIEW_START = C1ContractConstants.MessageType.PREVIEW_START
+    const val PREVIEW_STOP = C1ContractConstants.MessageType.PREVIEW_STOP
+    const val RECORD_PREPARE = C1ContractConstants.MessageType.RECORD_PREPARE
+    const val RECORD_START = C1ContractConstants.MessageType.RECORD_START
+    const val RECORD_STOP = C1ContractConstants.MessageType.RECORD_STOP
+    const val SIGNAL_EMIT = C1ContractConstants.MessageType.SIGNAL_EMIT
+    const val SNAPSHOT = C1ContractConstants.MessageType.SNAPSHOT
+    const val UPLOAD_POLICY = C1ContractConstants.MessageType.UPLOAD_POLICY
+    const val MASTERS_UPLOAD = C1ContractConstants.MessageType.MASTERS_UPLOAD
+    const val CONFIG_SET = C1ContractConstants.MessageType.CONFIG_SET
+    const val APP_UPDATE = C1ContractConstants.MessageType.APP_UPDATE
+    const val LOGS_UPLOAD = C1ContractConstants.MessageType.LOGS_UPLOAD
 
-    const val TIER_PROXY = "proxy"
-    const val TIER_MASTER = "master"
-    val TIERS = listOf(TIER_PROXY, TIER_MASTER)
+    const val TIER_PROXY = C1ContractConstants.Tier.PROXY
+    const val TIER_MASTER = C1ContractConstants.Tier.MASTER
+    val TIERS = C1ContractConstants.Tier.ALL
 }
 
 /** Device-chosen `nack.code` values. C1 leaves codes free-form. */
 object C1NackCode {
-    const val NOT_ROOTED = "not_rooted"
-    const val BUSY = "busy"
-    const val BAD_REQUEST = "bad_request"
-    const val UNSUPPORTED = "unsupported"
-    const val NOT_ENROLLED = "not_enrolled"
-    const val INTERNAL = "internal"
-    const val TIMEOUT = "timeout"
+    const val NOT_ROOTED = C1ContractConstants.NackCode.NOT_ROOTED
+    const val BUSY = C1ContractConstants.NackCode.BUSY
+    const val BAD_REQUEST = C1ContractConstants.NackCode.BAD_REQUEST
+    const val UNSUPPORTED = C1ContractConstants.NackCode.UNSUPPORTED
+    const val NOT_ENROLLED = C1ContractConstants.NackCode.NOT_ENROLLED
+    const val INTERNAL = C1ContractConstants.NackCode.INTERNAL
+    const val TIMEOUT = C1ContractConstants.NackCode.TIMEOUT
 
     /** `record.start` for a session with no matching `record.prepare`: K2 must prepare first. */
-    const val NOT_PREPARED = "not_prepared"
+    const val NOT_PREPARED = C1ContractConstants.NackCode.NOT_PREPARED
 
     /** 1.4: `masters.upload` for a range where the phone holds no masters. */
-    const val GONE = "gone"
+    const val GONE = C1ContractConstants.NackCode.GONE
 
     /** 1.9: `masters.upload` whose `toServerMs` is not after `fromServerMs`. */
-    const val BAD_RANGE = "bad_range"
+    const val BAD_RANGE = C1ContractConstants.NackCode.BAD_RANGE
 
     /** 1.11: `record.prepare`/`record.start` whose duration does not fit above the storage reserve. */
-    const val STORAGE_FULL = "storage_full"
+    const val STORAGE_FULL = C1ContractConstants.NackCode.STORAGE_FULL
 }
 
 /** A command body K1 refuses; [code] is the `nack.code` it is answered with. */
@@ -156,14 +157,14 @@ data class C1Envelope(val id: String, val type: String, val ts: Long, val body: 
 }
 
 enum class CourtMode(val wire: String) {
-    IDLE("idle"),
-    PREVIEWING("previewing"),
-    ARMED("armed"),
-    RECORDING("recording"),
-    UPLOADING("uploading"),
-    UPDATING("updating"),
-    DEGRADED("degraded"),
-    ERROR("error"),
+    IDLE(C1ContractConstants.DeviceModeWire.IDLE),
+    PREVIEWING(C1ContractConstants.DeviceModeWire.PREVIEWING),
+    ARMED(C1ContractConstants.DeviceModeWire.ARMED),
+    RECORDING(C1ContractConstants.DeviceModeWire.RECORDING),
+    UPLOADING(C1ContractConstants.DeviceModeWire.UPLOADING),
+    UPDATING(C1ContractConstants.DeviceModeWire.UPDATING),
+    DEGRADED(C1ContractConstants.DeviceModeWire.DEGRADED),
+    ERROR(C1ContractConstants.DeviceModeWire.ERROR),
 }
 
 data class CourtCaps(
@@ -249,17 +250,17 @@ data class StateBody(
     }
 
     companion object {
-        const val BLOCKED_STORAGE_FULL = "storage_full"
+        const val BLOCKED_STORAGE_FULL = C1ContractConstants.BlockedReason.STORAGE_FULL
     }
 }
 
 data class RecordProfile(
-    val masterRes: String = "1080p",
-    val fps: Int = 30,
+    val masterRes: String = C1ContractConstants.Profile.MASTER_RES_1080P,
+    val fps: Int = C1ContractConstants.Profile.FPS_30,
     val masterKbps: Int = 8_000,
-    val proxyRes: String = "720p",
-    val proxyKbps: Int = 2_000,
-    val segmentS: Int = 6,
+    val proxyRes: String = C1ContractConstants.Profile.PROXY_RES,
+    val proxyKbps: Int = C1ContractConstants.Profile.PROXY_KBPS,
+    val segmentS: Int = C1ContractConstants.Profile.SEGMENT_S,
 ) {
     fun toJson(): JSONObject = JSONObject()
         .put("masterRes", masterRes)
@@ -295,11 +296,11 @@ data class RecordProfile(
 
         /** Widest first. */
         private val SIZES = linkedMapOf(
-            "2160p" to (3840 to 2160),
-            "1080p" to (1920 to 1080),
+            C1ContractConstants.Profile.MASTER_RES_2160P to (3840 to 2160),
+            C1ContractConstants.Profile.MASTER_RES_1080P to (1920 to 1080),
             RES_720P to (1280 to 720),
         )
-        private const val RES_720P = "720p"
+        private const val RES_720P = C1ContractConstants.Profile.MASTER_RES_720P
 
         /** The largest resolution whose width fits in [width]; 720p when none does. */
         fun resFor(width: Int): String = SIZES.entries.firstOrNull { width >= it.value.first }?.key ?: RES_720P
@@ -390,14 +391,15 @@ data class PreviewStart(val publishUrl: String, val token: String, val kbps: Int
         "PreviewStart(publishUrl=${PreviewUrls.redact(publishUrl)}, kbps=$kbps, ttlS=$ttlS)"
 
     companion object {
-        const val WIDTH = 640L
-        const val HEIGHT = 360L
-        const val FPS = 20L
-        private val KBPS_RANGE = 1L..1_000L
+        const val WIDTH = C1ContractConstants.Preview.WIDTH.toLong()
+        const val HEIGHT = C1ContractConstants.Preview.HEIGHT.toLong()
+        const val FPS = C1ContractConstants.Preview.FPS.toLong()
+        private val KBPS_RANGE =
+            C1ContractConstants.Preview.KBPS_MIN.toLong()..C1ContractConstants.Preview.KBPS_MAX.toLong()
         private val TTL_RANGE = 1L..Long.MAX_VALUE / 1_000
 
         /** C1 1.10.1: an opaque, URL-safe token. */
-        private val TOKEN = Regex("[A-Za-z0-9_-]{22,128}")
+        private val TOKEN = Regex(C1ContractConstants.PUBLISH_TOKEN_PATTERN)
 
         fun fromJson(body: JSONObject): PreviewStart {
             val publishUrl = body.requireText("publishUrl")
@@ -493,11 +495,11 @@ data class UploadPolicy(
     fun mastersMayMove(idle: Boolean): Boolean = masterMaxKbps != 0 && (masterMode == MODE_STREAM || idle)
 
     companion object {
-        const val MODE_NEVER = "never"
-        const val MODE_ON_REQUEST = "on-request"
-        const val MODE_WINDOW = "window"
-        const val MODE_STREAM = "stream"
-        private val MODES = setOf(MODE_NEVER, MODE_ON_REQUEST, MODE_WINDOW, MODE_STREAM)
+        const val MODE_NEVER = C1ContractConstants.MasterMode.NEVER
+        const val MODE_ON_REQUEST = C1ContractConstants.MasterMode.ON_REQUEST
+        const val MODE_WINDOW = C1ContractConstants.MasterMode.WINDOW
+        const val MODE_STREAM = C1ContractConstants.MasterMode.STREAM
+        private val MODES = C1ContractConstants.MasterMode.ALL.toSet()
 
         val DEFAULT = UploadPolicy()
 

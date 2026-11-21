@@ -23,6 +23,7 @@ import android.security.keystore.KeyProperties
 import android.util.Base64
 import android.util.Log
 import android.util.Size
+import com.amaia23.hydracam.phonecore.C1ContractConstants
 import org.json.JSONObject
 import java.io.IOException
 import java.io.InputStream
@@ -154,7 +155,7 @@ class DeviceStatusProbe(private val context: Context) {
     }
 
     fun caps(): CourtCaps {
-        var maxRes = "720p"
+        var maxRes = C1ContractConstants.Profile.PROXY_RES
         var fps = listOf(BASE_FPS)
         var torch = false
         var captureProfiles = emptyList<CaptureProfileCapability>()

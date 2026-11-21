@@ -149,7 +149,7 @@ class TsPartRecovery(
     }
 
     companion object {
-        const val REASON_NO_COMPLETE_FRAME = "no-complete-frame"
+        const val REASON_NO_COMPLETE_FRAME = C1ContractConstants.GapReason.NO_COMPLETE_FRAME
         const val META_SUFFIX = ".part.json"
         private const val TAG = "CourtPartRecovery"
 

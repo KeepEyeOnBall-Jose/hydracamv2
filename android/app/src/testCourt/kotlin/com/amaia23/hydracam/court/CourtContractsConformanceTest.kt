@@ -1,5 +1,6 @@
 package com.amaia23.hydracam.court
 
+import com.amaia23.hydracam.phonecore.C1ContractConstants
 import com.amaia23.hydracam.phonecore.CommandResult
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.networknt.schema.JsonSchema
@@ -194,6 +195,75 @@ class CourtContractsConformanceTest {
         assertTrue("K1 codes outside the contract: ${k1 - contract}", contract.containsAll(k1))
     }
 
+    @Test
+    fun c1ContractConstantsMatchVendoredProtocolEnums() {
+        fun strings(array: org.json.JSONArray): List<String> = (0 until array.length()).map { array.getString(it) }
+
+        assertEquals(strings(schemaJson("nack-code").getJSONArray("enum")), C1ContractConstants.NackCode.ALL)
+        assertEquals(strings(schemaJson("device-mode").getJSONArray("enum")), C1ContractConstants.DeviceModeWire.ALL)
+        assertEquals(strings(schemaJson("gap-reason").getJSONArray("enum")), C1ContractConstants.GapReason.ALL)
+
+        val signalEnum = bodyProps("signal.emit").getJSONObject("signal").getJSONArray("enum")
+        assertEquals(strings(signalEnum), C1ContractConstants.SignalId.ALL)
+
+        val gestureEnum = bodyProps("gesture.detected").getJSONObject("gesture").getJSONArray("enum")
+        assertEquals(strings(gestureEnum), C1ContractConstants.GestureId.ALL)
+
+        val masterModeEnum = bodyProps("upload.policy").getJSONObject("masterMode").getJSONArray("enum")
+        assertEquals(strings(masterModeEnum), C1ContractConstants.MasterMode.ALL)
+    }
+
+    @Test
+    fun c1ContractConstantsMatchVendoredCaptureProfileAndPreviewSchemas() {
+        fun strings(array: org.json.JSONArray): List<String> = (0 until array.length()).map { array.getString(it) }
+        fun ints(array: org.json.JSONArray): List<Int> = (0 until array.length()).map { array.getInt(it) }
+
+        val captureProps = schemaJson("capture-target").getJSONObject("properties")
+        assertEquals(strings(captureProps.getJSONObject("lens").getJSONArray("enum")), C1ContractConstants.Lens.ALL)
+        assertEquals(
+            strings(captureProps.getJSONObject("codec").getJSONArray("enum")),
+            C1ContractConstants.VideoCodec.ALL,
+        )
+        assertEquals(
+            ints(captureProps.getJSONObject("rotationDeg").getJSONArray("enum")),
+            C1ContractConstants.Rotation.DEGREES,
+        )
+
+        val profileProps = schemaJson("profile").getJSONObject("properties")
+        assertEquals(
+            strings(profileProps.getJSONObject("masterRes").getJSONArray("enum")),
+            C1ContractConstants.Profile.MASTER_RESOLUTIONS,
+        )
+        assertEquals(
+            ints(profileProps.getJSONObject("fps").getJSONArray("enum")),
+            C1ContractConstants.Profile.FPS_OPTIONS,
+        )
+        assertEquals(profileProps.getJSONObject("proxyRes").getString("const"), C1ContractConstants.Profile.PROXY_RES)
+        assertEquals(profileProps.getJSONObject("proxyKbps").getInt("const"), C1ContractConstants.Profile.PROXY_KBPS)
+        assertEquals(profileProps.getJSONObject("segmentS").getInt("const"), C1ContractConstants.Profile.SEGMENT_S)
+
+        val previewProps = bodyProps("preview.start")
+        assertEquals(previewProps.getJSONObject("width").getInt("const"), C1ContractConstants.Preview.WIDTH)
+        assertEquals(previewProps.getJSONObject("height").getInt("const"), C1ContractConstants.Preview.HEIGHT)
+        assertEquals(previewProps.getJSONObject("fps").getInt("const"), C1ContractConstants.Preview.FPS)
+        assertEquals(previewProps.getJSONObject("kbps").getInt("minimum"), C1ContractConstants.Preview.KBPS_MIN)
+        assertEquals(previewProps.getJSONObject("kbps").getInt("maximum"), C1ContractConstants.Preview.KBPS_MAX)
+        assertEquals(
+            previewProps.getJSONObject("token").getString("pattern"),
+            C1ContractConstants.PUBLISH_TOKEN_PATTERN,
+        )
+
+        val streamId = schemaJson("stream-id")
+        assertEquals(streamId.getInt("maxLength"), C1ContractConstants.STREAM_ID_MAX_BYTES)
+        assertEquals(streamId.getString("pattern").replace("\\/", "/"), C1ContractConstants.STREAM_ID_PATTERN)
+    }
+
+    private fun schemaJson(name: String): JSONObject =
+        JSONObject(File(root, "json-schema/c1/$name$SCHEMA_SUFFIX").readText())
+
+    private fun bodyProps(name: String): JSONObject =
+        schemaJson(name).getJSONObject("properties").getJSONObject("body").getJSONObject("properties")
+
     /** Refused when the envelope does not decode or the table nacks it. */
     private fun k1Refuses(fixture: File): Boolean =
         runCatching { decode(fixture) }.getOrNull()?.let { reply(it).type == C1.NACK } ?: true
@@ -218,7 +288,7 @@ class CourtContractsConformanceTest {
         const val ROOT = "court-contracts"
         const val MANIFEST = "MANIFEST.sha256"
         const val SCHEMA_SUFFIX = ".schema.json"
-        const val CONTRACT_VERSION = "1.29"
+        const val CONTRACT_VERSION = C1ContractConstants.CONTRACT_VERSION
         const val CAPTURE_TARGET = "capture-target"
         const val APPLIED_CAPTURE = "applied-capture"
         const val MIN_GOOD = 40

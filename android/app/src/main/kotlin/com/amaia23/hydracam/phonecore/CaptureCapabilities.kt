@@ -20,9 +20,9 @@ data class CaptureProfileCapability(
 
 /** Fail closed when either the camera's size-specific frame timing or encoder support is unknown. */
 object CaptureCapabilities {
-    private val FRAME_RATES = listOf(30, 60)
+    private val FRAME_RATES = C1ContractConstants.Profile.FPS_OPTIONS
     private const val NANOS_PER_SECOND = 1_000_000_000L
-    private const val PROXY_KBPS = 2_000
+    private const val PROXY_KBPS = C1ContractConstants.Profile.PROXY_KBPS
     private const val MAX_KBPS = 100_000
 
     fun profiles(
@@ -40,12 +40,12 @@ object CaptureCapabilities {
         encoderMaxKbps: (Pair<Int, Int>, Int) -> Int?,
         fps: Int,
     ): List<CaptureProfileCapability> {
-        val proxy = RecordProfile.sizeFor("720p")
+        val proxy = RecordProfile.sizeFor(C1ContractConstants.Profile.PROXY_RES)
         if ((encoderMaxKbps(proxy, fps) ?: 0) < PROXY_KBPS) return emptyList()
         // Camera2 reports integer nanoseconds; allow rounding up by less than one nanosecond.
         val frameNs = (NANOS_PER_SECOND + fps - 1) / fps
-        return listOf("wide", "ultrawide", "tele").flatMap { role ->
-            listOf("2160p", "1080p", "720p").mapNotNull { resolution ->
+        return C1ContractConstants.Lens.ALL.flatMap { role ->
+            C1ContractConstants.Profile.MASTER_RESOLUTIONS.mapNotNull { resolution ->
                 val profile = RecordProfile(masterRes = resolution, fps = fps)
                 val plan = CapturePlanner.plan(profile, CaptureTarget(lens = role), lenses) as? CapturePlan
                     ?: return@mapNotNull null

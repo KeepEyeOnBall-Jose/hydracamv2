@@ -308,7 +308,7 @@ class CourtStateMachine(
         const val REASON_RECOVERED = "recovered"
 
         /** C1 1.11 `recording.stopped.reason`: free space ran down to the reserve mid-recording. */
-        const val REASON_STORAGE_FULL = "storage_full"
+        const val REASON_STORAGE_FULL = C1ContractConstants.BlockedReason.STORAGE_FULL
         private const val TAG = "CourtState"
     }
 }

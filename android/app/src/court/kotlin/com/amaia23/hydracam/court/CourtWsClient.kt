@@ -114,7 +114,7 @@ class CourtWsClient(
         if (synchronized(this) { !wsState.isCurrentConnect(currentGeneration) }) return
         val url = webSocketUrl()
         if (url == null) {
-            failAndRetry(currentGeneration, "not_enrolled")
+            failAndRetry(currentGeneration, C1NackCode.NOT_ENROLLED)
             return
         }
         val token = accessTokenOrRetry(currentGeneration) ?: return

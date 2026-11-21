@@ -70,7 +70,7 @@ data class CapturePlan(
 
 /** C1 1.16 on K1: which lens and Camera2 settings a capture target maps to, or why it cannot. */
 object CapturePlanner {
-    const val HALF_TURN = 180
+    const val HALF_TURN = C1ContractConstants.Rotation.DEG_180
 
     /** 1/500 s: sharp ball and racket frames at 30 fps (PRD C.1). */
     const val DEFAULT_SHUTTER_NS = 2_000_000L
@@ -97,7 +97,7 @@ object CapturePlanner {
         if (target.codec != CaptureTarget.CODEC_AVC) {
             return CaptureUnsupported("capture.codec", "only avc is recorded")
         }
-        if (target.rotationDeg != 0 && target.rotationDeg != HALF_TURN) {
+        if (target.rotationDeg != C1ContractConstants.Rotation.DEG_0 && target.rotationDeg != HALF_TURN) {
             return CaptureUnsupported(
                 "capture.rotationDeg",
                 "only 0 and 180 degree pixel rotation are supported",

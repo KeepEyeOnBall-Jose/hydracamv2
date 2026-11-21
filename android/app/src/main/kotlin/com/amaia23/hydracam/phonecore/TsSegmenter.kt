@@ -140,7 +140,7 @@ class SegmentSidecarReader(private val storage: CourtStorage, private val logger
     companion object {
         const val SIDECAR = "segments.jsonl"
         private const val TAG = "CourtSidecar"
-        private val SHA256 = Regex("[0-9a-f]{64}")
+        private val SHA256 = Regex(C1ContractConstants.SHA256_PATTERN)
     }
 }
 
