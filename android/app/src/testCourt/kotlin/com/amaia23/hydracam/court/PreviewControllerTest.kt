@@ -3,6 +3,7 @@ package com.amaia23.hydracam.court
 import android.util.Size
 import android.view.Surface
 import com.amaia23.hydracam.phonecore.CommandResult
+import com.amaia23.hydracam.phonecore.PreviewTransport
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse

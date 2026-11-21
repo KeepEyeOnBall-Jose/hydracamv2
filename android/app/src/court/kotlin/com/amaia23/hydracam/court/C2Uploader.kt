@@ -1,5 +1,9 @@
 package com.amaia23.hydracam.court
 
+import com.amaia23.hydracam.phonecore.UploadGrant
+import com.amaia23.hydracam.phonecore.UploadGrantCheck
+import com.amaia23.hydracam.phonecore.UploadGrants
+import com.amaia23.hydracam.phonecore.UploadLifecycle
 import okhttp3.Call
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
@@ -102,8 +106,10 @@ class C2Uploader(
     fun requestMasters(commandId: String, request: MastersUpload): Int {
         val now = clock.nowMs()
         val claims = UploadGrantClaims.decode(request.uploadGrant)
-        val grantExpMs = claims?.expMs?.takeIf { it > 0 } ?: Long.MAX_VALUE
-        masterGrantProblem(claims, request.sessionId, grantExpMs, now)?.let { throw C1ProtocolException(it) }
+        val grantExpMs = UploadGrants.grantExpiryMs(claims)
+        UploadGrants.masterGrantProblem(claims, request.sessionId, grantExpMs, now)?.let {
+            throw C1ProtocolException(it)
+        }
         store.masterRequest(commandId)?.let { return JSONArray(it.seqsJson).length() }
         val held = store.items(request.sessionId).filter {
             it.tier == C1.TIER_MASTER && it.isHeldOnPhone() && request.covers(it.mediaStartServerMs, it.durationMs)
@@ -132,20 +138,6 @@ class C2Uploader(
         return held.size
     }
 
-    /** Why a grant with [claims] cannot cover a `masters.upload` for [sessionId], or null when it can. */
-    private fun masterGrantProblem(
-        claims: UploadGrantClaims?,
-        sessionId: String,
-        grantExpMs: Long,
-        now: Long,
-    ): String? = when {
-        claims != null && claims.tiers.isNotEmpty() && C1.TIER_MASTER !in claims.tiers ->
-            "uploadGrant does not list master."
-        claims?.sessionId != null && claims.sessionId != sessionId -> "uploadGrant is for another session."
-        now >= grantExpMs -> "uploadGrant expired."
-        else -> null
-    }
-
     /** Called by the runtime after `recording.stopped`. */
     fun onSessionStopped(sessionId: String, lastSeqProxy: Long, lastSeqMaster: Long) {
         val session = store.session(sessionId) ?: return
@@ -162,7 +154,7 @@ class C2Uploader(
         val now = clock.nowMs()
         val item = UploadItem.from(segment, now)
         val session = store.session(segment.sessionId)
-        val held = session != null && segment.tier !in session.tiers
+        val held = UploadGrants.isTierHeld(segment.tier, session?.tiers)
         store.enqueue(if (held) item.copy(state = UploadState.HELD.name) else item)
     }
 
@@ -192,36 +184,25 @@ class C2Uploader(
     private fun stored(item: UploadItem): UploadItem = store.item(item.key) ?: item
 
     /** The grant [item] uploads under now, or null after settling an item that cannot upload. */
-    private fun readyGrant(item: UploadItem, now: Long): Grant? {
-        val session = store.session(item.sessionId)
-        val grants = session?.let { grantsFor(item.tier, it) }.orEmpty()
-        val grant = grants.firstOrNull { now < it.expMs }
-        val problem: Pair<UploadState, String?>? = when {
-            session == null -> UploadState.FAILED to "no_grant"
-            grants.isEmpty() -> UploadState.HELD to null
-            grant == null -> UploadState.FAILED to "grant_expired"
-            item.uploadState != UploadState.VERIFYING && !File(item.filePath).isFile ->
-                UploadState.FAILED to "file_missing"
-            else -> null
+    private fun readyGrant(item: UploadItem, now: Long): UploadGrant? {
+        val sessionGrant = store.session(item.sessionId)?.toGrant()
+        val check = UploadGrants.evaluateGrant(
+            tier = item.tier,
+            uploadState = item.uploadState,
+            fileExists = File(item.filePath).isFile,
+            nowMs = now,
+            sessionGrant = sessionGrant,
+        )
+        return when (check) {
+            is UploadGrantCheck.Ready -> check.grant
+            is UploadGrantCheck.Settled -> {
+                finish(item, check.state, check.error)
+                null
+            }
         }
-        problem?.let { (state, error) -> finish(item, state, error) }
-        return if (problem == null) grant else null
     }
 
-    /** Grants that may upload [tier], preferred first: a `masters.upload` grant, then `record.start`'s. */
-    private fun grantsFor(tier: String, session: UploadSession): List<Grant> {
-        val grants = mutableListOf<Grant>()
-        val masterGrant = session.masterGrant
-        if (tier == C1.TIER_MASTER && masterGrant != null) {
-            grants += Grant(masterGrant, session.masterIngestUrl ?: session.ingestUrl, session.masterGrantExpMs)
-        }
-        if (tier in session.tiers) {
-            grants += Grant(session.uploadGrant, session.ingestUrl, session.grantExpMs)
-        }
-        return grants
-    }
-
-    private fun initUpload(item: UploadItem, grant: Grant, file: File) {
+    private fun initUpload(item: UploadItem, grant: UploadGrant, file: File) {
         val body = JSONObject()
             .put("sessionId", item.sessionId)
             .put("slot", item.slot)
@@ -270,7 +251,7 @@ class C2Uploader(
         onAlert("${item.key} $error")
     }
 
-    private fun uploadParts(item: UploadItem, grant: Grant, file: File) {
+    private fun uploadParts(item: UploadItem, grant: UploadGrant, file: File) {
         val parts = JSONArray(item.partsJson ?: "[]")
         val etags = JSONObject(item.etagsJson ?: "{}")
         var current = item
@@ -357,7 +338,7 @@ class C2Uploader(
         }
     }
 
-    private fun complete(item: UploadItem, grant: Grant, parts: JSONArray, etags: JSONObject) {
+    private fun complete(item: UploadItem, grant: UploadGrant, parts: JSONArray, etags: JSONObject) {
         val partList = JSONArray()
         for (index in 0 until parts.length()) {
             val number = parts.getJSONObject(index).getInt("n")
@@ -387,7 +368,7 @@ class C2Uploader(
         }
     }
 
-    private fun pollStatus(item: UploadItem, grant: Grant, file: File) {
+    private fun pollStatus(item: UploadItem, grant: UploadGrant, file: File) {
         val request = Request.Builder()
             .url(grant.url("/v2/uploads/${item.uploadId}"))
             .header("Authorization", "Bearer ${grant.token}")
@@ -415,23 +396,25 @@ class C2Uploader(
 
     private fun sendDueManifest(now: Long): Boolean {
         val (session, items) = store.sessions().asSequence()
-            .filter { manifestDue(it, now) }
+            .filter {
+                UploadLifecycle.isSessionManifestDue(
+                    stoppedAtMs = it.stoppedAtMs,
+                    manifestState = it.manifestState,
+                    nextManifestAtMs = it.nextManifestAtMs,
+                    grantExpMs = it.grantExpMs,
+                    nowMs = now,
+                )
+            }
             .map { it to store.items(it.sessionId) }
             // Only granted proxies hold it back: 1.11 streamed masters may still be uploading, and
             // requested masters upload under their own manifest.
             .firstOrNull { (session, items) ->
-                items.none { it.uploadState.active && it.tier == C1.TIER_PROXY && it.tier in session.tiers }
+                items.none { UploadLifecycle.isGrantedProxyBlockingManifest(it.uploadState, it.tier, session.tiers) }
             }
             ?: return false
         sendManifest(session, items)
         return true
     }
-
-    /** Stopped, not yet complete, past its retry time, and still under its grant. */
-    private fun manifestDue(session: UploadSession, now: Long): Boolean = session.stoppedAtMs > 0 &&
-        session.manifestState != UploadSession.MANIFEST_COMPLETE &&
-        session.nextManifestAtMs <= now &&
-        now < session.grantExpMs
 
     private fun sendManifest(session: UploadSession, items: List<UploadItem>) {
         val segments = JSONArray()
@@ -448,7 +431,11 @@ class C2Uploader(
                 JSONObject().put(C1.TIER_PROXY, session.lastSeqProxy).put(C1.TIER_MASTER, session.lastSeqMaster),
             )
             .put("segments", segments)
-        val request = postJson(manifestUrl(session.ingestUrl, session.sessionId), session.uploadGrant, body)
+        val request = postJson(
+            UploadGrants.manifestUrl(session.ingestUrl, session.sessionId),
+            session.uploadGrant,
+            body,
+        )
         try {
             http.newCall(request).execute().use { response ->
                 if (response.isSuccessful) {
@@ -508,7 +495,11 @@ class C2Uploader(
         val segments = JSONArray()
         held.forEach { segments.put(JSONObject().put("seq", it.seq).put("sha256", it.sha256)) }
         val body = JSONObject().put("slot", request.slot).put("tier", C1.TIER_MASTER).put("segments", segments)
-        val call = postJson(manifestUrl(request.ingestUrl, request.sessionId), request.uploadGrant, body)
+        val call = postJson(
+            UploadGrants.manifestUrl(request.ingestUrl, request.sessionId),
+            request.uploadGrant,
+            body,
+        )
         try {
             http.newCall(call).execute().use { response ->
                 when {
@@ -666,8 +657,7 @@ class C2Uploader(
         store.update(item.copy(state = state.name, lastError = error, updatedAtMs = clock.nowMs()))
     }
 
-    private fun backoffMs(attempts: Int): Long =
-        min(maxBackoffMs, baseBackoffMs shl min(attempts - 1, MAX_BACKOFF_SHIFT))
+    private fun backoffMs(attempts: Int): Long = UploadLifecycle.backoffMs(attempts, baseBackoffMs, maxBackoffMs)
 
     /** Back to PENDING with no multipart, so the next attempt re-declares the key. */
     private fun UploadItem.restarted(): UploadItem =
@@ -680,20 +670,15 @@ class C2Uploader(
         .build()
 
     /** On the phone, not refused by K3 (different bytes, or verification failed past the cap). */
-    private fun UploadItem.isHeldOnPhone(): Boolean = uploadState != UploadState.VERIFIED &&
-        uploadState != UploadState.CONFLICT &&
-        !(uploadState == UploadState.FAILED && verifyRestarts >= MAX_VERIFY_RESTARTS) &&
-        File(filePath).isFile
+    private fun UploadItem.isHeldOnPhone(): Boolean = UploadLifecycle.isHeldOnPhone(
+        state = uploadState,
+        verifyRestarts = verifyRestarts,
+        fileExists = File(filePath).isFile,
+        maxVerifyRestarts = MAX_VERIFY_RESTARTS,
+    )
 
     /** Can answer a K3 `missing` entry: on the phone, granted, and K3 has not refused these bytes. */
-    private fun UploadItem.canRefill(): Boolean = uploadState != UploadState.VERIFIED &&
-        uploadState != UploadState.CONFLICT &&
-        uploadState != UploadState.HELD &&
-        File(filePath).isFile
-
-    private class Grant(val token: String, val ingestUrl: String, val expMs: Long) {
-        fun url(path: String): String = ingestUrl(ingestUrl, path)
-    }
+    private fun UploadItem.canRefill(): Boolean = UploadLifecycle.canRefill(uploadState, File(filePath).isFile)
 
     private fun Response.jsonBody(): JSONObject {
         val text = body?.string().orEmpty()
@@ -735,16 +720,11 @@ class C2Uploader(
         /** C2 says "16 MB parts"; read as MiB. A 6 s segment at 8 Mbps is ~6 MB, so one part. */
         const val DEFAULT_PART_SIZE_BYTES = 16L * 1024 * 1024
         const val CONTENT_TYPE_TS = "video/mp2t"
-        const val REASON_NOT_REQUESTED = "not-requested"
+        const val REASON_NOT_REQUESTED = UploadLifecycle.REASON_NOT_REQUESTED
         private const val PART_TIMEOUT_BASE_NS = 120_000_000_000L
         private const val COPY_BUFFER_BYTES = 64 * 1024
-        private const val MAX_BACKOFF_SHIFT = 16
-        const val MAX_VERIFY_RESTARTS = 3
+        const val MAX_VERIFY_RESTARTS = UploadLifecycle.MAX_VERIFY_RESTARTS
         private val JSON_MEDIA_TYPE = "application/json".toMediaType()
         private const val TAG = "CourtUploader"
     }
 }
-
-private fun ingestUrl(base: String, path: String): String = base.trimEnd('/') + path
-
-private fun manifestUrl(base: String, sessionId: String): String = ingestUrl(base, "/v2/sessions/$sessionId/manifest")
