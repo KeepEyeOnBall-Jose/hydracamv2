@@ -2,6 +2,7 @@ package com.amaia23.hydracam.court
 
 import android.util.Size
 import android.view.Surface
+import com.amaia23.hydracam.phonecore.CommandResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.asCoroutineDispatcher

@@ -8,6 +8,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.Test
+import java.io.File
 
 class C1ProtocolTest {
     private fun policyBody(): JSONObject = JSONObject()
@@ -100,6 +101,32 @@ class C1ProtocolTest {
         val stopped = C1CoreEvents.recordingStopped("s1", 4, 3, "command")
         assertEquals(4L, stopped.getJSONObject("lastSeq").getLong("proxy"))
         assertEquals(3L, stopped.getJSONObject("lastSeq").getLong("master"))
+
+        val segment = C1CoreEvents.recordingSegment(
+            SegmentRecord(
+                sessionId = "s1",
+                slot = "A",
+                tier = C1.TIER_PROXY,
+                seq = 2,
+                file = File("/tmp/000002.ts"),
+                bytes = 188,
+                sha256 = "ab".repeat(32),
+                mediaStartServerMs = 1_700_000_000_000L,
+                durationMs = 6_000L,
+                frames = 180,
+                offsetMs = -10L,
+                rttMs = 12L,
+            ),
+        )
+        assertEquals("s1", segment.getString("sessionId"))
+        assertEquals(2L, segment.getLong("seq"))
+        assertEquals("ab".repeat(32), segment.getString("sha256"))
+
+        val gap = C1CoreEvents.recordingGap(SegmentGap("s1", C1.TIER_MASTER, 42L, "no-complete-frame"))
+        assertEquals("s1", gap.getString("sessionId"))
+        assertEquals(C1.TIER_MASTER, gap.getString("tier"))
+        assertEquals(42L, gap.getLong("fromServerMs"))
+        assertEquals("no-complete-frame", gap.getString("reason"))
     }
 
     @Test

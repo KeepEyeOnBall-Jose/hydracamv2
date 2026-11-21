@@ -528,7 +528,7 @@ data class UploadPolicy(
     }
 }
 
-/** Pure session lifecycle C1 events that do not depend on court segment/gap file types. */
+/** Pure C1 session and segment lifecycle event payloads. */
 object C1CoreEvents {
     /** 1.16 [applied] is what the camera and encoder accepted; omitted when it could not be read back. */
     fun recordingStarted(
@@ -548,6 +548,23 @@ object C1CoreEvents {
         }
         return json
     }
+
+    fun recordingSegment(segment: SegmentRecord): JSONObject = JSONObject()
+        .put("sessionId", segment.sessionId)
+        .put("tier", segment.tier)
+        .put("seq", segment.seq)
+        .put("bytes", segment.bytes)
+        .put("sha256", segment.sha256)
+        .put("mediaStartServerMs", segment.mediaStartServerMs)
+        .put("durationMs", segment.durationMs)
+        .put("frames", segment.frames)
+
+    /** A crash lost one tier's media from `fromServerMs` up to the next `recording.segment`. */
+    fun recordingGap(gap: SegmentGap): JSONObject = JSONObject()
+        .put("sessionId", gap.sessionId)
+        .put("tier", gap.tier)
+        .put("fromServerMs", gap.fromServerMs)
+        .put("reason", gap.reason)
 
     fun recordingStopped(sessionId: String, lastSeqProxy: Long, lastSeqMaster: Long, reason: String): JSONObject =
         JSONObject()

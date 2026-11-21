@@ -1,5 +1,6 @@
 package com.amaia23.hydracam.court
 
+import com.amaia23.hydracam.phonecore.CommandResult
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.networknt.schema.JsonSchema
 import com.networknt.schema.JsonSchemaFactory
