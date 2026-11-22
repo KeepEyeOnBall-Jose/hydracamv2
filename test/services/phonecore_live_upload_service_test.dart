@@ -275,13 +275,18 @@ void main() {
     expect(snapshot.verifiedSegments, 1);
   });
 
-  test("hasPendingWork queries channel and parses wake timestamp", () async {
+  test("hasPendingWork queries channel and parses wake timestamp and summary",
+      () async {
     mockChannel((call) async {
       expect(call.method, "hasPendingWork");
       expect(call.arguments, isNull);
       return {
         "hasPendingWork": true,
         "nextWakeAtMs": 1700000005000,
+        "pendingSessionCount": 2,
+        "pendingSegmentCount": 5,
+        "pendingBytes": 4096,
+        "pendingSessionIds": ["s1", "s2"],
       };
     });
 
@@ -289,6 +294,55 @@ void main() {
     final pending = await service.hasPendingWork();
     expect(pending.hasPendingWork, isTrue);
     expect(pending.nextWakeAtMs, 1700000005000);
+    expect(pending.pendingSessionCount, 2);
+    expect(pending.pendingSegmentCount, 5);
+    expect(pending.pendingBytes, 4096);
+    expect(pending.pendingSessionIds, ["s1", "s2"]);
+    expect(
+      () => pending.pendingSessionIds.add("s3"),
+      throwsUnsupportedError,
+    );
+  });
+
+  test(
+      "hasPendingWork and drainOnce default optional summary fields when absent",
+      () async {
+    mockChannel((call) async {
+      if (call.method == "hasPendingWork") {
+        return {
+          "hasPendingWork": true,
+          "nextWakeAtMs": 1700000005000,
+        };
+      }
+      return {
+        "stepsTaken": 2,
+        "didWork": true,
+        "hasPendingWork": true,
+        "nextWakeAtMs": 1700000007000,
+        "pendingSessionCount": 1,
+        "pendingSegmentCount": 3,
+        "pendingBytes": 1024,
+        "pendingSessionIds": ["s1"],
+      };
+    });
+
+    final service = PhoneCoreLiveUploadService();
+    final pending = await service.hasPendingWork();
+    expect(pending.hasPendingWork, isTrue);
+    expect(pending.pendingSessionCount, 0);
+    expect(pending.pendingSegmentCount, 0);
+    expect(pending.pendingBytes, 0);
+    expect(pending.pendingSessionIds, isEmpty);
+
+    final drain = await service.drainOnce();
+    expect(drain.pendingSessionCount, 1);
+    expect(drain.pendingSegmentCount, 3);
+    expect(drain.pendingBytes, 1024);
+    expect(drain.pendingSessionIds, ["s1"]);
+    expect(
+      () => drain.pendingSessionIds.add("s2"),
+      throwsUnsupportedError,
+    );
   });
 
   test("fromMap throws FormatException on null or malformed native payloads",
@@ -319,6 +373,22 @@ void main() {
     );
     expect(
       () => PhoneCoreDrainResult.fromMap({"stepsTaken": "nope"}),
+      throwsFormatException,
+    );
+    expect(
+      () => PhoneCorePendingWork.fromMap({
+        "hasPendingWork": true,
+        "nextWakeAtMs": null,
+        "pendingSessionIds": "bad",
+      }),
+      throwsFormatException,
+    );
+    expect(
+      () => PhoneCorePendingWork.fromMap({
+        "hasPendingWork": true,
+        "nextWakeAtMs": null,
+        "pendingSessionIds": [123],
+      }),
       throwsFormatException,
     );
   });

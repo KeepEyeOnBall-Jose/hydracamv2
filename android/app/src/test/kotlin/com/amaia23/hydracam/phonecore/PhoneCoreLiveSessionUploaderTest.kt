@@ -336,6 +336,182 @@ class PhoneCoreLiveSessionUploaderTest {
         assertNotNull(uploader.snapshot("live-exp"))
     }
 
+    @Test
+    fun pendingWorkSummaryAggregatesSessionsSegmentsBytesAndManifestWakeups() {
+        mastersAllowed.set(false)
+        val store = InMemoryUploadQueueStore()
+        val uploader = PhoneCoreLiveSessionUploader(
+            http = http,
+            store = store,
+            clock = clock,
+            logger = logger,
+            onAlert = { alerts += it },
+            mastersAllowed = mastersAllowed::get,
+        )
+
+        val empty = uploader.pendingWorkSummary()
+        assertFalse(empty.hasPendingWork)
+        assertNull(empty.nextWakeAtMs)
+        assertEquals(0, empty.pendingSessionCount)
+        assertEquals(0, empty.pendingSegmentCount)
+        assertEquals(0L, empty.pendingBytes)
+        assertEquals(emptyList<String>(), empty.pendingSessionIds)
+
+        val grant1 = testGrant("sum-1", listOf(C1.TIER_PROXY, C1.TIER_MASTER), 4_000_000_000L)
+        val grant2 = testGrant("sum-2", listOf(C1.TIER_PROXY), 4_000_000_000L)
+        val grant3 = testGrant("sum-3", listOf(C1.TIER_PROXY), 4_000_000_000L)
+        uploader.startSession("sum-1", "A", grant1, server.url("/").toString(), clock.now)
+        uploader.startSession("sum-2", "B", grant2, server.url("/").toString(), clock.now)
+        uploader.startSession("sum-3", "A", grant3, server.url("/").toString(), clock.now)
+
+        val f1 = writeSegmentFile("sum-1-p0.ts", size = 40)
+        val f1m = writeSegmentFile("sum-1-m0.ts", size = 120)
+        uploader.enqueueSegment("sum-1", "A", C1.TIER_PROXY, 0, f1, "sha-1p", clock.now, 2_000)
+        uploader.enqueueSegment("sum-1", "A", C1.TIER_MASTER, 0, f1m, "sha-1m", clock.now, 2_000)
+
+        // sum-2 and sum-3 are both stopped with no segments yet -> two manifest-pending sessions.
+        store.upsertSession(
+            store.session("sum-2")!!.copy(
+                stoppedAtMs = clock.now + 10L,
+                nextManifestAtMs = clock.now + 5_000L,
+            ),
+        )
+        store.upsertSession(
+            store.session("sum-3")!!.copy(
+                stoppedAtMs = clock.now + 20L,
+                nextManifestAtMs = clock.now + 3_000L,
+            ),
+        )
+
+        val proxyOnly = uploader.pendingWorkSummary(includeMasters = false)
+        assertTrue(proxyOnly.hasPendingWork)
+        assertEquals(0L, proxyOnly.nextWakeAtMs)
+        assertEquals(3, proxyOnly.pendingSessionCount)
+        assertEquals(1, proxyOnly.pendingSegmentCount)
+        assertEquals(40L, proxyOnly.pendingBytes)
+        assertEquals(listOf("sum-1", "sum-2", "sum-3"), proxyOnly.pendingSessionIds)
+
+        val withMasters = uploader.pendingWorkSummary(includeMasters = true)
+        assertTrue(withMasters.hasPendingWork)
+        assertEquals(0L, withMasters.nextWakeAtMs)
+        assertEquals(3, withMasters.pendingSessionCount)
+        assertEquals(2, withMasters.pendingSegmentCount)
+        assertEquals(160L, withMasters.pendingBytes)
+        assertEquals(listOf("sum-1", "sum-2", "sum-3"), withMasters.pendingSessionIds)
+    }
+
+    @Test
+    fun coldRestartMidMultipartAndVerifyingDrainsWithoutNewStartSession() {
+        val queueFile = File(temp.root, "cold_restart_uploader.json")
+        val seg0 = writeSegmentFile("cold-0.ts", size = 16)
+        val seg1 = writeSegmentFile("cold-1.ts", size = 32)
+        val seg2 = writeSegmentFile("cold-2.ts", size = 24)
+        seedPreCrashUploaderState(queueFile, seg0, seg1, seg2)
+
+        // Simulate cold process restart at +1_000ms (seg 2 is due immediately; seg 0 and seg 1 wake at +2_000ms).
+        clock.now += 1_000L
+        val uploader2 = newPersistentUploader(queueFile, partSizeBytes = 16L)
+        val summary = uploader2.pendingWorkSummary()
+        assertTrue(summary.hasPendingWork)
+        assertEquals(0L, summary.nextWakeAtMs)
+        assertEquals(1, summary.pendingSessionCount)
+        assertEquals(3, summary.pendingSegmentCount)
+        assertEquals(72L, summary.pendingBytes)
+        assertEquals(listOf("live-cold"), summary.pendingSessionIds)
+
+        drainResumedColdSegments(uploader2, seg1)
+
+        val finalSummary = uploader2.pendingWorkSummary()
+        assertFalse(finalSummary.hasPendingWork)
+        assertNull(finalSummary.nextWakeAtMs)
+        assertEquals(0, finalSummary.pendingSessionCount)
+        assertEquals(0, finalSummary.pendingSegmentCount)
+        assertEquals(0L, finalSummary.pendingBytes)
+        assertTrue(finalSummary.pendingSessionIds.isEmpty())
+
+        val uploader3 = newPersistentUploader(queueFile, partSizeBytes = 16L)
+        val finalSnap = uploader3.snapshot("live-cold")!!
+        assertTrue(finalSnap.isComplete)
+        assertEquals(3, finalSnap.verifiedSegments)
+        assertEquals(0, finalSnap.activeSegments)
+        assertFalse(seg0.exists())
+        assertFalse(seg1.exists())
+        assertFalse(seg2.exists())
+        assertFalse(uploader3.hasPendingWork())
+    }
+
+    private fun newPersistentUploader(queueFile: File, partSizeBytes: Long) = PhoneCoreLiveSessionUploader(
+        http = http,
+        store = FileUploadQueueStore(queueFile, logger),
+        clock = clock,
+        logger = logger,
+        partSizeBytes = partSizeBytes,
+    )
+
+    private fun seedPreCrashUploaderState(queueFile: File, seg0: File, seg1: File, seg2: File) {
+        val grant = testGrant("live-cold", listOf(C1.TIER_PROXY), 4_000_000_000L)
+        val uploader1 = newPersistentUploader(queueFile, partSizeBytes = 16L)
+        uploader1.startSession("live-cold", "A", grant, server.url("/").toString(), clock.now)
+        uploader1.enqueueSegment("live-cold", "A", C1.TIER_PROXY, 0, seg0, "sha-0", clock.now, 2_000)
+        uploader1.enqueueSegment("live-cold", "A", C1.TIER_PROXY, 1, seg1, "sha-1", clock.now + 2_000, 2_000)
+        uploader1.enqueueSegment("live-cold", "A", C1.TIER_PROXY, 2, seg2, "sha-2", clock.now + 4_000, 2_000)
+        uploader1.markRecordingStopped("live-cold", stoppedAtMs = clock.now + 6_000)
+
+        // seg 0 completes upload -> VERIFYING (nextAttemptAtMs = clock.now + 2_000).
+        server.enqueue(initCreated("u-cold-0", partCount = 1))
+        server.enqueue(partOk("etag-0-1"))
+        server.enqueue(json(HttpStatus.OK, JSONObject()))
+        assertTrue(uploader1.drainOnce())
+        repeat(3) { take() }
+
+        // seg 1 uploads part 1 of 2, then fails part 2 so it persists mid-multipart in UPLOADING with ETag 1.
+        server.enqueue(initCreated("u-cold-1", partCount = 2))
+        server.enqueue(partOk("etag-1-1"))
+        server.enqueue(MockResponse().setResponseCode(HttpStatus.REQUEST_TIMEOUT))
+        assertTrue(uploader1.drainOnce())
+        repeat(3) { take() }
+    }
+
+    private fun drainResumedColdSegments(uploader2: PhoneCoreLiveSessionUploader, seg1: File) {
+        // seg 2 runs immediately without calling startSession again.
+        server.enqueue(initCreated("u-cold-2", partCount = 2))
+        server.enqueue(partOk("etag-2-1"))
+        server.enqueue(partOk("etag-2-2"))
+        server.enqueue(json(HttpStatus.OK, JSONObject()))
+        assertTrue(uploader2.drainOnce())
+        repeat(4) { take() }
+        assertFalse(uploader2.drainOnce())
+        assertEquals(clock.now + 1_000L, uploader2.nextWakeAtMs())
+
+        // At +2_000ms: seg 0 verifies, and seg 1 resumes at part 2 (not part 1!).
+        clock.now += 1_000L
+        server.enqueue(json(HttpStatus.OK, JSONObject().put("state", "verified")))
+        assertTrue(uploader2.drainOnce())
+        assertEquals("/v2/uploads/u-cold-0", take().path)
+
+        server.enqueue(partOk("etag-1-2"))
+        server.enqueue(json(HttpStatus.OK, JSONObject()))
+        assertTrue(uploader2.drainOnce())
+        val resumedPartReq = take()
+        assertEquals("/part/2", resumedPartReq.path)
+        assertArrayEquals(seg1.readBytes().copyOfRange(16, 32), resumedPartReq.body.readByteArray())
+        val complete1Req = take()
+        assertEquals("/v2/uploads/u-cold-1/complete", complete1Req.path)
+        val parts1 = JSONObject(complete1Req.body.readUtf8()).getJSONArray("parts")
+        assertEquals(2, parts1.length())
+        assertEquals("etag-1-1", parts1.getJSONObject(0).getString("etag"))
+        assertEquals("etag-1-2", parts1.getJSONObject(1).getString("etag"))
+
+        // At +4_000ms: seg 1 and seg 2 verify, and manifest completes.
+        clock.now += 2_000L
+        server.enqueue(json(HttpStatus.OK, JSONObject().put("state", "verified")))
+        server.enqueue(json(HttpStatus.OK, JSONObject().put("state", "verified")))
+        server.enqueue(json(HttpStatus.OK, JSONObject().put("state", UploadSession.MANIFEST_COMPLETE)))
+        while (uploader2.drainOnce()) {
+            take()
+        }
+    }
+
     private fun expectIllegalArg(block: () -> Unit) {
         try {
             block()

@@ -7,6 +7,7 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hydracam/screens/fixed_camera_hls_screen.dart";
 import "package:hydracam/services/fixed_camera_hls_recorder_service.dart";
 import "package:hydracam/services/phonecore_live_upload_bridge.dart";
+import "package:hydracam/services/phonecore_live_upload_recovery.dart";
 import "package:hydracam/services/phonecore_live_upload_service.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
@@ -935,6 +936,98 @@ void main() {
         expect(summaryText, contains("complete=false"));
         expect(summaryText, contains("pending=0"));
         expect(summaryText, contains("failed=1"));
+      },
+    );
+
+    testWidgets(
+      "resumes pending persisted K3 uploads via recovery coordinator when toggled on",
+      (tester) async {
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(recorderChannel, (call) async {
+          if (call.method == "getCapabilities") {
+            return {
+              "platform": "android",
+              "channelAvailable": true,
+              "nativeRecorderImplemented": true,
+              "cameraRecorderImplemented": false,
+              "recorderMode": "synthetic_local",
+              "supportedRecorderModes": ["synthetic_local"],
+              "cameraIds": <String>[],
+              "requiresCameraHardware": false,
+              "supportsHlsUpload": true,
+              "supportedMimeTypes": ["application/vnd.apple.mpegurl"],
+            };
+          }
+          return null;
+        });
+
+        mockUploadChannel((call) async {
+          switch (call.method) {
+            case "hasPendingWork":
+              return {
+                "hasPendingWork": true,
+                "nextWakeAtMs": 0,
+                "pendingSessionCount": 1,
+                "pendingSegmentCount": 2,
+                "pendingBytes": 512,
+                "pendingSessionIds": ["persisted-session-1"],
+              };
+            case "drainOnce":
+              return {
+                "stepsTaken": 3,
+                "didWork": true,
+                "hasPendingWork": false,
+                "nextWakeAtMs": null,
+                "pendingSessionCount": 0,
+                "pendingSegmentCount": 0,
+                "pendingBytes": 0,
+                "pendingSessionIds": <String>[],
+              };
+            default:
+              return null;
+          }
+        });
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: FixedCameraHlsScreen(
+              k3Recovery: PhoneCoreLiveUploadRecovery(
+                nowMs: () => 1700000000000,
+                isPlatformSupported: () => true,
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        expect(
+          find.byKey(const Key("resumePendingK3UploadsButton")),
+          findsNothing,
+        );
+
+        final k3SwitchFinder =
+            find.byKey(const Key("usePhoneCoreK3UploadSwitch"));
+        await tester.ensureVisible(k3SwitchFinder);
+        await tester.tap(k3SwitchFinder);
+        await tester.pumpAndSettle();
+        expect(recordedCalls, isEmpty);
+
+        final resumeButtonFinder =
+            find.byKey(const Key("resumePendingK3UploadsButton"));
+        expect(resumeButtonFinder, findsOneWidget);
+        await tester.ensureVisible(resumeButtonFinder);
+        await tester.tap(resumeButtonFinder);
+        await tester.pumpAndSettle();
+
+        expect(
+          recordedCalls.map((c) => c.method).toList(),
+          ["hasPendingWork", "drainOnce"],
+        );
+        final summaryText = tester
+            .widget<Text>(find.byKey(const Key("uploadSummaryText")))
+            .data;
+        expect(summaryText, contains("drained"));
+        expect(summaryText, contains("steps=3"));
       },
     );
   });

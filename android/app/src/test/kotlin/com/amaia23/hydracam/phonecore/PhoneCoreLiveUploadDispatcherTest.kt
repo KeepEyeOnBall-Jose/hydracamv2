@@ -102,6 +102,10 @@ class PhoneCoreLiveUploadDispatcherTest {
         val emptyPending = dispatcher.dispatch("hasPendingWork")!!
         assertEquals(false, emptyPending["hasPendingWork"])
         assertNull(emptyPending["nextWakeAtMs"])
+        assertEquals(0, emptyPending["pendingSessionCount"])
+        assertEquals(0, emptyPending["pendingSegmentCount"])
+        assertEquals(0L, emptyPending["pendingBytes"])
+        assertEquals(emptyList<String>(), emptyPending["pendingSessionIds"])
         assertNull(dispatcher.dispatch("getSnapshot", mapOf("sessionId" to "live-e2e")))
 
         val started = dispatcher.dispatch(
@@ -137,6 +141,10 @@ class PhoneCoreLiveUploadDispatcherTest {
         val pendingAfterEnqueue = dispatcher.dispatch("hasPendingWork", emptyMap<String, Any?>())!!
         assertEquals(true, pendingAfterEnqueue["hasPendingWork"])
         assertEquals(0L, pendingAfterEnqueue["nextWakeAtMs"])
+        assertEquals(1, pendingAfterEnqueue["pendingSessionCount"])
+        assertEquals(1, pendingAfterEnqueue["pendingSegmentCount"])
+        assertEquals(40L, pendingAfterEnqueue["pendingBytes"])
+        assertEquals(listOf("live-e2e"), pendingAfterEnqueue["pendingSessionIds"])
 
         val stopped = dispatcher.dispatch(
             "markRecordingStopped",
@@ -220,6 +228,10 @@ class PhoneCoreLiveUploadDispatcherTest {
         assertEquals(true, secondDrain["didWork"])
         assertEquals(false, secondDrain["hasPendingWork"])
         assertNull(secondDrain["nextWakeAtMs"])
+        assertEquals(0, secondDrain["pendingSessionCount"])
+        assertEquals(0, secondDrain["pendingSegmentCount"])
+        assertEquals(0L, secondDrain["pendingBytes"])
+        assertEquals(emptyList<String>(), secondDrain["pendingSessionIds"])
         assertFalse(segmentFile.exists())
 
         val finalSnapshot = dispatcher.dispatch("getSnapshot", mapOf("sessionId" to "live-e2e"))!!
@@ -349,6 +361,183 @@ class PhoneCoreLiveUploadDispatcherTest {
         expectInvalid("getSnapshot", null)
         expectInvalid("getSnapshot", mapOf("sessionId" to " "))
         expectInvalid("getSnapshot", mapOf("sessionId" to "../bad"))
+    }
+
+    @Test
+    fun coldRestartReloadsPersistedSessionsAndDrainsViaDispatcherWithoutStartSession() {
+        val queueFile = File(temp.root, "dispatcher_cold_restart.json")
+        val f0 = writeSegmentFile("disp-0.ts", size = 30)
+        val f1 = writeSegmentFile("disp-1.ts", size = 50)
+        seedStoppedDispatcherSession(queueFile, f0, f1)
+
+        // Simulate full cold process restart with fresh FileUploadQueueStore + Uploader + Dispatcher.
+        val dispatcher2 = newPersistentDispatcher(queueFile)
+        val pendingOnBoot = dispatcher2.dispatch("hasPendingWork")!!
+        assertEquals(true, pendingOnBoot["hasPendingWork"])
+        assertEquals(0L, pendingOnBoot["nextWakeAtMs"])
+        assertEquals(1, pendingOnBoot["pendingSessionCount"])
+        assertEquals(2, pendingOnBoot["pendingSegmentCount"])
+        assertEquals(80L, pendingOnBoot["pendingBytes"])
+        assertEquals(listOf("live-cold-disp"), pendingOnBoot["pendingSessionIds"])
+
+        // Drain seg 1 into VERIFYING without calling startSession again.
+        server.enqueue(initCreated("u-disp-1"))
+        server.enqueue(partOk("etag-d1"))
+        server.enqueue(json(HttpStatus.OK, JSONObject()))
+        val bootDrain = dispatcher2.dispatch("drainOnce", mapOf("maxSteps" to 16))!!
+        assertEquals(1, bootDrain["stepsTaken"])
+        assertEquals(true, bootDrain["didWork"])
+        assertEquals(true, bootDrain["hasPendingWork"])
+        assertEquals(clock.now + 2_000L, bootDrain["nextWakeAtMs"])
+        assertEquals(1, bootDrain["pendingSessionCount"])
+        assertEquals(2, bootDrain["pendingSegmentCount"])
+
+        verifyAndCompleteRestoredDispatcherSession(dispatcher2, f0, f1)
+    }
+
+    @Test
+    fun coldRestartWithExpiredGrantAndUnstoppedSessionSettlesCleanly() {
+        val queueFile = File(temp.root, "dispatcher_cold_edge.json")
+        val fExpired = writeSegmentFile("exp-0.ts", size = 20)
+        val fUnstopped = writeSegmentFile("unst-0.ts", size = 35)
+        seedExpiredAndUnstoppedSessions(queueFile, fExpired, fUnstopped)
+
+        // Advance past shortGrant expiry, then cold-restart.
+        clock.now += 20_000L
+        val dispatcher2 = newPersistentDispatcher(queueFile)
+        val pending = dispatcher2.dispatch("hasPendingWork")!!
+        assertEquals(true, pending["hasPendingWork"])
+        assertEquals(2, pending["pendingSessionCount"])
+        assertEquals(2, pending["pendingSegmentCount"])
+        assertEquals(55L, pending["pendingBytes"])
+        assertEquals(listOf("live-expired", "live-unstopped"), pending["pendingSessionIds"])
+
+        // Unstopped session uploads & verifies; expired session settles to FAILED without looping.
+        server.enqueue(json(HttpStatus.OK, JSONObject().put("uploadId", "u-unst").put("state", "verified")))
+        val drain = dispatcher2.dispatch("drainOnce", mapOf("maxSteps" to 16))!!
+        assertEquals(2, drain["stepsTaken"])
+        assertEquals(false, drain["hasPendingWork"])
+        assertNull(drain["nextWakeAtMs"])
+        assertEquals(0, drain["pendingSessionCount"])
+        assertEquals(0, drain["pendingSegmentCount"])
+        assertEquals(0L, drain["pendingBytes"])
+
+        val expiredSnap = dispatcher2.dispatch("getSnapshot", mapOf("sessionId" to "live-expired"))!!
+        assertEquals(1, expiredSnap["failedSegments"])
+        assertEquals(false, expiredSnap["isComplete"])
+        assertTrue(fExpired.exists())
+
+        val unstoppedSnap = dispatcher2.dispatch("getSnapshot", mapOf("sessionId" to "live-unstopped"))!!
+        assertEquals(1, unstoppedSnap["verifiedSegments"])
+        assertEquals(false, unstoppedSnap["isComplete"])
+        assertFalse(fUnstopped.exists())
+    }
+
+    private fun newPersistentDispatcher(queueFile: File) = PhoneCoreLiveUploadDispatcher(
+        PhoneCoreLiveSessionUploader(
+            http = http,
+            store = FileUploadQueueStore(queueFile, logger),
+            clock = clock,
+            logger = logger,
+        ),
+    )
+
+    private fun dispatchStartAndEnqueue(
+        target: PhoneCoreLiveUploadDispatcher,
+        sessionId: String,
+        slot: String,
+        grant: String,
+        file: File,
+    ) {
+        target.dispatch(
+            "startSession",
+            mapOf(
+                "sessionId" to sessionId,
+                "slot" to slot,
+                "uploadGrant" to grant,
+                "ingestUrl" to server.url("/").toString(),
+                "nowMs" to clock.now,
+            ),
+        )
+        target.dispatch(
+            "enqueueSegment",
+            mapOf(
+                "sessionId" to sessionId,
+                "slot" to slot,
+                "tier" to C1.TIER_PROXY,
+                "seq" to 0,
+                "filePath" to file.absolutePath,
+                "sha256" to "sha-$sessionId-0",
+                "mediaStartServerMs" to clock.now,
+                "durationMs" to 2_000,
+            ),
+        )
+    }
+
+    private fun seedStoppedDispatcherSession(queueFile: File, f0: File, f1: File) {
+        val grant = testGrant("live-cold-disp", listOf(C1.TIER_PROXY), 4_000_000_000L)
+        val dispatcher1 = newPersistentDispatcher(queueFile)
+        dispatchStartAndEnqueue(dispatcher1, "live-cold-disp", "A", grant, f0)
+        dispatcher1.dispatch(
+            "enqueueSegment",
+            mapOf(
+                "sessionId" to "live-cold-disp",
+                "slot" to "A",
+                "tier" to C1.TIER_PROXY,
+                "seq" to 1,
+                "filePath" to f1.absolutePath,
+                "sha256" to "sha-cold-1",
+                "mediaStartServerMs" to clock.now + 2_000L,
+                "durationMs" to 2_000,
+            ),
+        )
+        dispatcher1.dispatch(
+            "markRecordingStopped",
+            mapOf("sessionId" to "live-cold-disp", "stoppedAtMs" to (clock.now + 4_000L)),
+        )
+
+        server.enqueue(initCreated("u-disp-0"))
+        server.enqueue(partOk("etag-d0"))
+        server.enqueue(json(HttpStatus.OK, JSONObject()))
+        val preCrashDrain = dispatcher1.dispatch("drainOnce", mapOf("maxSteps" to 1))!!
+        assertEquals(1, preCrashDrain["stepsTaken"])
+        assertEquals(true, preCrashDrain["hasPendingWork"])
+    }
+
+    private fun verifyAndCompleteRestoredDispatcherSession(
+        dispatcher2: PhoneCoreLiveUploadDispatcher,
+        f0: File,
+        f1: File,
+    ) {
+        clock.now += 2_000L
+        server.enqueue(json(HttpStatus.OK, JSONObject().put("state", "verified")))
+        server.enqueue(json(HttpStatus.OK, JSONObject().put("state", "verified")))
+        server.enqueue(json(HttpStatus.OK, JSONObject().put("state", UploadSession.MANIFEST_COMPLETE)))
+        val finalDrain = dispatcher2.dispatch("drainOnce", mapOf("maxSteps" to 16))!!
+        assertEquals(3, finalDrain["stepsTaken"])
+        assertEquals(true, finalDrain["didWork"])
+        assertEquals(false, finalDrain["hasPendingWork"])
+        assertNull(finalDrain["nextWakeAtMs"])
+        assertEquals(0, finalDrain["pendingSessionCount"])
+        assertEquals(0, finalDrain["pendingSegmentCount"])
+        assertEquals(0L, finalDrain["pendingBytes"])
+        assertEquals(emptyList<String>(), finalDrain["pendingSessionIds"])
+
+        val snapshot = dispatcher2.dispatch("getSnapshot", mapOf("sessionId" to "live-cold-disp"))!!
+        assertEquals(true, snapshot["isComplete"])
+        assertEquals(2, snapshot["verifiedSegments"])
+        assertEquals(0, snapshot["activeSegments"])
+        assertEquals(UploadSession.MANIFEST_COMPLETE, snapshot["manifestState"])
+        assertFalse(f0.exists())
+        assertFalse(f1.exists())
+    }
+
+    private fun seedExpiredAndUnstoppedSessions(queueFile: File, fExpired: File, fUnstopped: File) {
+        val shortGrant = testGrant("live-expired", listOf(C1.TIER_PROXY), (clock.now / 1_000L) + 10L)
+        val longGrant = testGrant("live-unstopped", listOf(C1.TIER_PROXY), 4_000_000_000L)
+        val dispatcher1 = newPersistentDispatcher(queueFile)
+        dispatchStartAndEnqueue(dispatcher1, "live-expired", "A", shortGrant, fExpired)
+        dispatchStartAndEnqueue(dispatcher1, "live-unstopped", "B", longGrant, fUnstopped)
     }
 
     private fun assertStartSessionValidation(grant: String, baseUrl: String) {

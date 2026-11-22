@@ -10,6 +10,7 @@ import "../services/hls_stream_upload_queue.dart";
 import "../services/hls_stream_upload_service.dart";
 import "../services/log_service.dart";
 import "../services/phonecore_live_upload_bridge.dart";
+import "../services/phonecore_live_upload_recovery.dart";
 import "../widgets/hls_player_view.dart";
 import "../widgets/hydra_cam_app_bar.dart";
 
@@ -17,7 +18,12 @@ import "../widgets/hydra_cam_app_bar.dart";
 /// real Camera2), replay it in-app, and upload it to media-timeline (legacy or
 /// opt-in PhoneCore K3).
 class FixedCameraHlsScreen extends StatefulWidget {
-  const FixedCameraHlsScreen({super.key});
+  const FixedCameraHlsScreen({
+    super.key,
+    @visibleForTesting PhoneCoreLiveUploadRecovery? k3Recovery,
+  }) : _k3Recovery = k3Recovery;
+
+  final PhoneCoreLiveUploadRecovery? _k3Recovery;
 
   @override
   State<FixedCameraHlsScreen> createState() => _FixedCameraHlsScreenState();
@@ -27,6 +33,8 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
   final FixedCameraHlsRecorderService _service =
       FixedCameraHlsRecorderService();
   final PhoneCoreLiveUploadBridge _k3Bridge = PhoneCoreLiveUploadBridge();
+  late final PhoneCoreLiveUploadRecovery _k3Recovery =
+      widget._k3Recovery ?? PhoneCoreLiveUploadRecovery.instance;
   final TextEditingController _sessionController = TextEditingController(
     text: "fixed-camera-hls-${DateTime.now().millisecondsSinceEpoch}",
   );
@@ -302,6 +310,47 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
     }
   }
 
+  Future<void> _resumePendingK3Uploads() async {
+    if (_busy) {
+      return;
+    }
+    setState(() {
+      _busy = true;
+      _uploadSummary = null;
+      _status = "Checking pending PhoneCore K3 queue…";
+    });
+    try {
+      final result = await _k3Recovery.recoverPendingUploads();
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _uploadSummary = "K3 recovery (${result.status.name}): "
+            "steps=${result.totalStepsTaken}, "
+            "iterations=${result.drainIterations}, "
+            "pendingSessions=${result.pendingSessionCount}, "
+            "pendingSegments=${result.pendingSegmentCount}"
+            "${result.errorMessage != null ? ", error=${result.errorMessage}" : ""}";
+        _status = switch (result.status) {
+          PhoneCoreLiveUploadRecoveryStatus.drained =>
+            "K3 pending queue drained (${result.totalStepsTaken} steps).",
+          PhoneCoreLiveUploadRecoveryStatus.idle =>
+            "No pending K3 uploads in queue.",
+          PhoneCoreLiveUploadRecoveryStatus.deferred =>
+            "K3 recovery deferred (${result.pendingSegmentCount} segments remaining).",
+          PhoneCoreLiveUploadRecoveryStatus.unavailable =>
+            "PhoneCore K3 queue unavailable on this platform.",
+          PhoneCoreLiveUploadRecoveryStatus.failed =>
+            "K3 queue recovery failed.",
+        };
+      });
+    } finally {
+      if (mounted) {
+        setState(() => _busy = false);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final capabilities = _capabilities;
@@ -395,13 +444,15 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
                       : "Upload to media-timeline",
                 ),
               ),
-              if (_uploadSummary != null) ...[
-                const SizedBox(height: 8),
-                Text(
-                  _uploadSummary!,
-                  key: const Key("uploadSummaryText"),
-                ),
-              ],
+            ],
+            if (_uploadSummary != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                _uploadSummary!,
+                key: const Key("uploadSummaryText"),
+              ),
+            ],
+            if (finalized != null) ...[
               const SizedBox(height: 16),
               const Text(
                 "In-app replay",
@@ -445,6 +496,13 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
           labelText: "K3 camera slot",
           border: OutlineInputBorder(),
         ),
+      ),
+      const SizedBox(height: 8),
+      OutlinedButton.icon(
+        key: const Key("resumePendingK3UploadsButton"),
+        onPressed: _busy ? null : _resumePendingK3Uploads,
+        icon: const Icon(Icons.sync),
+        label: const Text("Resume pending K3 queue"),
       ),
       const SizedBox(height: 8),
     ];
