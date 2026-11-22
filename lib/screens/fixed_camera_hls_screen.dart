@@ -9,11 +9,13 @@ import "../services/fixed_camera_hls_upload_bridge.dart";
 import "../services/hls_stream_upload_queue.dart";
 import "../services/hls_stream_upload_service.dart";
 import "../services/log_service.dart";
+import "../services/phonecore_live_upload_bridge.dart";
 import "../widgets/hls_player_view.dart";
 import "../widgets/hydra_cam_app_bar.dart";
 
 /// End-to-end fixed-camera HLS surface: record a local HLS bundle (synthetic or
-/// real Camera2), replay it in-app, and upload it to media-timeline.
+/// real Camera2), replay it in-app, and upload it to media-timeline (legacy or
+/// opt-in PhoneCore K3).
 class FixedCameraHlsScreen extends StatefulWidget {
   const FixedCameraHlsScreen({super.key});
 
@@ -24,16 +26,24 @@ class FixedCameraHlsScreen extends StatefulWidget {
 class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
   final FixedCameraHlsRecorderService _service =
       FixedCameraHlsRecorderService();
+  final PhoneCoreLiveUploadBridge _k3Bridge = PhoneCoreLiveUploadBridge();
   final TextEditingController _sessionController = TextEditingController(
     text: "fixed-camera-hls-${DateTime.now().millisecondsSinceEpoch}",
   );
   final TextEditingController _baseApiController = TextEditingController(
     text: "http://127.0.0.1:3001/api",
   );
+  final TextEditingController _k3IngestUrlController = TextEditingController();
+  final TextEditingController _k3UploadGrantController =
+      TextEditingController();
+  final TextEditingController _k3SlotController = TextEditingController(
+    text: "A",
+  );
 
   FixedCameraHlsCapabilities? _capabilities;
   String _deviceId = "fixed-court-a";
   bool _useCamera2 = false;
+  bool _usePhoneCoreK3Upload = false;
   FixedCameraHlsCameraMode? _selectedMode;
   bool _busy = false;
 
@@ -54,6 +64,9 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
   void dispose() {
     _sessionController.dispose();
     _baseApiController.dispose();
+    _k3IngestUrlController.dispose();
+    _k3UploadGrantController.dispose();
+    _k3SlotController.dispose();
     super.dispose();
   }
 
@@ -176,6 +189,10 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
     if (finalized == null || _busy) {
       return;
     }
+    if (_usePhoneCoreK3Upload) {
+      await _uploadViaPhoneCoreK3(finalized);
+      return;
+    }
     setState(() {
       _busy = true;
       _uploadSummary = null;
@@ -221,6 +238,70 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
     }
   }
 
+  Future<void> _uploadViaPhoneCoreK3(
+    FixedCameraHlsRecordingResult finalized,
+  ) async {
+    final ingestUrl = _k3IngestUrlController.text.trim();
+    final uploadGrant = _k3UploadGrantController.text.trim();
+    final rawSlot = _k3SlotController.text.trim();
+    final slot = rawSlot.isEmpty ? "A" : rawSlot;
+    if (ingestUrl.isEmpty || uploadGrant.isEmpty) {
+      setState(() {
+        _uploadSummary =
+            "K3 upload requires both K3 ingest URL and K3 upload grant.";
+        _status = "Missing K3 configuration.";
+      });
+      return;
+    }
+    setState(() {
+      _busy = true;
+      _uploadSummary = null;
+      _status = "Uploading ${finalized.recordingId} via PhoneCore K3…";
+    });
+    try {
+      final result = await _k3Bridge.uploadFinalizedRecording(
+        sessionId: _sessionController.text.trim(),
+        recording: finalized,
+        config: PhoneCoreLiveUploadConfig(
+          uploadGrant: uploadGrant,
+          ingestUrl: ingestUrl,
+          slot: slot,
+        ),
+      );
+      if (!mounted) {
+        return;
+      }
+      final manifestSuffix = result.manifestState != null
+          ? ", manifest=${result.manifestState}"
+          : "";
+      setState(() {
+        _uploadSummary = "K3 (${result.sessionId}, slot ${result.slot}): "
+            "verified=${result.verifiedSegments}/${result.totalSegments}, "
+            "complete=${result.isComplete}, "
+            "pending=${result.activeSegments}, "
+            "failed=${result.failedSegments}, "
+            "conflict=${result.conflictSegments}, "
+            "held=${result.heldSegments}$manifestSuffix";
+        _status = result.isComplete
+            ? "K3 upload complete (${result.verifiedSegments}/${result.totalSegments} verified)."
+            : result.failedSegments > 0 || result.conflictSegments > 0
+                ? "K3 upload finished with failures (failed=${result.failedSegments}, conflict=${result.conflictSegments})."
+                : "K3 upload pending (${result.verifiedSegments}/${result.totalSegments} verified, pending=${result.activeSegments}).";
+      });
+    } catch (error) {
+      if (mounted) {
+        setState(() {
+          _uploadSummary = "K3 upload error: $error";
+          _status = "K3 upload failed.";
+        });
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _busy = false);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final capabilities = _capabilities;
@@ -254,6 +335,18 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
                 border: OutlineInputBorder(),
               ),
             ),
+            SwitchListTile(
+              key: const Key("usePhoneCoreK3UploadSwitch"),
+              title: const Text("Use PhoneCore K3 live upload"),
+              subtitle: const Text(
+                "Opt-in C2 segmented upload via native PhoneCore",
+              ),
+              value: _usePhoneCoreK3Upload,
+              onChanged: _busy
+                  ? null
+                  : (value) => setState(() => _usePhoneCoreK3Upload = value),
+            ),
+            if (_usePhoneCoreK3Upload) ..._buildK3UploadFields(),
             if (capabilities?.canRecordCameraHls ?? false)
               SwitchListTile(
                 key: const Key("useCamera2Switch"),
@@ -296,11 +389,18 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
                 key: const Key("uploadButton"),
                 onPressed: _busy ? null : _upload,
                 icon: const Icon(Icons.cloud_upload),
-                label: const Text("Upload to media-timeline"),
+                label: Text(
+                  _usePhoneCoreK3Upload
+                      ? "Upload via PhoneCore K3"
+                      : "Upload to media-timeline",
+                ),
               ),
               if (_uploadSummary != null) ...[
                 const SizedBox(height: 8),
-                Text(_uploadSummary!),
+                Text(
+                  _uploadSummary!,
+                  key: const Key("uploadSummaryText"),
+                ),
               ],
               const SizedBox(height: 16),
               const Text(
@@ -314,6 +414,40 @@ class _FixedCameraHlsScreenState extends State<FixedCameraHlsScreen> {
         ),
       ),
     );
+  }
+
+  List<Widget> _buildK3UploadFields() {
+    return [
+      const SizedBox(height: 8),
+      TextField(
+        key: const Key("k3IngestUrlField"),
+        controller: _k3IngestUrlController,
+        decoration: const InputDecoration(
+          labelText: "K3 ingest URL",
+          hintText: "https://ingest.example.com",
+          border: OutlineInputBorder(),
+        ),
+      ),
+      const SizedBox(height: 12),
+      TextField(
+        key: const Key("k3UploadGrantField"),
+        controller: _k3UploadGrantController,
+        decoration: const InputDecoration(
+          labelText: "K3 upload grant",
+          border: OutlineInputBorder(),
+        ),
+      ),
+      const SizedBox(height: 12),
+      TextField(
+        key: const Key("k3SlotField"),
+        controller: _k3SlotController,
+        decoration: const InputDecoration(
+          labelText: "K3 camera slot",
+          border: OutlineInputBorder(),
+        ),
+      ),
+      const SizedBox(height: 8),
+    ];
   }
 
   /// Highest-resolution mode across every camera the device exposes.
