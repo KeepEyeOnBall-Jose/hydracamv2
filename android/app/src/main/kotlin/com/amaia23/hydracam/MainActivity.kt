@@ -11,6 +11,7 @@ import android.os.Looper
 import android.util.Log
 import com.amaia23.hydracam.fixedcamera.FixedCameraCamera2HlsRecorder
 import com.amaia23.hydracam.fixedcamera.FixedCameraLocalHlsRecorder
+import com.amaia23.hydracam.phonecore.FileUploadQueueStore
 import com.amaia23.hydracam.phonecore.PhoneCoreLiveSessionUploader
 import com.amaia23.hydracam.phonecore.PhoneCoreLiveUploadDispatcher
 import com.amaia23.hydracam.phonecore.PhoneLogger
@@ -66,6 +67,10 @@ class MainActivity: FlutterActivity() {
 		PhoneCoreLiveUploadDispatcher(
 			PhoneCoreLiveSessionUploader(
 				http = http,
+				store = FileUploadQueueStore(
+					file = File(filesDir, "phonecore_live_upload_queue.json"),
+					logger = logger,
+				),
 				logger = logger,
 			)
 		)
