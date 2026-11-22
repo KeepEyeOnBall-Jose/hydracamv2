@@ -6,16 +6,27 @@ import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.media.MediaMetadataRetriever
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import com.amaia23.hydracam.fixedcamera.FixedCameraCamera2HlsRecorder
 import com.amaia23.hydracam.fixedcamera.FixedCameraLocalHlsRecorder
+import com.amaia23.hydracam.phonecore.PhoneCoreLiveSessionUploader
+import com.amaia23.hydracam.phonecore.PhoneCoreLiveUploadDispatcher
+import com.amaia23.hydracam.phonecore.PhoneLogger
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import okhttp3.OkHttpClient
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import java.util.concurrent.RejectedExecutionException
+import java.util.concurrent.TimeUnit
 
 class MainActivity: FlutterActivity() {
 	private val launchConfigChannelName = "hydracamv2/launch_config"
@@ -24,6 +35,41 @@ class MainActivity: FlutterActivity() {
 	private val fixedCameraHlsChannelName = "hydracamv2/fixed_camera_hls"
 	private val wearableReplayChannelName = "hydracamv2/wearable_replay"
 	private val manualExposureChannelName = "hydracamv2/manual_exposure"
+	private val phoneCoreLiveUploadChannelName = "hydracamv2/phonecore_live_upload"
+	private val mainHandler: Handler by lazy {
+		Handler(Looper.getMainLooper())
+	}
+	private val phoneCoreLiveUploadExecutorDelegate = lazy {
+		Executors.newSingleThreadExecutor { runnable ->
+			Thread(runnable, "PhoneCoreLiveUpload")
+		}
+	}
+	private val phoneCoreLiveUploadExecutor: ExecutorService by phoneCoreLiveUploadExecutorDelegate
+	private val phoneCoreLiveUploadDispatcher: PhoneCoreLiveUploadDispatcher by lazy {
+		val http = OkHttpClient.Builder()
+			.connectTimeout(10, TimeUnit.SECONDS)
+			.readTimeout(30, TimeUnit.SECONDS)
+			.writeTimeout(60, TimeUnit.SECONDS)
+			.callTimeout(5, TimeUnit.MINUTES)
+			.followRedirects(false)
+			.followSslRedirects(false)
+			.build()
+		val logger = object : PhoneLogger {
+			override fun info(tag: String, message: String) {
+				Log.i(tag, message)
+			}
+
+			override fun warn(tag: String, message: String, error: Throwable?) {
+				Log.w(tag, message, error)
+			}
+		}
+		PhoneCoreLiveUploadDispatcher(
+			PhoneCoreLiveSessionUploader(
+				http = http,
+				logger = logger,
+			)
+		)
+	}
 	private val manualExposureController: ManualExposureController by lazy {
 		ManualExposureController(this)
 	}
@@ -133,6 +179,17 @@ class MainActivity: FlutterActivity() {
 					else -> result.notImplemented()
 				}
 			}
+		MethodChannel(flutterEngine.dartExecutor.binaryMessenger, phoneCoreLiveUploadChannelName)
+			.setMethodCallHandler { call, result ->
+				handlePhoneCoreLiveUploadCall(call, result)
+			}
+	}
+
+	override fun onDestroy() {
+		if (phoneCoreLiveUploadExecutorDelegate.isInitialized()) {
+			phoneCoreLiveUploadExecutor.shutdown()
+		}
+		super.onDestroy()
 	}
 
 	override fun onNewIntent(intent: Intent) {
@@ -455,6 +512,54 @@ class MainActivity: FlutterActivity() {
 			directory.mkdirs()
 		}
 		return directory
+	}
+
+	private fun handlePhoneCoreLiveUploadCall(
+		call: MethodCall,
+		result: MethodChannel.Result,
+	) {
+		val method = call.method
+		if (!PhoneCoreLiveUploadDispatcher.isSupportedCommand(method)) {
+			result.notImplemented()
+			return
+		}
+		val rawArguments = call.arguments
+		try {
+			phoneCoreLiveUploadExecutor.execute {
+				try {
+					val arguments = toPhoneCoreArguments(rawArguments)
+					val response = phoneCoreLiveUploadDispatcher.dispatch(method, arguments)
+					mainHandler.post { result.success(response) }
+				} catch (error: PhoneCoreLiveUploadDispatcher.UnknownCommandException) {
+					mainHandler.post { result.notImplemented() }
+				} catch (error: IllegalArgumentException) {
+					mainHandler.post {
+						result.error("invalid_phonecore_live_upload_request", error.message, null)
+					}
+				} catch (error: Exception) {
+					mainHandler.post {
+						result.error("phonecore_live_upload_error", error.message, null)
+					}
+				}
+			}
+		} catch (error: RejectedExecutionException) {
+			result.error("phonecore_live_upload_shutdown", error.message, null)
+		}
+	}
+
+	private fun toPhoneCoreArguments(rawArguments: Any?): Map<String, Any?>? {
+		if (rawArguments == null) {
+			return null
+		}
+		val rawMap = rawArguments as? Map<*, *>
+			?: throw IllegalArgumentException("Arguments must be a map.")
+		val converted = LinkedHashMap<String, Any?>(rawMap.size)
+		for ((key, value) in rawMap) {
+			val stringKey = key as? String
+				?: throw IllegalArgumentException("Argument keys must be strings.")
+			converted[stringKey] = value
+		}
+		return converted
 	}
 
 	private fun isoTimestamp(epochMillis: Long): String {
