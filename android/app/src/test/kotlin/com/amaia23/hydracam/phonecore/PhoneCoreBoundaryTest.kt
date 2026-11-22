@@ -86,6 +86,7 @@ class PhoneCoreBoundaryTest {
             "CourtWsCore.kt",
             "DeviceTokenClient.kt",
             "EventOutbox.kt",
+            "FileUploadQueueStore.kt",
             "MpegTsMuxer.kt",
             "PhoneCore.kt",
             "PhoneCoreLiveSessionUploader.kt",
@@ -120,6 +121,7 @@ class PhoneCoreBoundaryTest {
         val expectedTestFiles = setOf(
             "CaptureWarmupTest.kt",
             "DeviceTokenClientTest.kt",
+            "FileUploadQueueStoreTest.kt",
             "PhoneCoreBoundaryTest.kt",
             "PhoneCoreLiveSessionUploaderTest.kt",
             "PhoneCoreLiveUploadDispatcherTest.kt",
