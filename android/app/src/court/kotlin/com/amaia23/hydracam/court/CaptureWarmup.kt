@@ -41,10 +41,14 @@ internal fun captureWarmupAction(
     fixedFocus: Boolean,
     manualFocus: Boolean,
     observed: WarmupObservation,
-): CaptureWarmupAction? = phonecoreCaptureWarmupAction(
-    elapsedMs = elapsedMs,
-    progress = progress,
-    fixedFocus = fixedFocus,
-    manualFocus = manualFocus,
-    signals = observed.toSignals(),
-)
+    continuousAuto: Boolean = false,
+): CaptureWarmupAction? {
+    if (continuousAuto) return null
+    return phonecoreCaptureWarmupAction(
+        elapsedMs = elapsedMs,
+        progress = progress,
+        fixedFocus = fixedFocus,
+        manualFocus = manualFocus,
+        signals = observed.toSignals(),
+    )
+}

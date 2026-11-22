@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.os.Build
 import androidx.core.content.pm.PackageInfoCompat
+import com.amaia23.hydracam.R
 import com.amaia23.hydracam.phonecore.CommandResult
 import com.amaia23.hydracam.phonecore.CourtStateMachine
 import okhttp3.OkHttpClient
@@ -87,12 +88,17 @@ class CourtRuntime private constructor(context: Context) {
     @Volatile
     private var uploadAlert: String? = null
 
+    private val continuousAutoCourts = appContext.resources.getStringArray(R.array.continuous_auto_courts).toSet()
+
     private val recorder = CourtCameraRecorder(
         appContext,
         storage,
         queue,
         clockEstimator,
-        { slot() },
+        {
+            val current = enrollment
+            RecorderMount(current?.slot.orEmpty(), current?.courtId in continuousAutoCourts)
+        },
         RecorderEvents(),
         logger,
     )
