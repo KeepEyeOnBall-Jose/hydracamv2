@@ -8,6 +8,7 @@ import "package:hydracam/main.dart";
 import "package:hydracam/master/master_screen.dart";
 import "package:hydracam/services/battery_service.dart";
 import "package:hydracam/services/camera_service_singleton.dart";
+import "package:hydracam/services/phonecore_live_upload_recovery.dart";
 import "package:hydracam/services/storage_service.dart";
 
 void main() {
@@ -81,5 +82,50 @@ void main() {
 
     completer.complete(true);
     await completer.future;
+  });
+
+  test("startPhoneCoreLiveUploadRecovery launches recovery without waiting",
+      () async {
+    final completer = Completer<PhoneCoreLiveUploadRecoveryResult>();
+    var recoveryCalls = 0;
+
+    startPhoneCoreLiveUploadRecovery(
+      recoverPendingUploads: () {
+        recoveryCalls += 1;
+        return completer.future;
+      },
+    );
+
+    expect(recoveryCalls, 1);
+    expect(completer.isCompleted, isFalse);
+
+    completer.complete(
+      const PhoneCoreLiveUploadRecoveryResult(
+        status: PhoneCoreLiveUploadRecoveryStatus.idle,
+      ),
+    );
+    await completer.future;
+  });
+
+  testWidgets("HydraCamApp triggers K3 upload recovery on app resume",
+      (WidgetTester tester) async {
+    var resumeCalls = 0;
+
+    await tester.pumpWidget(
+      HydraCamApp(
+        recoverPendingUploads: () async {
+          resumeCalls += 1;
+          return const PhoneCoreLiveUploadRecoveryResult(
+            status: PhoneCoreLiveUploadRecoveryStatus.idle,
+          );
+        },
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(resumeCalls, 0);
+
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pump();
+    expect(resumeCalls, 1);
   });
 }

@@ -138,6 +138,10 @@ class PhoneCoreDrainResult {
     required this.didWork,
     required this.hasPendingWork,
     required this.nextWakeAtMs,
+    this.pendingSessionCount = 0,
+    this.pendingSegmentCount = 0,
+    this.pendingBytes = 0,
+    this.pendingSessionIds = const <String>[],
   });
 
   factory PhoneCoreDrainResult.fromMap(Object? raw) {
@@ -147,6 +151,10 @@ class PhoneCoreDrainResult {
       didWork: _requireBool(map, "didWork"),
       hasPendingWork: _requireBool(map, "hasPendingWork"),
       nextWakeAtMs: _optionalInt(map, "nextWakeAtMs"),
+      pendingSessionCount: _optionalInt(map, "pendingSessionCount") ?? 0,
+      pendingSegmentCount: _optionalInt(map, "pendingSegmentCount") ?? 0,
+      pendingBytes: _optionalInt(map, "pendingBytes") ?? 0,
+      pendingSessionIds: _optionalStringList(map, "pendingSessionIds"),
     );
   }
 
@@ -154,6 +162,10 @@ class PhoneCoreDrainResult {
   final bool didWork;
   final bool hasPendingWork;
   final int? nextWakeAtMs;
+  final int pendingSessionCount;
+  final int pendingSegmentCount;
+  final int pendingBytes;
+  final List<String> pendingSessionIds;
 }
 
 /// Next-wake status across queued live-session uploads and manifests.
@@ -161,6 +173,10 @@ class PhoneCorePendingWork {
   const PhoneCorePendingWork({
     required this.hasPendingWork,
     required this.nextWakeAtMs,
+    this.pendingSessionCount = 0,
+    this.pendingSegmentCount = 0,
+    this.pendingBytes = 0,
+    this.pendingSessionIds = const <String>[],
   });
 
   factory PhoneCorePendingWork.fromMap(Object? raw) {
@@ -168,11 +184,19 @@ class PhoneCorePendingWork {
     return PhoneCorePendingWork(
       hasPendingWork: _requireBool(map, "hasPendingWork"),
       nextWakeAtMs: _optionalInt(map, "nextWakeAtMs"),
+      pendingSessionCount: _optionalInt(map, "pendingSessionCount") ?? 0,
+      pendingSegmentCount: _optionalInt(map, "pendingSegmentCount") ?? 0,
+      pendingBytes: _optionalInt(map, "pendingBytes") ?? 0,
+      pendingSessionIds: _optionalStringList(map, "pendingSessionIds"),
     );
   }
 
   final bool hasPendingWork;
   final int? nextWakeAtMs;
+  final int pendingSessionCount;
+  final int pendingSegmentCount;
+  final int pendingBytes;
+  final List<String> pendingSessionIds;
 }
 
 /// Thin Flutter `MethodChannel` bridge over native `PhoneCoreLiveSessionUploader`.
@@ -344,6 +368,14 @@ List<String> _requireStringList(Map<String, dynamic> map, String key) {
     result.add(element);
   }
   return result;
+}
+
+List<String> _optionalStringList(Map<String, dynamic> map, String key) {
+  final value = map[key];
+  if (value == null) {
+    return const <String>[];
+  }
+  return List<String>.unmodifiable(_requireStringList(map, key));
 }
 
 List<PhoneCoreLiveUploadItem> _requireItemList(

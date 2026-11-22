@@ -22,15 +22,28 @@ import "services/launch_config_service.dart";
 import "services/linux_dbus_availability.dart";
 import "services/log_service.dart";
 import "services/permission_service.dart";
+import "services/phonecore_live_upload_recovery.dart";
 import "services/storage_service.dart";
 import "services/user_service.dart";
 import "slave/slave_screen.dart";
 
 typedef BackendWarmUpCallback = Future<bool> Function();
+typedef PhoneCoreLiveUploadRecoveryCallback
+    = Future<PhoneCoreLiveUploadRecoveryResult> Function();
 
 @visibleForTesting
 void startBackendWarmUp({BackendWarmUpCallback? warmUpBackend}) {
   unawaited((warmUpBackend ?? HydraCamApiService().warmUpBackend)());
+}
+
+@visibleForTesting
+void startPhoneCoreLiveUploadRecovery({
+  PhoneCoreLiveUploadRecoveryCallback? recoverPendingUploads,
+}) {
+  unawaited(
+    (recoverPendingUploads ??
+        PhoneCoreLiveUploadRecovery.instance.recoverPendingUploads)(),
+  );
 }
 
 void main() {
@@ -50,6 +63,7 @@ void main() {
     };
 
     startBackendWarmUp();
+    startPhoneCoreLiveUploadRecovery();
 
     final LaunchConfig? launchConfig =
         await LaunchConfigService.instance.load();
@@ -141,10 +155,14 @@ class HydraCamApp extends StatefulWidget {
     super.key,
     this.launchConfig,
     AppLocaleService? localeService,
-  }) : _localeService = localeService;
+    @visibleForTesting
+    PhoneCoreLiveUploadRecoveryCallback? recoverPendingUploads,
+  })  : _localeService = localeService,
+        _recoverPendingUploads = recoverPendingUploads;
 
   final LaunchConfig? launchConfig;
   final AppLocaleService? _localeService;
+  final PhoneCoreLiveUploadRecoveryCallback? _recoverPendingUploads;
 
   static final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
@@ -204,6 +222,9 @@ class _HydraCamAppState extends State<HydraCamApp> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) {
       unawaited(_enableScreenWakeLock("app resumed"));
       unawaited(_openNormalAppAfterManualLauncherStart());
+      startPhoneCoreLiveUploadRecovery(
+        recoverPendingUploads: widget._recoverPendingUploads,
+      );
     }
   }
 

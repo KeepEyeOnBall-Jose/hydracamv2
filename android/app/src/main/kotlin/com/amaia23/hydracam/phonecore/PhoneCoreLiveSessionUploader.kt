@@ -25,6 +25,16 @@ data class LiveSessionUploadSnapshot(
         get() = manifestState == UploadSession.MANIFEST_COMPLETE && activeSegments == 0
 }
 
+/** Point-in-time pending work summary across all persisted live upload sessions. */
+data class LivePendingWorkSummary(
+    val hasPendingWork: Boolean,
+    val nextWakeAtMs: Long?,
+    val pendingSessionCount: Int,
+    val pendingSegmentCount: Int,
+    val pendingBytes: Long,
+    val pendingSessionIds: List<String>,
+)
+
 /**
  * H3 Slice 1: Room-free K3 upload coordinator built purely on `phonecore` so live hand-held mode
  * can upload finalized `.ts` segments and complete session manifests via [C2Uploader] without Room
@@ -173,17 +183,46 @@ class PhoneCoreLiveSessionUploader(
     }
 
     /** Earliest timestamp at which an active segment, master request, or ready manifest can run. */
-    fun nextWakeAtMs(includeMasters: Boolean = mastersAllowed()): Long? {
-        val now = clock.nowMs()
-        val itemOrRequestWake = store.nextWakeAtMs(includeMasters)
-        val manifestWake = store.sessions()
-            .filter { session -> isManifestPendingAndUnblocked(session, now) }
-            .minOfOrNull { it.nextManifestAtMs }
-        return listOfNotNull(itemOrRequestWake, manifestWake).minOrNull()
-    }
+    fun nextWakeAtMs(includeMasters: Boolean = mastersAllowed()): Long? =
+        pendingWorkSummary(includeMasters).nextWakeAtMs
 
     /** True while any segment upload, poll/retry, or stopped-session manifest remains pending. */
     fun hasPendingWork(includeMasters: Boolean = mastersAllowed()): Boolean = nextWakeAtMs(includeMasters) != null
+
+    /** Returns an aggregate summary of pending sessions, segments, bytes, and earliest wake time. */
+    fun pendingWorkSummary(includeMasters: Boolean = mastersAllowed()): LivePendingWorkSummary {
+        val now = clock.nowMs()
+        val itemOrRequestWake = store.nextWakeAtMs(includeMasters)
+        val pendingSessionIds = mutableListOf<String>()
+        var pendingSegmentCount = 0
+        var pendingBytes = 0L
+        var manifestWake: Long? = null
+
+        for (session in store.sessions()) {
+            val wakeItems = store.items(session.sessionId).filter {
+                UploadLifecycle.isItemWakeEligible(it.tier, it.uploadState, includeMasters)
+            }
+            val manifestPending = isManifestPendingAndUnblocked(session, now)
+            if (manifestPending) {
+                manifestWake = minWake(manifestWake, session.nextManifestAtMs)
+            }
+            if (wakeItems.isNotEmpty() || manifestPending) {
+                pendingSessionIds += session.sessionId
+                pendingSegmentCount += wakeItems.size
+                pendingBytes += wakeItems.sumOf { it.bytes }
+            }
+        }
+
+        val nextWake = listOfNotNull(itemOrRequestWake, manifestWake).minOrNull()
+        return LivePendingWorkSummary(
+            hasPendingWork = nextWake != null,
+            nextWakeAtMs = nextWake,
+            pendingSessionCount = pendingSessionIds.size,
+            pendingSegmentCount = pendingSegmentCount,
+            pendingBytes = pendingBytes,
+            pendingSessionIds = pendingSessionIds,
+        )
+    }
 
     /** Returns a point-in-time upload summary for [sessionId], or null when unknown. */
     fun snapshot(sessionId: String): LiveSessionUploadSnapshot? {
@@ -208,6 +247,9 @@ class PhoneCoreLiveSessionUploader(
             items = items,
         )
     }
+
+    private fun minWake(current: Long?, candidate: Long): Long =
+        if (current == null) candidate else minOf(current, candidate)
 
     private fun isManifestPendingAndUnblocked(session: UploadSession, nowMs: Long): Boolean {
         val manifestPending = session.stoppedAtMs > 0 && session.manifestState != UploadSession.MANIFEST_COMPLETE

@@ -86,12 +86,16 @@ class PhoneCoreLiveUploadDispatcher(private val uploader: PhoneCoreLiveSessionUp
         while (stepsTaken < maxSteps && uploader.drainOnce()) {
             stepsTaken += 1
         }
-        val nextWakeAtMs = uploader.nextWakeAtMs()
+        val summary = uploader.pendingWorkSummary()
         return mapOf(
             "stepsTaken" to stepsTaken,
             "didWork" to (stepsTaken > 0),
-            "hasPendingWork" to (nextWakeAtMs != null),
-            "nextWakeAtMs" to nextWakeAtMs,
+            "hasPendingWork" to summary.hasPendingWork,
+            "nextWakeAtMs" to summary.nextWakeAtMs,
+            "pendingSessionCount" to summary.pendingSessionCount,
+            "pendingSegmentCount" to summary.pendingSegmentCount,
+            "pendingBytes" to summary.pendingBytes,
+            "pendingSessionIds" to summary.pendingSessionIds,
         )
     }
 
@@ -101,13 +105,16 @@ class PhoneCoreLiveUploadDispatcher(private val uploader: PhoneCoreLiveSessionUp
         return uploader.snapshot(sessionId)?.toMap()
     }
 
-    private fun hasPendingWork(): Map<String, Any?> {
-        val nextWakeAtMs = uploader.nextWakeAtMs()
-        return mapOf(
-            "hasPendingWork" to (nextWakeAtMs != null),
-            "nextWakeAtMs" to nextWakeAtMs,
-        )
-    }
+    private fun hasPendingWork(): Map<String, Any?> = uploader.pendingWorkSummary().toMap()
+
+    private fun LivePendingWorkSummary.toMap(): Map<String, Any?> = mapOf(
+        "hasPendingWork" to hasPendingWork,
+        "nextWakeAtMs" to nextWakeAtMs,
+        "pendingSessionCount" to pendingSessionCount,
+        "pendingSegmentCount" to pendingSegmentCount,
+        "pendingBytes" to pendingBytes,
+        "pendingSessionIds" to pendingSessionIds,
+    )
 
     private fun requireArguments(arguments: Map<String, Any?>?): Map<String, Any?> =
         requireNotNull(arguments) { "Arguments map is required." }
