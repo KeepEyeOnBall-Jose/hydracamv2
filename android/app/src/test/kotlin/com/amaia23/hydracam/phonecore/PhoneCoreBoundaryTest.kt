@@ -89,6 +89,7 @@ class PhoneCoreBoundaryTest {
             "MpegTsMuxer.kt",
             "PhoneCore.kt",
             "PhoneCoreLiveSessionUploader.kt",
+            "PhoneCoreLiveUploadDispatcher.kt",
             "PipelineAction.kt",
             "PreviewBurst.kt",
             "PreviewController.kt",
@@ -121,6 +122,7 @@ class PhoneCoreBoundaryTest {
             "DeviceTokenClientTest.kt",
             "PhoneCoreBoundaryTest.kt",
             "PhoneCoreLiveSessionUploaderTest.kt",
+            "PhoneCoreLiveUploadDispatcherTest.kt",
         )
         checkBoundary(testDir, forbidden, expectedTestFiles)
     }
