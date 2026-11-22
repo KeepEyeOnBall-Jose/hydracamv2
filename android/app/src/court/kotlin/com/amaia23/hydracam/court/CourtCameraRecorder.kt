@@ -59,6 +59,9 @@ interface CourtRecorderListener {
 /** An open pipeline serves one profile and one C1 1.16 capture; a new pair reopens the camera. */
 private data class PipelineKey(val profile: RecordProfile, val capture: CaptureTarget, val continuousAuto: Boolean)
 
+/** Enrolled mount and the court's camera policy, without device credentials. */
+data class RecorderMount(val slot: String, val continuousAuto: Boolean)
+
 /**
  * H5/H6/H15/H17: one Camera2 session feeding a master and a proxy (low) H.264 encoder, each cut into
  * 6 s MPEG-TS segments. C1 1.16: the lens, zoom and stabilization come from `record.prepare.capture`
@@ -77,10 +80,9 @@ class CourtCameraRecorder(
     private val storage: CourtStorage,
     private val seqStore: SegmentSeqStore,
     private val clockEstimator: ClockOffsetEstimator,
-    private val slot: () -> String,
+    private val mount: () -> RecorderMount,
     private val listener: CourtRecorderListener,
     private val logger: CourtLogger = NoopCourtLogger,
-    private val continuousAuto: () -> Boolean,
 ) : CourtRecorderPort,
     TorchControl,
     CourtPreviewSeam {
@@ -137,7 +139,7 @@ class CourtCameraRecorder(
             }
             armed = true
             try {
-                ensurePipeline(PipelineKey(profile, capture, continuousAuto()), sessionId)
+                ensurePipeline(PipelineKey(profile, capture, mount().continuousAuto), sessionId)
             } catch (error: Exception) {
                 // Not armed: holdCameraForPreview(false) and disarm() must be free to close the camera.
                 armed = false
@@ -147,7 +149,7 @@ class CourtCameraRecorder(
     }
 
     override fun start(command: RecordStart, profile: RecordProfile, capture: CaptureTarget) {
-        control.execute { startNow(command, PipelineKey(profile, capture, continuousAuto())) }
+        control.execute { startNow(command, PipelineKey(profile, capture, mount().continuousAuto)) }
     }
 
     override fun refresh(command: RecordStart) {
@@ -227,7 +229,7 @@ class CourtCameraRecorder(
                 return@execute
             }
             try {
-                ensurePipeline(PipelineKey(RecordProfile.DEFAULT, CaptureTarget.DEFAULT, continuousAuto()))
+                ensurePipeline(PipelineKey(RecordProfile.DEFAULT, CaptureTarget.DEFAULT, mount().continuousAuto))
             } catch (error: Exception) {
                 logger.warn(TAG, "Live preview could not open the camera.", error)
             }
@@ -265,7 +267,7 @@ class CourtCameraRecorder(
             val segmenters = C1.TIERS.associateWith { tier ->
                 TsSegmenter(
                     sessionId = sessionId,
-                    slot = slot(),
+                    slot = mount().slot,
                     tier = tier,
                     directory = storage.tierDir(sessionId, tier),
                     sidecar = sidecar,
@@ -403,7 +405,7 @@ class CourtCameraRecorder(
         C1.TIERS.forEach { tier ->
             try {
                 val directory = storage.tierDir(sessionId, tier)
-                TsPartRecovery(sessionId, slot(), tier, directory, sidecar, seqStore, logger = logger).recover(
+                TsPartRecovery(sessionId, mount().slot, tier, directory, sidecar, seqStore, logger = logger).recover(
                     onSegment = { listener.onSegment(it) },
                     onGap = { listener.onSegmentLost(it) },
                 )

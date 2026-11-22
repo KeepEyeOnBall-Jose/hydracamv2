@@ -95,10 +95,12 @@ class CourtRuntime private constructor(context: Context) {
         storage,
         queue,
         clockEstimator,
-        { slot() },
+        {
+            val current = enrollment
+            RecorderMount(current?.slot.orEmpty(), current?.courtId in continuousAutoCourts)
+        },
         RecorderEvents(),
         logger,
-        continuousAuto = { enrollment?.courtId in continuousAutoCourts },
     )
 
     private val stateMachine = CourtStateMachine(
