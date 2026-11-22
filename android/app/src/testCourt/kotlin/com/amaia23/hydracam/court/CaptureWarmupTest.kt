@@ -11,6 +11,15 @@ import org.junit.Test
 /** Protocol-state cases, not substitutes for the retained real blurred camera images. */
 class CaptureWarmupTest {
     @Test
+    fun continuousVideoAutoNeverSwitchesToManualOrLocksAfterWarmup() {
+        for (elapsed in listOf(0L, 1500L, 4000L, 120000L)) {
+            assertNull(decide(elapsed = elapsed, continuousAuto = true))
+            assertNull(decide(elapsed = elapsed, continuousAuto = true, manualFocus = false))
+            assertNull(decide(elapsed = elapsed, continuousAuto = true, fixedFocus = true))
+        }
+    }
+
+    @Test
     fun convergedExposureMustNotFreezeSearchingTenDiopterFocus() {
         assertNull(decide(elapsed = 1510, afState = CaptureResult.CONTROL_AF_STATE_PASSIVE_SCAN, focus = 10f))
         val timeout = decide(elapsed = 4000, afState = CaptureResult.CONTROL_AF_STATE_PASSIVE_SCAN, focus = 10f)!!
@@ -105,11 +114,13 @@ class CaptureWarmupTest {
         afState: Int? = CaptureResult.CONTROL_AF_STATE_PASSIVE_FOCUSED,
         lensState: Int? = CaptureResult.LENS_STATE_STATIONARY,
         focus: Float? = 0f,
+        continuousAuto: Boolean = false,
     ) = captureWarmupAction(
         elapsed,
         WarmupProgress(exposureLocked, focusLocked),
         fixedFocus,
         manualFocus,
         WarmupObservation(aeState, awbState, afState, lensState, focus),
+        continuousAuto,
     )
 }

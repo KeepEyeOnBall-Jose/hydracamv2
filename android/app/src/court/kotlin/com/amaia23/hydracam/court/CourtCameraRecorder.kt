@@ -57,13 +57,13 @@ interface CourtRecorderListener {
 }
 
 /** An open pipeline serves one profile and one C1 1.16 capture; a new pair reopens the camera. */
-private data class PipelineKey(val profile: RecordProfile, val capture: CaptureTarget)
+private data class PipelineKey(val profile: RecordProfile, val capture: CaptureTarget, val continuousAuto: Boolean)
 
 /**
  * H5/H6/H15/H17: one Camera2 session feeding a master and a proxy (low) H.264 encoder, each cut into
  * 6 s MPEG-TS segments. C1 1.16: the lens, zoom and stabilization come from `record.prepare.capture`
- * through [CapturePlanner]; after warm-up AF/AWB lock and exposure is fixed at a 1/500 s shutter
- * (AE lock where the lens has no manual sensor). Torch through `FLASH_MODE_TORCH` in the repeating
+ * through [CapturePlanner]. Continuous-auto courts use Camera2 video AE, AF and AWB throughout.
+ * Other courts lock 3A after warm-up. Torch through `FLASH_MODE_TORCH` in the repeating
  * request. Audio only when `record.start.audio`. The camera is closed when idle, unless the live
  * preview holds it ([CourtPreviewSeam]).
  *
@@ -80,6 +80,7 @@ class CourtCameraRecorder(
     private val slot: () -> String,
     private val listener: CourtRecorderListener,
     private val logger: CourtLogger = NoopCourtLogger,
+    private val continuousAuto: () -> Boolean,
 ) : CourtRecorderPort,
     TorchControl,
     CourtPreviewSeam {
@@ -103,9 +104,15 @@ class CourtCameraRecorder(
     private var held = false
     private var armed = false
 
-    /** For the status screen: `closed`, `warming`, `locked`. */
+    /** Camera policy/state for the status screen. */
     val cameraState: String
-        get() = pipeline?.let { if (it.locked) "locked" else "warming" } ?: "closed"
+        get() = pipeline?.let {
+            when {
+                it.key.continuousAuto -> "continuous-auto"
+                it.locked -> "locked"
+                else -> "warming"
+            }
+        } ?: "closed"
 
     /** For the status screen: the preview output made it into the open capture session. */
     val previewInSession: Boolean
@@ -130,7 +137,7 @@ class CourtCameraRecorder(
             }
             armed = true
             try {
-                ensurePipeline(PipelineKey(profile, capture), sessionId)
+                ensurePipeline(PipelineKey(profile, capture, continuousAuto()), sessionId)
             } catch (error: Exception) {
                 // Not armed: holdCameraForPreview(false) and disarm() must be free to close the camera.
                 armed = false
@@ -140,7 +147,7 @@ class CourtCameraRecorder(
     }
 
     override fun start(command: RecordStart, profile: RecordProfile, capture: CaptureTarget) {
-        control.execute { startNow(command, PipelineKey(profile, capture)) }
+        control.execute { startNow(command, PipelineKey(profile, capture, continuousAuto())) }
     }
 
     override fun refresh(command: RecordStart) {
@@ -220,7 +227,7 @@ class CourtCameraRecorder(
                 return@execute
             }
             try {
-                ensurePipeline(PipelineKey(RecordProfile.DEFAULT, CaptureTarget.DEFAULT))
+                ensurePipeline(PipelineKey(RecordProfile.DEFAULT, CaptureTarget.DEFAULT, continuousAuto()))
             } catch (error: Exception) {
                 logger.warn(TAG, "Live preview could not open the camera.", error)
             }
@@ -576,7 +583,7 @@ class CourtCameraRecorder(
             logger.info(
                 TAG,
                 "Camera $cameraId (${plan.lens}, ${plan.zoomRatio}x) open: master $masterSize, proxy $proxySize " +
-                    "@ ${profile.fps} fps, shutter ${plan.shutterNs ?: "auto"} ns, " +
+                    "@ ${profile.fps} fps, continuousAuto=${key.continuousAuto}, " +
                     "preview output ${if (previewInSession) "on" else "off"}.",
             )
         }
@@ -677,6 +684,8 @@ class CourtCameraRecorder(
         private fun applyBaseControls(request: CaptureRequest.Builder) {
             request.set(CaptureRequest.CONTROL_MODE, CaptureRequest.CONTROL_MODE_AUTO)
             request.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON)
+            request.set(CaptureRequest.CONTROL_AE_LOCK, false)
+            request.set(CaptureRequest.CONTROL_AWB_LOCK, false)
             request.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_VIDEO)
             request.set(CaptureRequest.CONTROL_AWB_MODE, CaptureRequest.CONTROL_AWB_MODE_AUTO)
             request.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF)
@@ -768,6 +777,7 @@ class CourtCameraRecorder(
                         result.get(CaptureResult.LENS_STATE),
                         result.get(CaptureResult.LENS_FOCUS_DISTANCE),
                     ),
+                    key.continuousAuto,
                 ) ?: return
                 lock(elapsed, action)
             }
@@ -889,7 +899,7 @@ class CourtCameraRecorder(
             openedAtMs = SystemClock.elapsedRealtime()
             locked = false
             submit()
-            logger.info(TAG, "3A unlocked to warm up again for $sessionId.")
+            logger.info(TAG, "3A unlocked for $sessionId, continuousAuto=${key.continuousAuto}.")
         }
 
         fun setTorch(on: Boolean) {
