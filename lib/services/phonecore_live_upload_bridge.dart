@@ -1,10 +1,6 @@
 import "dart:io";
 import "dart:math" as math;
 
-// `crypto` is declared under dev_dependencies in pubspec.yaml (outside this
-// slice's owned files), so suppress depend_on_referenced_packages until it is
-// promoted to dependencies.
-// ignore: depend_on_referenced_packages
 import "package:crypto/crypto.dart";
 
 import "fixed_camera_hls_recorder_service.dart";
