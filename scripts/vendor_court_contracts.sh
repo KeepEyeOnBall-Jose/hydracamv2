@@ -14,7 +14,6 @@ set -euo pipefail
 
 sha="${1:?usage: vendor_court_contracts.sh <media-timeline commit sha>}"
 repo="KeepEyeOnBall-Jose/media-timeline"
-pkg="packages/court-contracts"
 root="$(git rev-parse --show-toplevel)"
 dest="$root/android/app/src/testCourt/resources/court-contracts"
 tmp="$(mktemp -d)"
@@ -25,8 +24,27 @@ if [ "$(jq -r .truncated "$tmp/tree.json")" != "false" ]; then
   echo "vendor_court_contracts: tree listing truncated" >&2
   exit 1
 fi
-jq -r '.tree[] | select(.type == "blob") | .path + " " + .sha' "$tmp/tree.json" |
-  grep -E "^$pkg/(json-schema/index\.json|json-schema/c1/|fixtures/c1/)" > "$tmp/list"
+jq -r '.tree[] | select(.type == "blob") | .path + " " + .sha' "$tmp/tree.json" > "$tmp/blobs"
+
+# The pin may predate the move to contracts/. Use its tree for every blob.
+pkg=""
+for candidate in contracts packages/court-contracts; do
+  if grep -q "^$candidate/json-schema/index\.json " "$tmp/blobs"; then
+    pkg="$candidate"
+    break
+  fi
+done
+if [[ -z "$pkg" ]]; then
+  echo "vendor_court_contracts: no contract index at $sha" >&2
+  exit 1
+fi
+grep -E "^$pkg/(json-schema/index\.json |json-schema/c1/|fixtures/c1/)" "$tmp/blobs" > "$tmp/list"
+for required in json-schema/c1 fixtures/c1/good fixtures/c1/bad; do
+  if ! grep -q "^$pkg/$required/.*\.json " "$tmp/list"; then
+    echo "vendor_court_contracts: missing $required at $sha" >&2
+    exit 1
+  fi
+done
 
 while read -r path blob; do
   out="$tmp/files/${path#"$pkg"/}"
