@@ -48,6 +48,23 @@ class CaptureCapabilitiesTest {
     }
 
     @Test
+    fun advertisesHevcOnlyWhereAHardwareHevcEncoderCoversTheMaster() {
+        assertTrue(profiles().none { it.codec == "hevc" })
+
+        val frames = mapOf(uhd to 33_333_333L, hd to 33_333_333L, proxy to 33_333_333L)
+        val modes = CaptureCapabilities.profiles(
+            listOf(lens),
+            { _, size -> frames[size] },
+            { size, _ -> if (size == uhd) null else 50_000 },
+            hevcMaxKbps = { size, _ -> if (size == proxy) null else 120_000 },
+        )
+        assertEquals(listOf("1080p", "720p"), modes.filter { it.codec == "avc" }.map { it.masterRes })
+        val hevc = modes.filter { it.codec == "hevc" }
+        assertEquals(listOf("2160p", "1080p"), hevc.map { it.masterRes })
+        assertTrue(hevc.all { it.maxMasterKbps == 100_000 && it.lens == "wide" && it.fps == 30 })
+    }
+
+    @Test
     fun supportsSixtyFpsWithIntegerNsRounding() {
         val faster = profiles(
             lens = lens.copy(aeFpsRanges = listOf(30..30, 60..60)),

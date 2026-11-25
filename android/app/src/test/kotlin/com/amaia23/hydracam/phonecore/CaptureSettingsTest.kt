@@ -93,6 +93,25 @@ class CaptureSettingsTest {
     }
 
     @Test
+    fun hevcPlansOnlyWhenAHardwareHevcEncoderCoversTheMasterMode() {
+        val hevc = CaptureTarget(codec = CaptureTarget.CODEC_HEVC)
+        val hd = 1920 to 1080
+        val probe: (Pair<Int, Int>, Int) -> Int? = { size, fps -> if (size == hd && fps == 30) 20_000 else null }
+
+        assertEquals(CaptureTarget.CODEC_AVC, (plan() as CapturePlan).codec)
+        val planned = CapturePlanner.plan(profile, hevc, fleet, wideId = "0", hevcMaxKbps = probe) as CapturePlan
+        assertEquals(CaptureTarget.CODEC_HEVC, planned.codec)
+        assertEquals(hd, planned.masterSize)
+
+        val uhd = profile.copy(masterRes = C1ContractConstants.Profile.MASTER_RES_2160P)
+        val tooFast = profile.copy(masterKbps = 20_001)
+        for (wanted in listOf(uhd, tooFast)) {
+            val refused = CapturePlanner.plan(wanted, hevc, fleet, wideId = "0", hevcMaxKbps = probe)
+            assertEquals("capture.codec", (refused as CaptureUnsupported).field)
+        }
+    }
+
+    @Test
     fun zoomStabilizationShutterAndIsoCalculations() {
         assertEquals(1.0, (plan(CaptureTarget(zoomRatio = 1.005)) as CapturePlan).zoomRatio, 0.0)
         assertEquals(2.5, (plan(CaptureTarget(zoomRatio = 2.5)) as CapturePlan).zoomRatio, 0.0)

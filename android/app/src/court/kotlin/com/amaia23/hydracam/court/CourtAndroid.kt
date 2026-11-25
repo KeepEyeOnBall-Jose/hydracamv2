@@ -190,6 +190,7 @@ class DeviceStatusProbe(private val context: Context) {
                     }
                 },
                 ::encoderMaxKbps,
+                ::hevcMaxKbps,
             )
         } catch (error: Exception) {
             Log.w(TAG, "Camera caps unavailable.", error)
@@ -201,22 +202,10 @@ class DeviceStatusProbe(private val context: Context) {
         return CourtCaps(maxRes, fps, hevc, 2, torch, speaker, captureProfiles)
     }
 
-    private fun encoderMaxKbps(size: Pair<Int, Int>, fps: Int): Int? {
-        // Match createEncoderByType in the recorder; a different available encoder is not proof.
-        val info = MediaCodecList(MediaCodecList.REGULAR_CODECS).codecInfos.firstOrNull { info ->
-            info.isEncoder && info.supportedTypes.any { it.equals(MediaFormat.MIMETYPE_VIDEO_AVC, true) }
-        } ?: return null
-        val hardware = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            info.isHardwareAccelerated
-        } else {
-            !info.name.startsWith("OMX.google.") && !info.name.startsWith("c2.android.")
-        }
-        val caps = info.getCapabilitiesForType(MediaFormat.MIMETYPE_VIDEO_AVC)
-        val video = caps.videoCapabilities ?: return null
-        val supported = hardware && caps.maxSupportedInstances >= REQUIRED_VIDEO_ENCODERS &&
-            video.areSizeAndRateSupported(size.first, size.second, fps.toDouble())
-        return (video.bitrateRange.upper / 1_000).takeIf { supported }
-    }
+    private fun encoderMaxKbps(size: Pair<Int, Int>, fps: Int): Int? =
+        CourtCameraRecorder.hardwareEncoderMaxKbps(MediaFormat.MIMETYPE_VIDEO_AVC, size, fps, REQUIRED_VIDEO_ENCODERS)
+
+    private fun hevcMaxKbps(size: Pair<Int, Int>, fps: Int): Int? = CourtCameraRecorder.hevcMaxKbps(size, fps)
 
     private companion object {
         const val TAG = "CourtProbe"

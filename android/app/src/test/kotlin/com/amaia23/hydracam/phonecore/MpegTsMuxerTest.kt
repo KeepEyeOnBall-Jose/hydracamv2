@@ -19,9 +19,13 @@ class MpegTsMuxerTest {
         val payload: ByteArray get() = bytes.copyOfRange(payloadOffset, bytes.size)
     }
 
-    private fun mux(hasAudio: Boolean, block: (MpegTsMuxer) -> Unit): List<Packet> {
+    private fun mux(
+        hasAudio: Boolean,
+        codec: TsVideoCodec = TsVideoCodec.H264,
+        block: (MpegTsMuxer) -> Unit,
+    ): List<Packet> {
         val out = ByteArrayOutputStream()
-        val muxer = MpegTsMuxer(hasAudio)
+        val muxer = MpegTsMuxer(hasAudio, codec)
         muxer.attach(out)
         block(muxer)
         val bytes = out.toByteArray()
@@ -87,6 +91,24 @@ class MpegTsMuxerTest {
         val audioPes = audio.fold(ByteArray(0)) { acc, packet -> acc + packet.payload }
         assertEquals(273_000L + MpegTsMuxer.PTS_DELAY_90K, MpegTsMuxer.decodeTimestamp(audioPes, 9))
         assertArrayEquals(byteArrayOf(0xFF.toByte(), 0xF1.toByte()), audioPes.copyOfRange(14, 16))
+    }
+
+    @Test
+    fun hevcProgramUsesHevcStreamTypeAndAccessUnitDelimiter() {
+        val vpsSpsPps = byteArrayOf(0, 0, 0, 1, 0x40, 1, 0, 0, 0, 1, 0x42, 1, 0, 0, 0, 1, 0x44, 1)
+        val packets = mux(hasAudio = false, codec = TsVideoCodec.HEVC) {
+            it.writeVideo(0, ByteArray(100) { 7 }, isKeyframe = true, videoConfig = vpsSpsPps)
+        }
+
+        val pmt = section(packets[1])
+        assertEquals(0, MpegTsMuxer.crc32Mpeg(pmt))
+        assertEquals(MpegTsMuxer.STREAM_TYPE_HEVC, pmt[12].toInt() and 0xFF)
+
+        val pes = packets.filter { it.pid == MpegTsMuxer.VIDEO_PID }.fold(ByteArray(0)) { acc, p -> acc + p.payload }
+        val hevcAud = byteArrayOf(0, 0, 0, 1, 0x46, 0x01, 0x50)
+        assertArrayEquals(hevcAud + vpsSpsPps, pes.copyOfRange(14, 14 + hevcAud.size + vpsSpsPps.size))
+        assertEquals(TsVideoCodec.HEVC, TsVideoCodec.of(CaptureTarget.CODEC_HEVC))
+        assertEquals(TsVideoCodec.H264, TsVideoCodec.of(CaptureTarget.CODEC_AVC))
     }
 
     @Test

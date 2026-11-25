@@ -15,6 +15,7 @@ import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaCodec
 import android.media.MediaCodecInfo
+import android.media.MediaCodecList
 import android.media.MediaFormat
 import android.media.MediaRecorder
 import android.os.Build
@@ -28,6 +29,7 @@ import android.view.Surface
 import androidx.core.content.ContextCompat
 import com.amaia23.hydracam.phonecore.C1ContractConstants
 import com.amaia23.hydracam.phonecore.FocusLock
+import com.amaia23.hydracam.phonecore.TsVideoCodec
 import java.io.IOException
 import java.nio.ByteBuffer
 import java.util.concurrent.CountDownLatch
@@ -281,6 +283,7 @@ class CourtCameraRecorder(
                     onGap = { listener.onSegmentLost(it) },
                     requestSyncFrame = { pipe.encoder(tier).requestSyncFrame() },
                     logger = logger,
+                    videoCodec = pipe.videoCodec(tier),
                 ).also { segmenter -> pipe.config(tier)?.let { segmenter.onVideoConfig(it) } }
             }
             val active = Recording(sessionId, profile, command.startAtServerMs, timebase, segmenters, pipe::applied)
@@ -358,7 +361,7 @@ class CourtCameraRecorder(
     private fun plan(profile: RecordProfile, capture: CaptureTarget): CapturePlanResult {
         val manager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
         val known = lenses ?: backLenses(manager).also { lenses = it }
-        return CapturePlanner.plan(profile, capture, known, backCameraId(manager))
+        return CapturePlanner.plan(profile, capture, known, backCameraId(manager), ::hevcMaxKbps)
     }
 
     /** The prepare already nacked an unsupported capture; one here means the phone changed under us. */
@@ -527,6 +530,10 @@ class CourtCameraRecorder(
 
         fun encoder(tier: String): VideoEncoder = encoders.getValue(tier)
 
+        /** The master records the planned codec; the proxy stays H.264 for every reader. */
+        fun videoCodec(tier: String): TsVideoCodec =
+            if (tier == C1.TIER_MASTER) TsVideoCodec.of(plan.codec) else TsVideoCodec.H264
+
         /** Latest completed result at announcement time; not matched to the encoded frame timestamp. */
         fun applied(): AppliedCapture? {
             val master = encoders[C1.TIER_MASTER]?.output ?: return null
@@ -546,8 +553,10 @@ class CourtCameraRecorder(
             // The planner already checked both sizes are among the camera's MediaCodec outputs.
             val masterSize = Size(plan.masterSize.first, plan.masterSize.second)
             val proxySize = Size(plan.proxySize.first, plan.proxySize.second)
-            encoders[C1.TIER_MASTER] = VideoEncoder(C1.TIER_MASTER, masterSize, profile.fps, profile.masterKbps)
-            encoders[C1.TIER_PROXY] = VideoEncoder(C1.TIER_PROXY, proxySize, profile.fps, profile.proxyKbps)
+            val masterMime = if (plan.codec == CaptureTarget.CODEC_HEVC) MIME_HEVC else MIME_AVC
+            encoders[C1.TIER_MASTER] =
+                VideoEncoder(C1.TIER_MASTER, masterSize, profile.fps, profile.masterKbps, masterMime)
+            encoders[C1.TIER_PROXY] = VideoEncoder(C1.TIER_PROXY, proxySize, profile.fps, profile.proxyKbps, MIME_AVC)
             encoders.values.forEach { it.start() }
             openFanout(masterSize, proxySize)
 
@@ -928,14 +937,14 @@ class CourtCameraRecorder(
             logger.info(TAG, "Camera closed.")
         }
 
-        inner class VideoEncoder(private val tier: String, size: Size, fps: Int, private val kbps: Int) {
-            private val codec = MediaCodec.createEncoderByType(MediaFormat.MIMETYPE_VIDEO_AVC)
+        inner class VideoEncoder(private val tier: String, size: Size, fps: Int, private val kbps: Int, mime: String) {
+            private val codec = MediaCodec.createEncoderByType(mime)
             val surface: Surface
             private val info = MediaCodec.BufferInfo()
 
             /** What the encoder reports it outputs; the configured size until it says. */
             @Volatile
-            var output = EncoderReadback(MIME_AVC, size.width, size.height, kbps)
+            var output = EncoderReadback(mime, size.width, size.height, kbps)
                 private set
 
             @Volatile
@@ -943,7 +952,9 @@ class CourtCameraRecorder(
             private val drainThread = Thread({ drain() }, "CourtEncoder-$tier")
 
             init {
-                configure(videoFormat(size, fps, kbps, withProfile = Build.VERSION.SDK_INT < Build.VERSION_CODES.Q))
+                // Baseline (no B-frames) only matters where KEY_MAX_B_FRAMES is missing; HEVC needs Q+.
+                val baseline = mime == MIME_AVC && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
+                configure(videoFormat(mime, size, fps, kbps, withProfile = baseline))
                 surface = codec.createInputSurface()
             }
 
@@ -1173,6 +1184,38 @@ class CourtCameraRecorder(
         private const val AUDIO_BIT_RATE = 96_000
         private const val AUDIO_CHUNK_BYTES = 4_096
         private const val AUDIO_BUFFER_CHUNKS = 4
+        private const val KBPS = 1_000
+
+        /**
+         * The top bitrate (kbps) of the encoder `createEncoderByType(mime)` picks, when it is hardware,
+         * runs [minInstances] at once and encodes [size] at [fps]; else null. A different available
+         * encoder is not proof.
+         */
+        fun hardwareEncoderMaxKbps(mime: String, size: Pair<Int, Int>, fps: Int, minInstances: Int): Int? {
+            val info = MediaCodecList(MediaCodecList.REGULAR_CODECS).codecInfos.firstOrNull { info ->
+                info.isEncoder && info.supportedTypes.any { it.equals(mime, true) }
+            } ?: return null
+            val hardware = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                info.isHardwareAccelerated
+            } else {
+                !info.name.startsWith("OMX.google.") && !info.name.startsWith("c2.android.")
+            }
+            val caps = info.getCapabilitiesForType(mime)
+            val video = caps.videoCapabilities ?: return null
+            val supported = hardware && caps.maxSupportedInstances >= minInstances &&
+                video.areSizeAndRateSupported(size.first, size.second, fps.toDouble())
+            return (video.bitrateRange.upper / KBPS).takeIf { supported }
+        }
+
+        /**
+         * A hardware HEVC master's top bitrate, or null. Q+ only: older phones cannot be told to
+         * skip B-frames, and the TS muxer writes PTS only.
+         */
+        fun hevcMaxKbps(size: Pair<Int, Int>, fps: Int): Int? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            hardwareEncoderMaxKbps(MIME_HEVC, size, fps, minInstances = 1)
+        } else {
+            null
+        }
 
         fun backCameraId(manager: CameraManager): String = manager.cameraIdList.firstOrNull { id ->
             manager.getCameraCharacteristics(id).get(CameraCharacteristics.LENS_FACING) ==
@@ -1246,8 +1289,8 @@ class CourtCameraRecorder(
         private const val CROP_TOP = "crop-top"
         private const val CROP_BOTTOM = "crop-bottom"
 
-        private fun videoFormat(size: Size, fps: Int, kbps: Int, withProfile: Boolean): MediaFormat =
-            MediaFormat.createVideoFormat(MediaFormat.MIMETYPE_VIDEO_AVC, size.width, size.height).apply {
+        private fun videoFormat(mime: String, size: Size, fps: Int, kbps: Int, withProfile: Boolean): MediaFormat =
+            MediaFormat.createVideoFormat(mime, size.width, size.height).apply {
                 setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface)
                 setInteger(MediaFormat.KEY_BIT_RATE, kbps * 1_000)
                 setInteger(MediaFormat.KEY_FRAME_RATE, fps)
