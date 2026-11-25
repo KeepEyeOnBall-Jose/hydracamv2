@@ -4,15 +4,15 @@ import java.io.ByteArrayOutputStream
 import java.io.OutputStream
 
 /**
- * Minimal streaming MPEG-TS muxer: one H.264 program, optional AAC (ADTS) audio.
+ * Minimal streaming MPEG-TS muxer: one H.264 or HEVC program, optional AAC (ADTS) audio.
  *
  * - PAT/PMT before every keyframe, so each segment file starts decodable.
- * - Each access unit gets an AUD; keyframes get SPS/PPS ([videoConfig]) in front.
+ * - Each access unit gets an AUD; keyframes get the parameter sets ([videoConfig]) in front.
  * - PCR rides on video; PTS = PCR + [PTS_DELAY_90K] (no B-frames, so DTS == PTS is omitted).
  *
  * Not thread-safe; [TsSegmenter] serializes access.
  */
-class MpegTsMuxer(private val hasAudio: Boolean) {
+class MpegTsMuxer(private val hasAudio: Boolean, private val codec: TsVideoCodec = TsVideoCodec.H264) {
     private val continuity = IntArray(0x2000)
     private var out: OutputStream? = null
     var packetsWritten: Long = 0
@@ -36,9 +36,10 @@ class MpegTsMuxer(private val hasAudio: Boolean) {
             writeTables()
         }
         val config = if (isKeyframe) videoConfig else null
-        val accessUnit = ByteArray(AUD.size + (config?.size ?: 0) + annexB.size)
-        System.arraycopy(AUD, 0, accessUnit, 0, AUD.size)
-        var offset = AUD.size
+        val aud = codec.accessUnitDelimiter
+        val accessUnit = ByteArray(aud.size + (config?.size ?: 0) + annexB.size)
+        System.arraycopy(aud, 0, accessUnit, 0, aud.size)
+        var offset = aud.size
         if (config != null) {
             System.arraycopy(config, 0, accessUnit, offset, config.size)
             offset += config.size
@@ -142,7 +143,7 @@ class MpegTsMuxer(private val hasAudio: Boolean) {
     }
 
     private fun pmtSection(): ByteArray {
-        val streams = mutableListOf(STREAM_TYPE_H264 to VIDEO_PID)
+        val streams = mutableListOf(codec.streamType to VIDEO_PID)
         if (hasAudio) {
             streams += STREAM_TYPE_AAC_ADTS to AUDIO_PID
         }
@@ -203,13 +204,13 @@ class MpegTsMuxer(private val hasAudio: Boolean) {
         const val VIDEO_PID = 0x0100
         const val AUDIO_PID = 0x0101
         const val STREAM_TYPE_H264 = 0x1B
+        const val STREAM_TYPE_HEVC = 0x24
         const val STREAM_TYPE_AAC_ADTS = 0x0F
         const val PTS_DELAY_90K = 63_000L
         private const val SYNC_BYTE = 0x47.toByte()
         private const val VIDEO_STREAM_ID = 0xE0
         private const val AUDIO_STREAM_ID = 0xC0
         private const val ADTS_FREQUENCY_INDEX_48K = 3
-        private val AUD = byteArrayOf(0, 0, 0, 1, 0x09, 0xF0.toByte())
 
         fun usTo90k(us: Long): Long = us * 9 / 100
 
@@ -289,5 +290,20 @@ class MpegTsMuxer(private val hasAudio: Boolean) {
             }
             return crc
         }
+    }
+}
+
+/** A video codec as MPEG-TS carries it: PMT stream type and access unit delimiter. */
+enum class TsVideoCodec(val streamType: Int, internal val accessUnitDelimiter: ByteArray) {
+    /** AUD NAL type 9, primary_pic_type 7 (any slice). */
+    H264(MpegTsMuxer.STREAM_TYPE_H264, byteArrayOf(0, 0, 0, 1, 0x09, 0xF0.toByte())),
+
+    /** AUD NAL type 35 (layer 0, temporal id 1), pic_type 2 (I, P or B slices). */
+    HEVC(MpegTsMuxer.STREAM_TYPE_HEVC, byteArrayOf(0, 0, 0, 1, 0x46, 0x01, 0x50)),
+    ;
+
+    companion object {
+        /** C1 `capture.codec` to the muxed stream; anything but hevc is avc. */
+        fun of(codec: String): TsVideoCodec = if (codec == CaptureTarget.CODEC_HEVC) HEVC else H264
     }
 }

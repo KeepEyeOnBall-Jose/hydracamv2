@@ -30,7 +30,11 @@ class TsSegmenterTest {
         storage = CourtStorage(temp.newFolder("court"))
     }
 
-    private fun segmenter(hasAudio: Boolean = false, estimate: ClockEstimate? = ClockEstimate(1_000, 12)) = TsSegmenter(
+    private fun segmenter(
+        hasAudio: Boolean = false,
+        estimate: ClockEstimate? = ClockEstimate(1_000, 12),
+        videoCodec: TsVideoCodec = TsVideoCodec.H264,
+    ) = TsSegmenter(
         sessionId = "s1",
         slot = "A",
         tier = C1.TIER_PROXY,
@@ -45,6 +49,7 @@ class TsSegmenterTest {
         onSegment = { segments += it },
         requestSyncFrame = { syncRequests += 1 },
         clock = FakePhoneClock(),
+        videoCodec = videoCodec,
     )
 
     private fun feed(target: TsSegmenter, from: Int, until: Int) {
@@ -86,6 +91,18 @@ class TsSegmenterTest {
         val recovered = SegmentSidecarReader(storage, logger).readAll()
         assertEquals(3, recovered.size)
         assertTrue(logger.warnings.isEmpty())
+    }
+
+    @Test
+    fun hevcSegmentsDeclareTheHevcStreamType() {
+        val target = segmenter(videoCodec = TsVideoCodec.HEVC)
+        target.onVideoConfig(byteArrayOf(0, 0, 0, 1, 0x40, 1))
+        feed(target, 0, 40)
+        target.finish()
+
+        val bytes = segments.single().file.readBytes()
+        val pmt = bytes.copyOfRange(MpegTsMuxer.PACKET_SIZE, 2 * MpegTsMuxer.PACKET_SIZE)
+        assertEquals(MpegTsMuxer.STREAM_TYPE_HEVC, pmt[5 + 12].toInt() and 0xFF)
     }
 
     @Test

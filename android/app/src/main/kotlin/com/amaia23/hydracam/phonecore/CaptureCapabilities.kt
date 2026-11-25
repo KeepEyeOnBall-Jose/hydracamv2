@@ -29,34 +29,39 @@ object CaptureCapabilities {
         lenses: List<LensInfo>,
         minFrameDurationNs: (String, Pair<Int, Int>) -> Long?,
         encoderMaxKbps: (Pair<Int, Int>, Int) -> Int?,
+        hevcMaxKbps: (Pair<Int, Int>, Int) -> Int? = { _, _ -> null },
     ): List<CaptureProfileCapability> {
         val rates = FRAME_RATES.filter { fps -> lenses.any { lens -> lens.aeFpsRanges.any { it.last == fps } } }
-        return rates.flatMap { fps -> profilesAtRate(lenses, minFrameDurationNs, encoderMaxKbps, fps) }
+        val encoders = mapOf(CaptureTarget.CODEC_AVC to encoderMaxKbps, CaptureTarget.CODEC_HEVC to hevcMaxKbps)
+        return rates.flatMap { fps -> profilesAtRate(lenses, minFrameDurationNs, encoderMaxKbps, encoders, fps) }
     }
 
+    /** [masterEncoders]: each recordable master codec's top bitrate for a size and fps, null when absent. */
     private fun profilesAtRate(
         lenses: List<LensInfo>,
         minFrameDurationNs: (String, Pair<Int, Int>) -> Long?,
-        encoderMaxKbps: (Pair<Int, Int>, Int) -> Int?,
+        proxyEncoderMaxKbps: (Pair<Int, Int>, Int) -> Int?,
+        masterEncoders: Map<String, (Pair<Int, Int>, Int) -> Int?>,
         fps: Int,
     ): List<CaptureProfileCapability> {
         val proxy = RecordProfile.sizeFor(C1ContractConstants.Profile.PROXY_RES)
-        if ((encoderMaxKbps(proxy, fps) ?: 0) < PROXY_KBPS) return emptyList()
+        if ((proxyEncoderMaxKbps(proxy, fps) ?: 0) < PROXY_KBPS) return emptyList()
         // Camera2 reports integer nanoseconds; allow rounding up by less than one nanosecond.
         val frameNs = (NANOS_PER_SECOND + fps - 1) / fps
         return C1ContractConstants.Lens.ALL.flatMap { role ->
-            C1ContractConstants.Profile.MASTER_RESOLUTIONS.mapNotNull { resolution ->
+            C1ContractConstants.Profile.MASTER_RESOLUTIONS.flatMap { resolution ->
                 val profile = RecordProfile(masterRes = resolution, fps = fps)
                 val plan = CapturePlanner.plan(profile, CaptureTarget(lens = role), lenses) as? CapturePlan
-                    ?: return@mapNotNull null
-                val sizes = listOf(plan.masterSize, proxy)
-                val timed = sizes.all { size ->
+                val timed = plan != null && listOf(plan.masterSize, proxy).all { size ->
                     val duration = minFrameDurationNs(plan.cameraId, size)
                     duration != null && duration > 0 && duration <= frameNs
                 }
-                val maxKbps = encoderMaxKbps(plan.masterSize, fps)?.coerceAtMost(MAX_KBPS)
-                if (!timed || maxKbps == null || maxKbps < PROXY_KBPS) return@mapNotNull null
-                CaptureProfileCapability(resolution, fps, role, CaptureTarget.CODEC_AVC, maxKbps)
+                if (plan == null || !timed) return@flatMap emptyList()
+                masterEncoders.mapNotNull { (codec, encoderMaxKbps) ->
+                    encoderMaxKbps(plan.masterSize, fps)?.coerceAtMost(MAX_KBPS)
+                        ?.takeIf { it >= PROXY_KBPS }
+                        ?.let { CaptureProfileCapability(resolution, fps, role, codec, it) }
+                }
             }
         }
     }

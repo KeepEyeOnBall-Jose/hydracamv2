@@ -265,6 +265,7 @@ class TsSegmenter(
     private val requestSyncFrame: () -> Unit = {},
     private val clock: PhoneClock = PhoneClock.SYSTEM,
     private val logger: PhoneLogger = NoopPhoneLogger,
+    private val videoCodec: TsVideoCodec = TsVideoCodec.H264,
 ) {
     private var videoConfig: ByteArray? = null
     private var current: OpenSegment? = null
@@ -357,7 +358,8 @@ class TsSegmenter(
 
     private fun openSegment(startPtsUs: Long): OpenSegment {
         val seq = lastSeq + 1
-        val open = OpenSegment(seq, startPtsUs, File(directory, "%06d.ts%s".format(seq, PART_SUFFIX)), hasAudio)
+        val partFile = File(directory, "%06d.ts%s".format(seq, PART_SUFFIX))
+        val open = OpenSegment(seq, startPtsUs, partFile, hasAudio, videoCodec)
         syncRequested = false
         timebase.anchor(startPtsUs)
         val estimate = clockEstimate()
@@ -398,11 +400,17 @@ class TsSegmenter(
     }
 
     /** `<seq>.ts.part` open for writing: bytes go through the SHA-256 digest into the muxer's file. */
-    private class OpenSegment(val seq: Long, val startPtsUs: Long, val partFile: File, hasAudio: Boolean) {
+    private class OpenSegment(
+        val seq: Long,
+        val startPtsUs: Long,
+        val partFile: File,
+        hasAudio: Boolean,
+        codec: TsVideoCodec,
+    ) {
         val fileStream = FileOutputStream(partFile)
         val digest: MessageDigest = MessageDigest.getInstance("SHA-256")
         val stream = BufferedOutputStream(DigestOutputStream(fileStream, digest), BUFFER_BYTES)
-        val muxer = MpegTsMuxer(hasAudio).also { it.attach(stream) }
+        val muxer = MpegTsMuxer(hasAudio, codec).also { it.attach(stream) }
         var frames = 0
         var lastPtsUs = startPtsUs
     }

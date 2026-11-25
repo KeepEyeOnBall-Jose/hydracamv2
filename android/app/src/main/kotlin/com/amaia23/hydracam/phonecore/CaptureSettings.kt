@@ -55,6 +55,8 @@ data class CapturePlan(
     val fixedFocus: Boolean,
     val isoRange: IntRange? = null,
     val rotationDeg: Int = 0,
+    /** C1 `capture.codec` of the master tier; the proxy and preview are always avc. */
+    val codec: String = CaptureTarget.CODEC_AVC,
 ) : CapturePlanResult {
     /**
      * The ISO that keeps the auto-exposure brightness at the fixed shutter: the warm-up chose
@@ -86,16 +88,21 @@ object CapturePlanner {
     private const val TELE_FACTOR = 0.8
     private const val NANOS_PER_SECOND = 1_000_000_000L
 
+    /**
+     * [hevcMaxKbps] is the hardware HEVC encoder's top bitrate for a master size and fps, null when
+     * there is none; an hevc target plans only when it covers `profile.masterKbps`.
+     */
     fun plan(
         profile: RecordProfile,
         target: CaptureTarget,
         lenses: List<LensInfo>,
         wideId: String = WIDE_ID,
+        hevcMaxKbps: (Pair<Int, Int>, Int) -> Int? = { _, _ -> null },
     ): CapturePlanResult {
         val lens = lensFor(target.lens, lenses, wideId)
             ?: return CaptureUnsupported("capture.lens", "this phone has no ${target.lens} back lens")
-        if (target.codec != CaptureTarget.CODEC_AVC) {
-            return CaptureUnsupported("capture.codec", "only avc is recorded")
+        if (target.codec != CaptureTarget.CODEC_AVC && target.codec != CaptureTarget.CODEC_HEVC) {
+            return CaptureUnsupported("capture.codec", "only avc and hevc are recorded")
         }
         if (target.rotationDeg != C1ContractConstants.Rotation.DEG_0 && target.rotationDeg != HALF_TURN) {
             return CaptureUnsupported(
@@ -113,6 +120,9 @@ object CapturePlanner {
             ?: return CaptureUnsupported("profile.masterRes", sizeDetail(profile.masterRes, lens))
         val proxy = videoSize(profile.proxyRes, lens)
             ?: return CaptureUnsupported("profile.proxyRes", sizeDetail(profile.proxyRes, lens))
+        if (target.codec == CaptureTarget.CODEC_HEVC && (hevcMaxKbps(master, profile.fps) ?: 0) < profile.masterKbps) {
+            return CaptureUnsupported("capture.codec", hevcDetail(profile))
+        }
         val frameDurationNs = NANOS_PER_SECOND / profile.fps
         return CapturePlan(
             cameraId = lens.cameraId,
@@ -129,8 +139,12 @@ object CapturePlanner {
             fixedFocus = lens.fixedFocus,
             isoRange = lens.isoRange,
             rotationDeg = target.rotationDeg,
+            codec = target.codec,
         )
     }
+
+    private fun hevcDetail(profile: RecordProfile) =
+        "no hardware hevc encoder for ${profile.masterRes}@${profile.fps} at ${profile.masterKbps} kbps"
 
     /** The [candidates] some auto-exposure range ends at: what `hello.caps.fps` may promise. */
     fun recordableFps(ranges: List<IntRange>, candidates: List<Int>): List<Int> =
